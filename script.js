@@ -1,42 +1,72 @@
+/* =========================================================
+   Mehmet Cam Portfolio - script.js
+   Compatible with premium index.html + style.css
+   Formspree endpoint: https://formspree.io/f/xpqbrwoa
+   ========================================================= */
+
+/* -----------------------------
+   Basic Config
+----------------------------- */
+
 const username = "mehmetcamofficial";
+
+const profile = {
+  name: "Mehmet Cam",
+  github: "https://github.com/mehmetcamofficial",
+  portfolio: "https://mehmetcamofficial.github.io",
+  email: "yourmail@example.com"
+};
+
+/* -----------------------------
+   Project Data
+----------------------------- */
 
 const projects = [
   {
     title: "AgriVision AI",
-    description: "AI-powered agriculture intelligence application for data-driven insights and decision support.",
+    description:
+      "AI-powered agriculture intelligence application for data-driven insights, smart decision support and AgriTech innovation.",
     tags: ["AI", "AgriTech", "Streamlit"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://agrivision-ai09.streamlit.app/"
   },
   {
     title: "Food Regulatory Dashboard",
-    description: "Interactive dashboard for food regulatory monitoring, compliance insights and data visualization.",
+    description:
+      "Interactive dashboard for food regulatory monitoring, compliance insights, analytics and visualization.",
     tags: ["FoodTech", "Regulatory", "Dashboard"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://food-regulatory-dashboard-09.streamlit.app/"
   },
   {
     title: "GrantMirror AI",
-    description: "AI-assisted grant discovery and project development tool for innovation funding opportunities.",
+    description:
+      "AI-assisted grant discovery and project development tool for innovation funding opportunities and EU projects.",
     tags: ["AI", "EU Projects", "Grants"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://grantmirror-ai.streamlit.app/"
   },
   {
     title: "MeetAlign",
-    description: "A smart meeting alignment and collaboration tool designed to improve productivity and decision-making.",
+    description:
+      "Smart meeting alignment and collaboration assistant designed to improve productivity, planning and decision-making.",
     tags: ["Productivity", "AI", "Meetings"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://meetalign.streamlit.app/"
   },
   {
     title: "OncoConnect Co-Creation App",
-    description: "Co-creation platform concept for oncology-related collaboration, stakeholder engagement and innovation.",
+    description:
+      "Oncology-focused co-creation concept for stakeholder engagement, collaboration and healthcare innovation.",
     tags: ["HealthTech", "Oncology", "Co-Creation"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://oncoconnect-co-creation-app.streamlit.app/"
   }
 ];
+
+/* -----------------------------
+   Streamlit App Data
+----------------------------- */
 
 const streamlitApps = [
   {
@@ -71,9 +101,34 @@ const streamlitApps = [
   }
 ];
 
-const projectGrid = document.getElementById("projectGrid");
+/* -----------------------------
+   Helper Functions
+----------------------------- */
+
+function safeText(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function isValidFormspreeUrl(url) {
+  return (
+    typeof url === "string" &&
+    url.startsWith("https://formspree.io/f/") &&
+    !url.includes("your-form-id")
+  );
+}
+
+/* -----------------------------
+   Render Project Cards
+----------------------------- */
 
 function renderProjects() {
+  const projectGrid = document.getElementById("projectGrid");
+
   if (!projectGrid) return;
 
   projectGrid.innerHTML = "";
@@ -82,23 +137,37 @@ function renderProjects() {
     const card = document.createElement("article");
     card.className = "project-card glass";
 
+    const tagsHtml = project.tags
+      .map((tag) => `<span>${safeText(tag)}</span>`)
+      .join("");
+
     card.innerHTML = `
-      <h3>${project.title}</h3>
-      <p>${project.description}</p>
+      <h3>${safeText(project.title)}</h3>
+
+      <p>${safeText(project.description)}</p>
 
       <div class="project-meta">
-        ${project.tags.map(tag => `<span>${tag}</span>`).join("")}
+        ${tagsHtml}
       </div>
 
       <div class="project-actions">
-        <a href="${project.github}" target="_blank" rel="noopener">GitHub</a>
-        <a href="${project.demo}" target="_blank" rel="noopener">Live Demo</a>
+        <a href="${project.github}" target="_blank" rel="noopener">
+          GitHub
+        </a>
+
+        <a href="${project.demo}" target="_blank" rel="noopener">
+          Live Demo
+        </a>
       </div>
     `;
 
     projectGrid.appendChild(card);
   });
 }
+
+/* -----------------------------
+   Render Streamlit App Cards
+----------------------------- */
 
 function renderStreamlitApps() {
   const appGrid = document.getElementById("appGrid");
@@ -112,21 +181,26 @@ function renderStreamlitApps() {
 
   streamlitApps.forEach((app, index) => {
     const appCard = document.createElement("button");
+
     appCard.className = index === 0 ? "app-card glass active" : "app-card glass";
     appCard.type = "button";
+    appCard.setAttribute("aria-label", `Open ${app.title}`);
+    appCard.dataset.url = app.url;
+    appCard.dataset.title = app.title;
 
     appCard.innerHTML = `
-      <span class="app-badge">${app.badge}</span>
-      <h3>${app.title}</h3>
-      <p>${app.description}</p>
+      <span class="app-badge">${safeText(app.badge)}</span>
+      <h3>${safeText(app.title)}</h3>
+      <p>${safeText(app.description)}</p>
     `;
 
     appCard.addEventListener("click", () => {
-      document.querySelectorAll(".app-card").forEach(card => {
+      document.querySelectorAll(".app-card").forEach((card) => {
         card.classList.remove("active");
       });
 
       appCard.classList.add("active");
+
       frame.src = app.url;
       activeTitle.textContent = app.title;
       openExternal.href = app.url;
@@ -136,21 +210,26 @@ function renderStreamlitApps() {
   });
 }
 
-renderProjects();
-renderStreamlitApps();
+/* -----------------------------
+   Dark / Light Mode
+----------------------------- */
 
-// Dark mode toggle
-const themeToggle = document.getElementById("themeToggle");
-const html = document.documentElement;
+function initThemeToggle() {
+  const themeToggle = document.getElementById("themeToggle");
+  const html = document.documentElement;
 
-const savedTheme = localStorage.getItem("theme");
+  if (!themeToggle || !html) return;
 
-if (savedTheme) {
-  html.setAttribute("data-theme", savedTheme);
-  themeToggle.textContent = savedTheme === "dark" ? "🌙" : "☀️";
-}
+  const savedTheme = localStorage.getItem("theme");
 
-if (themeToggle) {
+  if (savedTheme === "dark" || savedTheme === "light") {
+    html.setAttribute("data-theme", savedTheme);
+    themeToggle.textContent = savedTheme === "dark" ? "🌙" : "☀️";
+  } else {
+    html.setAttribute("data-theme", "dark");
+    themeToggle.textContent = "🌙";
+  }
+
   themeToggle.addEventListener("click", () => {
     const currentTheme = html.getAttribute("data-theme");
     const nextTheme = currentTheme === "dark" ? "light" : "dark";
@@ -162,8 +241,202 @@ if (themeToggle) {
   });
 }
 
-// Footer year
-const year = document.getElementById("year");
-if (year) {
-  year.textContent = new Date().getFullYear();
+/* -----------------------------
+   Contact Form - Formspree Ajax
+----------------------------- */
+
+function initContactForm() {
+  const form = document.querySelector(".contact-form");
+
+  if (!form) return;
+
+  const status = document.createElement("div");
+  status.className = "form-status";
+  status.style.display = "none";
+  status.style.marginTop = "12px";
+  status.style.padding = "14px 16px";
+  status.style.borderRadius = "14px";
+  status.style.fontWeight = "700";
+  status.style.lineHeight = "1.5";
+
+  form.appendChild(status);
+
+  form.addEventListener("submit", async (event) => {
+    const actionUrl = form.getAttribute("action");
+
+    if (!isValidFormspreeUrl(actionUrl)) {
+      event.preventDefault();
+
+      status.style.display = "block";
+      status.style.color = "#facc15";
+      status.style.background = "rgba(250, 204, 21, 0.12)";
+      status.style.border = "1px solid rgba(250, 204, 21, 0.25)";
+      status.textContent =
+        "Formspree URL henüz ayarlanmamış. index.html içindeki form action alanını kontrol et.";
+
+      return;
+    }
+
+    event.preventDefault();
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalButtonText = submitButton ? submitButton.textContent : "";
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+      submitButton.style.opacity = "0.75";
+      submitButton.style.cursor = "not-allowed";
+    }
+
+    status.style.display = "block";
+    status.style.color = "#38bdf8";
+    status.style.background = "rgba(56, 189, 248, 0.12)";
+    status.style.border = "1px solid rgba(56, 189, 248, 0.25)";
+    status.textContent = "Sending your message...";
+
+    try {
+      const formData = new FormData(form);
+
+      const response = await fetch(actionUrl, {
+        method: "POST",
+        body: formData,
+        headers: {
+          Accept: "application/json"
+        }
+      });
+
+      if (response.ok) {
+        form.reset();
+
+        status.style.color = "#22c55e";
+        status.style.background = "rgba(34, 197, 94, 0.12)";
+        status.style.border = "1px solid rgba(34, 197, 94, 0.25)";
+        status.textContent =
+          "Thank you! Your message has been sent successfully.";
+      } else {
+        status.style.color = "#fb7185";
+        status.style.background = "rgba(251, 113, 133, 0.12)";
+        status.style.border = "1px solid rgba(251, 113, 133, 0.25)";
+        status.textContent =
+          "Something went wrong. Please try again or contact me by email.";
+      }
+    } catch (error) {
+      status.style.color = "#fb7185";
+      status.style.background = "rgba(251, 113, 133, 0.12)";
+      status.style.border = "1px solid rgba(251, 113, 133, 0.25)";
+      status.textContent =
+        "Network error. Please try again or contact me by email.";
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalButtonText;
+        submitButton.style.opacity = "1";
+        submitButton.style.cursor = "pointer";
+      }
+    }
+  });
 }
+
+/* -----------------------------
+   Smooth Active Navigation
+----------------------------- */
+
+function initNavigationHighlight() {
+  const sections = document.querySelectorAll("section[id]");
+  const navLinks = document.querySelectorAll(".nav-links a");
+
+  if (!sections.length || !navLinks.length) return;
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        const id = entry.target.getAttribute("id");
+
+        navLinks.forEach((link) => {
+          link.classList.remove("active-nav");
+
+          if (link.getAttribute("href") === `#${id}`) {
+            link.classList.add("active-nav");
+          }
+        });
+      });
+    },
+    {
+      root: null,
+      threshold: 0.35
+    }
+  );
+
+  sections.forEach((section) => observer.observe(section));
+}
+
+/* -----------------------------
+   Reveal Animations
+----------------------------- */
+
+function initRevealAnimations() {
+  const revealItems = document.querySelectorAll(
+    ".glass, .section-heading, .project-card, .app-card"
+  );
+
+  if (!revealItems.length) return;
+
+  revealItems.forEach((item) => {
+    item.style.opacity = "0";
+    item.style.transform = "translateY(18px)";
+    item.style.transition =
+      "opacity 0.55s ease, transform 0.55s ease, border-color 0.25s ease, box-shadow 0.25s ease";
+  });
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        entry.target.style.opacity = "1";
+        entry.target.style.transform = "translateY(0)";
+
+        observer.unobserve(entry.target);
+      });
+    },
+    {
+      threshold: 0.12
+    }
+  );
+
+  revealItems.forEach((item) => observer.observe(item));
+}
+
+/* -----------------------------
+   Footer Year
+----------------------------- */
+
+function setFooterYear() {
+  const year = document.getElementById("year");
+
+  if (year) {
+    year.textContent = new Date().getFullYear();
+  }
+}
+
+/* -----------------------------
+   Init
+----------------------------- */
+
+document.addEventListener("DOMContentLoaded", () => {
+  renderProjects();
+  renderStreamlitApps();
+  initThemeToggle();
+  initContactForm();
+  initNavigationHighlight();
+  setFooterYear();
+
+  /*
+    Reveal animation renderProjects ve renderStreamlitApps sonrasında çalışmalı.
+    Çünkü kartlar JavaScript ile oluşturuluyor.
+  */
+  initRevealAnimations();
+});
