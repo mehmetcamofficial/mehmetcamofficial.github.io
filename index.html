@@ -66,9 +66,8 @@
         <div class="profile-wrap">
           <div class="profile-ring"></div>
 
-          <!-- Repo içine profile.jpg yükle -->
           <img
-            src="profile.jpg"
+            src="profile.jpeg"
             alt="Mehmet Cam profile photo"
             class="profile-img"
           />
@@ -85,8 +84,7 @@
           </h2>
 
           <div class="hero-buttons">
-            <!-- Repo içine Mehmet-Cam-CV.pdf yükle -->
-            <a href="Mehmet-Cam-CV.pdf" download class="btn primary">
+            <a href="Mehmet-Cam-CV..pdf" download class="btn primary">
               Download CV
             </a>
 
@@ -108,7 +106,6 @@
               GitHub
             </a>
 
-            <!-- Kendi LinkedIn linkinle değiştir -->
             <a
               href="https://www.linkedin.com/"
               target="_blank"
@@ -117,7 +114,6 @@
               LinkedIn
             </a>
 
-            <!-- Kendi mail adresinle değiştir -->
             <a href="mailto:yourmail@example.com">
               Email
             </a>
@@ -221,30 +217,26 @@
         <!-- App cards are inserted by script.js -->
       </div>
 
-      <div class="streamlit-box glass">
-        <div class="streamlit-header">
-          <div>
-            <p class="eyebrow">Live Preview</p>
-            <h3 id="activeAppTitle">AgriVision AI</h3>
-          </div>
+      <div class="app-preview glass">
+        <div>
+          <p class="eyebrow">Selected App</p>
+          <h3 id="activeAppTitle">AgriVision AI</h3>
+          <p id="activeAppDescription">
+            AI-powered agriculture intelligence and decision support.
+          </p>
+        </div>
 
+        <div class="preview-actions">
           <a
             id="openAppExternal"
             href="https://agrivision-ai09.streamlit.app/"
             target="_blank"
             rel="noopener"
-            class="btn secondary"
+            class="btn primary"
           >
             Open Full App
           </a>
         </div>
-
-        <iframe
-          id="streamlitFrame"
-          src="https://agrivision-ai09.streamlit.app/"
-          title="Streamlit App"
-          loading="lazy"
-        ></iframe>
       </div>
     </section>
 
@@ -348,15 +340,6 @@
       Visitor analytics ready: Plausible, GoatCounter, Umami or Google Analytics.
     </p>
   </footer>
-
-  <!-- Visitor Analytics Example - Domain alınca aktif ederiz -->
-  <!--
-  <script
-    data-goatcounter="https://yourname.goatcounter.com/count"
-    async
-    src="//gc.zgo.at/count.js">
-  </script>
-  -->
 
   <script src="script.js"></script>
 </body>
