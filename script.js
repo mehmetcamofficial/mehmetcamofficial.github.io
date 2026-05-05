@@ -1,25 +1,12 @@
 /* =========================================================
    Mehmet Cam Portfolio - script.js
-   Compatible with premium index.html + style.css
-   Formspree endpoint: https://formspree.io/f/xpqbrwoa
+   Files:
+   - profile.jpeg
+   - Mehmet-Cam-CV..pdf
+   - Formspree: https://formspree.io/f/xpqbrwoa
    ========================================================= */
 
-/* -----------------------------
-   Basic Config
------------------------------ */
-
 const username = "mehmetcamofficial";
-
-const profile = {
-  name: "Mehmet Cam",
-  github: "https://github.com/mehmetcamofficial",
-  portfolio: "https://mehmetcamofficial.github.io",
-  email: "yourmail@example.com"
-};
-
-/* -----------------------------
-   Project Data
------------------------------ */
 
 const projects = [
   {
@@ -64,10 +51,6 @@ const projects = [
   }
 ];
 
-/* -----------------------------
-   Streamlit App Data
------------------------------ */
-
 const streamlitApps = [
   {
     title: "AgriVision AI",
@@ -101,10 +84,6 @@ const streamlitApps = [
   }
 ];
 
-/* -----------------------------
-   Helper Functions
------------------------------ */
-
 function safeText(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -122,10 +101,7 @@ function isValidFormspreeUrl(url) {
   );
 }
 
-/* -----------------------------
-   Render Project Cards
------------------------------ */
-
+/* Projects */
 function renderProjects() {
   const projectGrid = document.getElementById("projectGrid");
 
@@ -143,7 +119,6 @@ function renderProjects() {
 
     card.innerHTML = `
       <h3>${safeText(project.title)}</h3>
-
       <p>${safeText(project.description)}</p>
 
       <div class="project-meta">
@@ -165,17 +140,14 @@ function renderProjects() {
   });
 }
 
-/* -----------------------------
-   Render Streamlit App Cards
------------------------------ */
-
+/* Streamlit apps without iframe */
 function renderStreamlitApps() {
   const appGrid = document.getElementById("appGrid");
-  const frame = document.getElementById("streamlitFrame");
   const activeTitle = document.getElementById("activeAppTitle");
+  const activeDescription = document.getElementById("activeAppDescription");
   const openExternal = document.getElementById("openAppExternal");
 
-  if (!appGrid || !frame || !activeTitle || !openExternal) return;
+  if (!appGrid || !activeTitle || !activeDescription || !openExternal) return;
 
   appGrid.innerHTML = "";
 
@@ -185,8 +157,6 @@ function renderStreamlitApps() {
     appCard.className = index === 0 ? "app-card glass active" : "app-card glass";
     appCard.type = "button";
     appCard.setAttribute("aria-label", `Open ${app.title}`);
-    appCard.dataset.url = app.url;
-    appCard.dataset.title = app.title;
 
     appCard.innerHTML = `
       <span class="app-badge">${safeText(app.badge)}</span>
@@ -201,8 +171,8 @@ function renderStreamlitApps() {
 
       appCard.classList.add("active");
 
-      frame.src = app.url;
       activeTitle.textContent = app.title;
+      activeDescription.textContent = app.description;
       openExternal.href = app.url;
     });
 
@@ -210,10 +180,7 @@ function renderStreamlitApps() {
   });
 }
 
-/* -----------------------------
-   Dark / Light Mode
------------------------------ */
-
+/* Theme */
 function initThemeToggle() {
   const themeToggle = document.getElementById("themeToggle");
   const html = document.documentElement;
@@ -241,10 +208,7 @@ function initThemeToggle() {
   });
 }
 
-/* -----------------------------
-   Contact Form - Formspree Ajax
------------------------------ */
-
+/* Contact Form */
 function initContactForm() {
   const form = document.querySelector(".contact-form");
 
@@ -272,7 +236,7 @@ function initContactForm() {
       status.style.background = "rgba(250, 204, 21, 0.12)";
       status.style.border = "1px solid rgba(250, 204, 21, 0.25)";
       status.textContent =
-        "Formspree URL henüz ayarlanmamış. index.html içindeki form action alanını kontrol et.";
+        "Formspree URL is not configured correctly.";
 
       return;
     }
@@ -338,10 +302,7 @@ function initContactForm() {
   });
 }
 
-/* -----------------------------
-   Smooth Active Navigation
------------------------------ */
-
+/* Navigation */
 function initNavigationHighlight() {
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".nav-links a");
@@ -373,10 +334,7 @@ function initNavigationHighlight() {
   sections.forEach((section) => observer.observe(section));
 }
 
-/* -----------------------------
-   Reveal Animations
------------------------------ */
-
+/* Reveal animations */
 function initRevealAnimations() {
   const revealItems = document.querySelectorAll(
     ".glass, .section-heading, .project-card, .app-card"
@@ -410,10 +368,7 @@ function initRevealAnimations() {
   revealItems.forEach((item) => observer.observe(item));
 }
 
-/* -----------------------------
-   Footer Year
------------------------------ */
-
+/* Footer year */
 function setFooterYear() {
   const year = document.getElementById("year");
 
@@ -422,10 +377,7 @@ function setFooterYear() {
   }
 }
 
-/* -----------------------------
-   Init
------------------------------ */
-
+/* Init */
 document.addEventListener("DOMContentLoaded", () => {
   renderProjects();
   renderStreamlitApps();
@@ -433,10 +385,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initContactForm();
   initNavigationHighlight();
   setFooterYear();
-
-  /*
-    Reveal animation renderProjects ve renderStreamlitApps sonrasında çalışmalı.
-    Çünkü kartlar JavaScript ile oluşturuluyor.
-  */
   initRevealAnimations();
 });
