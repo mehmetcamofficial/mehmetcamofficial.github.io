@@ -80,7 +80,7 @@ const agriProjects = [
     originalTitle: "Tarımsal Çözüm Merkezi",
     category: "Software",
     role: "Project Manager",
-    image: "./assets/agricultural-solution-center.jpg",
+    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/agricultural-solution-center.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A software-oriented agricultural solution concept designed to support stakeholders in the agriculture and food value chain through technology-enabled consulting, process management and decision support. I contributed to digital advisory workflows, farmer support mechanisms and solution design.",
@@ -93,7 +93,7 @@ const agriProjects = [
     originalTitle: "Smart OASIS",
     category: "Digital Farm",
     role: "Researcher",
-    image: "./assets/smart-oasis.jpg",
+    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/smart-oasis.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "An integrated digital farm initiative combining smart production infrastructure, IoT, data-driven monitoring and technology-oriented agricultural production concepts. I contributed as a researcher through project analysis, information gathering, innovation mapping and design support.",
@@ -106,7 +106,7 @@ const agriProjects = [
     originalTitle: "Tabit Akıllı Köy",
     category: "Smart Village",
     role: "Researcher",
-    image: "./assets/smart-village.jpg",
+    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/smart-village.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A smart village model combining rural development, agricultural innovation, digital transformation and technology-enabled farming practices. I contributed to research activities, user needs analysis and field-oriented learning processes.",
@@ -119,7 +119,7 @@ const agriProjects = [
     originalTitle: "Rapor ve İstatistik Geliştirme Uzayı",
     category: "Software",
     role: "Project Manager",
-    image: "./assets/rigel.jpg",
+    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/rigel.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A reporting and statistics-focused software concept designed to transform agricultural information into structured insights and decision-support outputs. As project manager, I contributed to process planning, output tracking and data-driven structure development.",
@@ -132,7 +132,7 @@ const agriProjects = [
     originalTitle: "Azmud Akıllı Sera",
     category: "Smart Greenhouse",
     role: "Researcher",
-    image: "./assets/azmud.jpg",
+    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/azmud.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A smart greenhouse sensor initiative focused on controlled agriculture, sensor technologies, monitoring and data-supported greenhouse management. I contributed to technical needs analysis, use-case development and agricultural technology assessment.",
@@ -145,7 +145,7 @@ const agriProjects = [
     originalTitle: "Vodafone Çiftçi Kulübü",
     category: "Business Model",
     role: "Contributor and Trainer",
-    image: "./assets/vodafone-farmers-club.jpg",
+    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/vodafone-farmers-club.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A farmer-oriented service, communication, training and business model initiative. I contributed to farmer engagement, training processes and field-oriented knowledge transfer activities.",
@@ -154,7 +154,6 @@ const agriProjects = [
     icon: "📱"
   }
 ];
-
 function safeText(value) {
   return String(value)
     .replaceAll("&", "&amp;")
