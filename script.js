@@ -1,12 +1,17 @@
 /* =========================================================
    Mehmet Cam Portfolio - script.js
-   Files:
+   Updated:
    - profile.jpeg
    - Mehmet-Cam-CV..pdf
    - Formspree: https://formspree.io/f/xpqbrwoa
+   - TABIT AIM project experience
    ========================================================= */
 
 const username = "mehmetcamofficial";
+
+/* -----------------------------
+   AI / Streamlit Project Cards
+----------------------------- */
 
 const projects = [
   {
@@ -51,6 +56,10 @@ const projects = [
   }
 ];
 
+/* -----------------------------
+   Streamlit App Selector
+----------------------------- */
+
 const streamlitApps = [
   {
     title: "AgriVision AI",
@@ -84,6 +93,77 @@ const streamlitApps = [
   }
 ];
 
+/* -----------------------------
+   TABIT AIM Projects
+----------------------------- */
+
+const tabitProjects = [
+  {
+    title: "Agricultural Solution Center",
+    originalTitle: "Tarımsal Çözüm Merkezi",
+    category: "Software",
+    role: "Proje Yöneticisi",
+    description:
+      "A digital agriculture support concept focused on delivering practical agricultural solutions, advisory workflows and software-enabled farmer services.",
+    impact: "Digital advisory • Farmer support • Agricultural software",
+    icon: "🌱"
+  },
+  {
+    title: "Smart OASIS",
+    originalTitle: "Smart OASIS",
+    category: "Digital Farm",
+    role: "Araştırmacı",
+    description:
+      "A digital farming and smart agriculture initiative combining field-scale technology, production systems and innovation-oriented farm infrastructure.",
+    impact: "Digital farm • Smart production • AgriTech infrastructure",
+    icon: "🛰️"
+  },
+  {
+    title: "Tabit Smart Village",
+    originalTitle: "Tabit Akıllı Köy",
+    category: "Smart Village",
+    role: "Araştırmacı",
+    description:
+      "A smart village model designed around agricultural innovation, rural digital transformation and technology-enabled farming practices.",
+    impact: "Smart village • Rural innovation • Digital transformation",
+    icon: "🏡"
+  },
+  {
+    title: "RIGEL",
+    originalTitle: "Rapor ve İstatistik Geliştirme Uzayı",
+    category: "Software",
+    role: "Proje Yöneticisi",
+    description:
+      "A reporting and statistics-oriented software concept for transforming agricultural information into usable insights, structured outputs and decision-support reports.",
+    impact: "Reporting • Statistics • Data-driven decisions",
+    icon: "📊"
+  },
+  {
+    title: "Azmud Smart Greenhouse Sensor",
+    originalTitle: "Azmud Akıllı Sera",
+    category: "Smart Greenhouse",
+    role: "Araştırmacı",
+    description:
+      "A smart greenhouse sensor initiative focused on controlled environment agriculture, monitoring and data-supported greenhouse management.",
+    impact: "Smart greenhouse • Sensors • Controlled agriculture",
+    icon: "🌿"
+  },
+  {
+    title: "Vodafone Farmers Club",
+    originalTitle: "Vodafone Çiftçi Kulübü",
+    category: "Business Model",
+    role: "Katkı Sağlayan ve Eğitmen",
+    description:
+      "A farmer-oriented business model and service ecosystem designed to support agricultural communication, access, training and farmer engagement.",
+    impact: "Farmer services • Business model • Training • Agricultural communication",
+    icon: "📱"
+  }
+];
+
+/* -----------------------------
+   Helpers
+----------------------------- */
+
 function safeText(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -101,7 +181,10 @@ function isValidFormspreeUrl(url) {
   );
 }
 
-/* Projects */
+/* -----------------------------
+   Render AI Project Cards
+----------------------------- */
+
 function renderProjects() {
   const projectGrid = document.getElementById("projectGrid");
 
@@ -140,7 +223,10 @@ function renderProjects() {
   });
 }
 
-/* Streamlit apps without iframe */
+/* -----------------------------
+   Render Streamlit App Cards
+----------------------------- */
+
 function renderStreamlitApps() {
   const appGrid = document.getElementById("appGrid");
   const activeTitle = document.getElementById("activeAppTitle");
@@ -180,7 +266,72 @@ function renderStreamlitApps() {
   });
 }
 
-/* Theme */
+/* -----------------------------
+   Render TABIT AIM Projects
+----------------------------- */
+
+function renderTabitProjects() {
+  const tabitGrid = document.getElementById("tabitGrid");
+  const filterButtons = document.querySelectorAll(".filter-btn");
+
+  if (!tabitGrid) return;
+
+  function createCards(filter = "All") {
+    tabitGrid.innerHTML = "";
+
+    const filteredProjects =
+      filter === "All"
+        ? tabitProjects
+        : tabitProjects.filter((project) => project.category === filter);
+
+    filteredProjects.forEach((project, index) => {
+      const card = document.createElement("article");
+      card.className = "tabit-card glass";
+      card.style.animationDelay = `${index * 0.08}s`;
+
+      card.innerHTML = `
+        <div class="tabit-card-top">
+          <div class="tabit-icon">${project.icon}</div>
+          <span class="tabit-category">${safeText(project.category)}</span>
+        </div>
+
+        <h3>${safeText(project.title)}</h3>
+        <p class="tabit-original">${safeText(project.originalTitle)}</p>
+
+        <p class="tabit-description">
+          ${safeText(project.description)}
+        </p>
+
+        <div class="tabit-impact">
+          ${safeText(project.impact)}
+        </div>
+
+        <div class="tabit-role">
+          <span>Role</span>
+          <strong>${safeText(project.role)}</strong>
+        </div>
+      `;
+
+      tabitGrid.appendChild(card);
+    });
+  }
+
+  createCards();
+
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      filterButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+
+      createCards(button.dataset.filter);
+    });
+  });
+}
+
+/* -----------------------------
+   Theme
+----------------------------- */
+
 function initThemeToggle() {
   const themeToggle = document.getElementById("themeToggle");
   const html = document.documentElement;
@@ -208,7 +359,10 @@ function initThemeToggle() {
   });
 }
 
-/* Contact Form */
+/* -----------------------------
+   Contact Form - Formspree
+----------------------------- */
+
 function initContactForm() {
   const form = document.querySelector(".contact-form");
 
@@ -235,9 +389,7 @@ function initContactForm() {
       status.style.color = "#facc15";
       status.style.background = "rgba(250, 204, 21, 0.12)";
       status.style.border = "1px solid rgba(250, 204, 21, 0.25)";
-      status.textContent =
-        "Formspree URL is not configured correctly.";
-
+      status.textContent = "Formspree URL is not configured correctly.";
       return;
     }
 
@@ -302,7 +454,10 @@ function initContactForm() {
   });
 }
 
-/* Navigation */
+/* -----------------------------
+   Navigation Highlight
+----------------------------- */
+
 function initNavigationHighlight() {
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".nav-links a");
@@ -334,10 +489,13 @@ function initNavigationHighlight() {
   sections.forEach((section) => observer.observe(section));
 }
 
-/* Reveal animations */
+/* -----------------------------
+   Reveal Animations
+----------------------------- */
+
 function initRevealAnimations() {
   const revealItems = document.querySelectorAll(
-    ".glass, .section-heading, .project-card, .app-card"
+    ".glass, .section-heading, .project-card, .app-card, .tabit-card"
   );
 
   if (!revealItems.length) return;
@@ -368,7 +526,10 @@ function initRevealAnimations() {
   revealItems.forEach((item) => observer.observe(item));
 }
 
-/* Footer year */
+/* -----------------------------
+   Footer Year
+----------------------------- */
+
 function setFooterYear() {
   const year = document.getElementById("year");
 
@@ -377,10 +538,14 @@ function setFooterYear() {
   }
 }
 
-/* Init */
+/* -----------------------------
+   Init
+----------------------------- */
+
 document.addEventListener("DOMContentLoaded", () => {
   renderProjects();
   renderStreamlitApps();
+  renderTabitProjects();
   initThemeToggle();
   initContactForm();
   initNavigationHighlight();
