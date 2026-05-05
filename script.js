@@ -1,18 +1,3 @@
-/* =========================================================
-   Mehmet Cam Portfolio - script.js
-   Updated:
-   - profile.jpeg
-   - Mehmet-Cam-CV..pdf
-   - Formspree: https://formspree.io/f/xpqbrwoa
-   - TABIT AIM project experience
-   ========================================================= */
-
-const username = "mehmetcamofficial";
-
-/* -----------------------------
-   AI / Streamlit Project Cards
------------------------------ */
-
 const projects = [
   {
     title: "AgriVision AI",
@@ -56,10 +41,6 @@ const projects = [
   }
 ];
 
-/* -----------------------------
-   Streamlit App Selector
------------------------------ */
-
 const streamlitApps = [
   {
     title: "AgriVision AI",
@@ -93,19 +74,18 @@ const streamlitApps = [
   }
 ];
 
-/* -----------------------------
-   TABIT AIM Projects
------------------------------ */
-
-const tabitProjects = [
+const agriProjects = [
   {
     title: "Agricultural Solution Center",
     originalTitle: "Tarımsal Çözüm Merkezi",
     category: "Software",
     role: "Proje Yöneticisi",
+    image: "agricultural-solution-center.jpg",
+    source: "https://tabitaim.com//projelerimiz",
     description:
-      "A digital agriculture support concept focused on delivering practical agricultural solutions, advisory workflows and software-enabled farmer services.",
-    impact: "Digital advisory • Farmer support • Agricultural software",
+      "Tarım ve gıda sektöründe tedarik zincirindeki paydaşlara teknoloji destekli danışmanlık, süreç yönetimi ve karar destek yaklaşımı sunan bir yazılım konsepti. Projede çiftçilere bilgiye erişim, doğru karar alma, verimlilik ve dijital danışmanlık süreçleri açısından katkı sağladım.",
+    impact:
+      "Digital advisory • Farmer support • Decision support software • Agricultural process management",
     icon: "🌱"
   },
   {
@@ -113,9 +93,12 @@ const tabitProjects = [
     originalTitle: "Smart OASIS",
     category: "Digital Farm",
     role: "Araştırmacı",
+    image: "smart-oasis.jpg",
+    source: "https://tabitaim.com//projelerimiz",
     description:
-      "A digital farming and smart agriculture initiative combining field-scale technology, production systems and innovation-oriented farm infrastructure.",
-    impact: "Digital farm • Smart production • AgriTech infrastructure",
+      "Dijital tarım, akıllı üretim altyapısı, IoT yaklaşımı, veri destekli izleme ve teknoloji odaklı üretim konseptleri üzerine kurgulanan entegre bir dijital çiftlik projesidir. Araştırmacı rolümle proje tasarımı, bilgi toplama, analiz ve inovasyon süreçlerine katkı sağladım.",
+    impact:
+      "Digital farm • Smart production • IoT • AgriTech infrastructure",
     icon: "🛰️"
   },
   {
@@ -123,9 +106,12 @@ const tabitProjects = [
     originalTitle: "Tabit Akıllı Köy",
     category: "Smart Village",
     role: "Araştırmacı",
+    image: "smart-village.jpg",
+    source: "https://tabitaim.com//projelerimiz",
     description:
-      "A smart village model designed around agricultural innovation, rural digital transformation and technology-enabled farming practices.",
-    impact: "Smart village • Rural innovation • Digital transformation",
+      "Kırsal kalkınma, tarımsal inovasyon, dijital dönüşüm ve teknoloji destekli üretim pratiklerini bir araya getiren akıllı köy modelidir. Araştırmacı olarak tarım teknolojileri, kullanıcı ihtiyaçları ve saha odaklı öğrenme süreçlerine katkı verdim.",
+    impact:
+      "Smart village • Rural innovation • Digital transformation • Farmer-centered design",
     icon: "🏡"
   },
   {
@@ -133,9 +119,12 @@ const tabitProjects = [
     originalTitle: "Rapor ve İstatistik Geliştirme Uzayı",
     category: "Software",
     role: "Proje Yöneticisi",
+    image: "rigel.jpg",
+    source: "https://tabitaim.com//projelerimiz",
     description:
-      "A reporting and statistics-oriented software concept for transforming agricultural information into usable insights, structured outputs and decision-support reports.",
-    impact: "Reporting • Statistics • Data-driven decisions",
+      "Tarımsal bilgi, raporlama, istatistik ve veri odaklı çıktıların düzenli şekilde geliştirilebilmesi için tasarlanan yazılım ve karar destek yaklaşımıdır. Proje yöneticisi olarak süreç planlama, çıktı takibi ve veri odaklı yapının geliştirilmesinde rol aldım.",
+    impact:
+      "Reporting • Statistics • Data-driven decisions • Structured agricultural insights",
     icon: "📊"
   },
   {
@@ -143,9 +132,12 @@ const tabitProjects = [
     originalTitle: "Azmud Akıllı Sera",
     category: "Smart Greenhouse",
     role: "Araştırmacı",
+    image: "azmud.jpg",
+    source: "https://tabitaim.com//projelerimiz",
     description:
-      "A smart greenhouse sensor initiative focused on controlled environment agriculture, monitoring and data-supported greenhouse management.",
-    impact: "Smart greenhouse • Sensors • Controlled agriculture",
+      "Kontrollü tarım, sera içi sensör teknolojileri, izleme ve veri destekli sera yönetimi üzerine odaklanan akıllı sera sensör projesidir. Araştırmacı olarak teknik ihtiyaç analizi, kullanım senaryoları ve tarımsal teknoloji değerlendirme süreçlerine katkı sağladım.",
+    impact:
+      "Smart greenhouse • Sensors • Controlled agriculture • Monitoring",
     icon: "🌿"
   },
   {
@@ -153,16 +145,15 @@ const tabitProjects = [
     originalTitle: "Vodafone Çiftçi Kulübü",
     category: "Business Model",
     role: "Katkı Sağlayan ve Eğitmen",
+    image: "vodafone-farmers-club.jpg",
+    source: "https://tabitaim.com//projelerimiz",
     description:
-      "A farmer-oriented business model and service ecosystem designed to support agricultural communication, access, training and farmer engagement.",
-    impact: "Farmer services • Business model • Training • Agricultural communication",
+      "Çiftçilere yönelik hizmet, iletişim, eğitim ve iş modeli geliştirme yaklaşımı üzerine kurgulanan bir tarımsal etkileşim ve destek projesidir. Katkı sağlayan ve eğitmen olarak çiftçi iletişimi, eğitim süreçleri ve saha odaklı bilgi aktarımı tarafında rol aldım.",
+    impact:
+      "Farmer services • Business model • Training • Agricultural communication",
     icon: "📱"
   }
 ];
-
-/* -----------------------------
-   Helpers
------------------------------ */
 
 function safeText(value) {
   return String(value)
@@ -181,13 +172,8 @@ function isValidFormspreeUrl(url) {
   );
 }
 
-/* -----------------------------
-   Render AI Project Cards
------------------------------ */
-
 function renderProjects() {
   const projectGrid = document.getElementById("projectGrid");
-
   if (!projectGrid) return;
 
   projectGrid.innerHTML = "";
@@ -209,23 +195,14 @@ function renderProjects() {
       </div>
 
       <div class="project-actions">
-        <a href="${project.github}" target="_blank" rel="noopener">
-          GitHub
-        </a>
-
-        <a href="${project.demo}" target="_blank" rel="noopener">
-          Live Demo
-        </a>
+        <a href="${project.github}" target="_blank" rel="noopener">GitHub</a>
+        <a href="${project.demo}" target="_blank" rel="noopener">Live Demo</a>
       </div>
     `;
 
     projectGrid.appendChild(card);
   });
 }
-
-/* -----------------------------
-   Render Streamlit App Cards
------------------------------ */
 
 function renderStreamlitApps() {
   const appGrid = document.getElementById("appGrid");
@@ -242,7 +219,6 @@ function renderStreamlitApps() {
 
     appCard.className = index === 0 ? "app-card glass active" : "app-card glass";
     appCard.type = "button";
-    appCard.setAttribute("aria-label", `Open ${app.title}`);
 
     appCard.innerHTML = `
       <span class="app-badge">${safeText(app.badge)}</span>
@@ -256,7 +232,6 @@ function renderStreamlitApps() {
       });
 
       appCard.classList.add("active");
-
       activeTitle.textContent = app.title;
       activeDescription.textContent = app.description;
       openExternal.href = app.url;
@@ -266,53 +241,51 @@ function renderStreamlitApps() {
   });
 }
 
-/* -----------------------------
-   Render TABIT AIM Projects
------------------------------ */
-
-function renderTabitProjects() {
-  const tabitGrid = document.getElementById("tabitGrid");
+function renderAgriProjects() {
+  const agriGrid = document.getElementById("agriGrid");
   const filterButtons = document.querySelectorAll(".filter-btn");
 
-  if (!tabitGrid) return;
+  if (!agriGrid) return;
 
   function createCards(filter = "All") {
-    tabitGrid.innerHTML = "";
+    agriGrid.innerHTML = "";
 
     const filteredProjects =
       filter === "All"
-        ? tabitProjects
-        : tabitProjects.filter((project) => project.category === filter);
+        ? agriProjects
+        : agriProjects.filter((project) => project.category === filter);
 
     filteredProjects.forEach((project, index) => {
       const card = document.createElement("article");
-      card.className = "tabit-card glass";
-      card.style.animationDelay = `${index * 0.08}s`;
+      card.className = "agri-card glass";
+      card.style.animationDelay = `${index * 0.07}s`;
 
       card.innerHTML = `
-        <div class="tabit-card-top">
-          <div class="tabit-icon">${project.icon}</div>
-          <span class="tabit-category">${safeText(project.category)}</span>
+        <div class="agri-image-wrap">
+          <img src="${project.image}" alt="${safeText(project.title)}" class="agri-image" />
+          <div class="agri-image-overlay">
+            <span>${project.icon}</span>
+            <strong>View Details</strong>
+          </div>
         </div>
 
-        <h3>${safeText(project.title)}</h3>
-        <p class="tabit-original">${safeText(project.originalTitle)}</p>
+        <div class="agri-card-body">
+          <div class="agri-card-top">
+            <span class="agri-category">${safeText(project.category)}</span>
+            <span class="agri-role-mini">${safeText(project.role)}</span>
+          </div>
 
-        <p class="tabit-description">
-          ${safeText(project.description)}
-        </p>
+          <h3>${safeText(project.title)}</h3>
+          <p class="agri-original">${safeText(project.originalTitle)}</p>
 
-        <div class="tabit-impact">
-          ${safeText(project.impact)}
-        </div>
-
-        <div class="tabit-role">
-          <span>Role</span>
-          <strong>${safeText(project.role)}</strong>
+          <p class="agri-short">
+            ${safeText(project.impact)}
+          </p>
         </div>
       `;
 
-      tabitGrid.appendChild(card);
+      card.addEventListener("click", () => openProjectModal(project));
+      agriGrid.appendChild(card);
     });
   }
 
@@ -328,9 +301,54 @@ function renderTabitProjects() {
   });
 }
 
-/* -----------------------------
-   Theme
------------------------------ */
+function openProjectModal(project) {
+  const modal = document.getElementById("projectModal");
+  const modalImage = document.getElementById("modalImage");
+  const modalCategory = document.getElementById("modalCategory");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalOriginal = document.getElementById("modalOriginal");
+  const modalRole = document.getElementById("modalRole");
+  const modalDescription = document.getElementById("modalDescription");
+  const modalImpact = document.getElementById("modalImpact");
+  const modalSource = document.getElementById("modalSource");
+
+  if (!modal) return;
+
+  modalImage.src = project.image;
+  modalImage.alt = project.title;
+  modalCategory.textContent = project.category;
+  modalTitle.textContent = project.title;
+  modalOriginal.textContent = project.originalTitle;
+  modalRole.textContent = project.role;
+  modalDescription.textContent = project.description;
+  modalImpact.textContent = project.impact;
+  modalSource.href = project.source;
+
+  modal.classList.add("active");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeProjectModal() {
+  const modal = document.getElementById("projectModal");
+  if (!modal) return;
+
+  modal.classList.remove("active");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("modal-open");
+}
+
+function initModal() {
+  document.querySelectorAll("[data-close-modal]").forEach((item) => {
+    item.addEventListener("click", closeProjectModal);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeProjectModal();
+    }
+  });
+}
 
 function initThemeToggle() {
   const themeToggle = document.getElementById("themeToggle");
@@ -344,8 +362,8 @@ function initThemeToggle() {
     html.setAttribute("data-theme", savedTheme);
     themeToggle.textContent = savedTheme === "dark" ? "🌙" : "☀️";
   } else {
-    html.setAttribute("data-theme", "dark");
-    themeToggle.textContent = "🌙";
+    html.setAttribute("data-theme", "light");
+    themeToggle.textContent = "☀️";
   }
 
   themeToggle.addEventListener("click", () => {
@@ -359,10 +377,6 @@ function initThemeToggle() {
   });
 }
 
-/* -----------------------------
-   Contact Form - Formspree
------------------------------ */
-
 function initContactForm() {
   const form = document.querySelector(".contact-form");
 
@@ -371,12 +385,6 @@ function initContactForm() {
   const status = document.createElement("div");
   status.className = "form-status";
   status.style.display = "none";
-  status.style.marginTop = "12px";
-  status.style.padding = "14px 16px";
-  status.style.borderRadius = "14px";
-  status.style.fontWeight = "700";
-  status.style.lineHeight = "1.5";
-
   form.appendChild(status);
 
   form.addEventListener("submit", async (event) => {
@@ -384,12 +392,9 @@ function initContactForm() {
 
     if (!isValidFormspreeUrl(actionUrl)) {
       event.preventDefault();
-
       status.style.display = "block";
-      status.style.color = "#facc15";
-      status.style.background = "rgba(250, 204, 21, 0.12)";
-      status.style.border = "1px solid rgba(250, 204, 21, 0.25)";
       status.textContent = "Formspree URL is not configured correctly.";
+      status.className = "form-status warning";
       return;
     }
 
@@ -401,14 +406,10 @@ function initContactForm() {
     if (submitButton) {
       submitButton.disabled = true;
       submitButton.textContent = "Sending...";
-      submitButton.style.opacity = "0.75";
-      submitButton.style.cursor = "not-allowed";
     }
 
     status.style.display = "block";
-    status.style.color = "#38bdf8";
-    status.style.background = "rgba(56, 189, 248, 0.12)";
-    status.style.border = "1px solid rgba(56, 189, 248, 0.25)";
+    status.className = "form-status info";
     status.textContent = "Sending your message...";
 
     try {
@@ -424,39 +425,23 @@ function initContactForm() {
 
       if (response.ok) {
         form.reset();
-
-        status.style.color = "#22c55e";
-        status.style.background = "rgba(34, 197, 94, 0.12)";
-        status.style.border = "1px solid rgba(34, 197, 94, 0.25)";
-        status.textContent =
-          "Thank you! Your message has been sent successfully.";
+        status.className = "form-status success";
+        status.textContent = "Thank you! Your message has been sent successfully.";
       } else {
-        status.style.color = "#fb7185";
-        status.style.background = "rgba(251, 113, 133, 0.12)";
-        status.style.border = "1px solid rgba(251, 113, 133, 0.25)";
-        status.textContent =
-          "Something went wrong. Please try again or contact me by email.";
+        status.className = "form-status error";
+        status.textContent = "Something went wrong. Please try again or contact me by email.";
       }
     } catch (error) {
-      status.style.color = "#fb7185";
-      status.style.background = "rgba(251, 113, 133, 0.12)";
-      status.style.border = "1px solid rgba(251, 113, 133, 0.25)";
-      status.textContent =
-        "Network error. Please try again or contact me by email.";
+      status.className = "form-status error";
+      status.textContent = "Network error. Please try again or contact me by email.";
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
         submitButton.textContent = originalButtonText;
-        submitButton.style.opacity = "1";
-        submitButton.style.cursor = "pointer";
       }
     }
   });
 }
-
-/* -----------------------------
-   Navigation Highlight
------------------------------ */
 
 function initNavigationHighlight() {
   const sections = document.querySelectorAll("section[id]");
@@ -481,7 +466,6 @@ function initNavigationHighlight() {
       });
     },
     {
-      root: null,
       threshold: 0.35
     }
   );
@@ -489,32 +473,22 @@ function initNavigationHighlight() {
   sections.forEach((section) => observer.observe(section));
 }
 
-/* -----------------------------
-   Reveal Animations
------------------------------ */
-
 function initRevealAnimations() {
   const revealItems = document.querySelectorAll(
-    ".glass, .section-heading, .project-card, .app-card, .tabit-card"
+    ".glass, .section-heading, .project-card, .app-card, .agri-card"
   );
 
   if (!revealItems.length) return;
 
   revealItems.forEach((item) => {
-    item.style.opacity = "0";
-    item.style.transform = "translateY(18px)";
-    item.style.transition =
-      "opacity 0.55s ease, transform 0.55s ease, border-color 0.25s ease, box-shadow 0.25s ease";
+    item.classList.add("reveal");
   });
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-
-        entry.target.style.opacity = "1";
-        entry.target.style.transform = "translateY(0)";
-
+        entry.target.classList.add("revealed");
         observer.unobserve(entry.target);
       });
     },
@@ -526,26 +500,18 @@ function initRevealAnimations() {
   revealItems.forEach((item) => observer.observe(item));
 }
 
-/* -----------------------------
-   Footer Year
------------------------------ */
-
 function setFooterYear() {
   const year = document.getElementById("year");
-
   if (year) {
     year.textContent = new Date().getFullYear();
   }
 }
 
-/* -----------------------------
-   Init
------------------------------ */
-
 document.addEventListener("DOMContentLoaded", () => {
   renderProjects();
   renderStreamlitApps();
-  renderTabitProjects();
+  renderAgriProjects();
+  initModal();
   initThemeToggle();
   initContactForm();
   initNavigationHighlight();
