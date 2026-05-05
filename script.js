@@ -174,19 +174,18 @@ const agriProjects = [
 
 /* -----------------------------
    Image Fallback System
+   jsDelivr CDN - hızlı ve güvenilir
 ----------------------------- */
 
-const repoRawBase =
-  "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main";
+const repoBase =
+  "https://cdn.jsdelivr.net/gh/mehmetcamofficial/mehmetcamofficial.github.io@main";
 
 function getImageCandidates(fileName) {
   return [
-    `./${fileName}?v=20260505`,
-    `${fileName}?v=20260505`,
-    `./assets/${fileName}?v=20260505`,
-    `assets/${fileName}?v=20260505`,
-    `${repoRawBase}/${fileName}`,
-    `${repoRawBase}/assets/${fileName}`
+    `./${fileName}`,
+    `/${fileName}`,
+    `${repoBase}/${fileName}`,
+    `https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/${fileName}`
   ];
 }
 
@@ -249,11 +248,9 @@ function renderProjects() {
     card.innerHTML = `
       <h3>${safeText(project.title)}</h3>
       <p>${safeText(project.description)}</p>
-
       <div class="project-meta">
         ${tagsHtml}
       </div>
-
       <div class="project-actions">
         <a href="${project.github}" target="_blank" rel="noopener">GitHub</a>
         <a href="${project.demo}" target="_blank" rel="noopener">Live Demo</a>
@@ -338,7 +335,6 @@ function renderAgriProjects() {
             alt="${safeText(project.title)}"
             class="agri-image"
           />
-
           <div class="agri-image-overlay">
             <span>${project.icon}</span>
             <strong>View Details</strong>
@@ -353,7 +349,6 @@ function renderAgriProjects() {
 
           <h3>${safeText(project.title)}</h3>
           <p class="agri-original">${safeText(project.originalTitle)}</p>
-
           <p class="agri-short">${safeText(project.impact)}</p>
         </div>
       `;
