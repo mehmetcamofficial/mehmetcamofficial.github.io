@@ -1,3 +1,12 @@
+/* =========================================================
+   Mehmet Cam Portfolio - script.js
+   Updated image fallback system for GitHub Pages + Raw GitHub
+   ========================================================= */
+
+/* -----------------------------
+   AI / Streamlit Project Cards
+----------------------------- */
+
 const projects = [
   {
     title: "AgriVision AI",
@@ -41,6 +50,10 @@ const projects = [
   }
 ];
 
+/* -----------------------------
+   Streamlit App Selector
+----------------------------- */
+
 const streamlitApps = [
   {
     title: "AgriVision AI",
@@ -74,13 +87,17 @@ const streamlitApps = [
   }
 ];
 
+/* -----------------------------
+   Agricultural Project Experience
+----------------------------- */
+
 const agriProjects = [
   {
     title: "Agricultural Solution Center",
     originalTitle: "Tarımsal Çözüm Merkezi",
     category: "Software",
     role: "Project Manager",
-    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/agricultural-solution-center.jpg",
+    imageFile: "agricultural-solution-center.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A software-oriented agricultural solution concept designed to support stakeholders in the agriculture and food value chain through technology-enabled consulting, process management and decision support. I contributed to digital advisory workflows, farmer support mechanisms and solution design.",
@@ -93,7 +110,7 @@ const agriProjects = [
     originalTitle: "Smart OASIS",
     category: "Digital Farm",
     role: "Researcher",
-    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/smart-oasis.jpg",
+    imageFile: "smart-oasis.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "An integrated digital farm initiative combining smart production infrastructure, IoT, data-driven monitoring and technology-oriented agricultural production concepts. I contributed as a researcher through project analysis, information gathering, innovation mapping and design support.",
@@ -106,7 +123,7 @@ const agriProjects = [
     originalTitle: "Tabit Akıllı Köy",
     category: "Smart Village",
     role: "Researcher",
-    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/smart-village.jpg",
+    imageFile: "smart-village.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A smart village model combining rural development, agricultural innovation, digital transformation and technology-enabled farming practices. I contributed to research activities, user needs analysis and field-oriented learning processes.",
@@ -119,7 +136,7 @@ const agriProjects = [
     originalTitle: "Rapor ve İstatistik Geliştirme Uzayı",
     category: "Software",
     role: "Project Manager",
-    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/rigel.jpg",
+    imageFile: "rigel.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A reporting and statistics-focused software concept designed to transform agricultural information into structured insights and decision-support outputs. As project manager, I contributed to process planning, output tracking and data-driven structure development.",
@@ -132,7 +149,7 @@ const agriProjects = [
     originalTitle: "Azmud Akıllı Sera",
     category: "Smart Greenhouse",
     role: "Researcher",
-    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/azmud.jpg",
+    imageFile: "azmud.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A smart greenhouse sensor initiative focused on controlled agriculture, sensor technologies, monitoring and data-supported greenhouse management. I contributed to technical needs analysis, use-case development and agricultural technology assessment.",
@@ -145,7 +162,7 @@ const agriProjects = [
     originalTitle: "Vodafone Çiftçi Kulübü",
     category: "Business Model",
     role: "Contributor and Trainer",
-    image: "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/assets/vodafone-farmers-club.jpg",
+    imageFile: "vodafone-farmers-club.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
       "A farmer-oriented service, communication, training and business model initiative. I contributed to farmer engagement, training processes and field-oriented knowledge transfer activities.",
@@ -154,6 +171,45 @@ const agriProjects = [
     icon: "📱"
   }
 ];
+
+/* -----------------------------
+   Image Fallback System
+----------------------------- */
+
+const repoRawBase =
+  "https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main";
+
+function getImageCandidates(fileName) {
+  return [
+    `./assets/${fileName}?v=20260505`,
+    `assets/${fileName}?v=20260505`,
+    `./${fileName}?v=20260505`,
+    `${repoRawBase}/assets/${fileName}`,
+    `${repoRawBase}/${fileName}`
+  ];
+}
+
+window.handleImageError = function (img) {
+  const fileName = img.dataset.file;
+  let step = Number(img.dataset.step || "0");
+
+  const candidates = getImageCandidates(fileName);
+  step += 1;
+
+  if (step < candidates.length) {
+    img.dataset.step = String(step);
+    img.src = candidates[step];
+  } else {
+    img.onerror = null;
+    img.classList.add("image-missing");
+    img.alt = "Project image could not be loaded";
+  }
+};
+
+/* -----------------------------
+   Helpers
+----------------------------- */
+
 function safeText(value) {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -170,6 +226,10 @@ function isValidFormspreeUrl(url) {
     !url.includes("your-form-id")
   );
 }
+
+/* -----------------------------
+   Render AI Project Cards
+----------------------------- */
 
 function renderProjects() {
   const projectGrid = document.getElementById("projectGrid");
@@ -203,6 +263,10 @@ function renderProjects() {
   });
 }
 
+/* -----------------------------
+   Render Streamlit App Cards
+----------------------------- */
+
 function renderStreamlitApps() {
   const appGrid = document.getElementById("appGrid");
   const activeTitle = document.getElementById("activeAppTitle");
@@ -215,7 +279,6 @@ function renderStreamlitApps() {
 
   streamlitApps.forEach((app, index) => {
     const appCard = document.createElement("button");
-
     appCard.className = index === 0 ? "app-card glass active" : "app-card glass";
     appCard.type = "button";
 
@@ -240,6 +303,10 @@ function renderStreamlitApps() {
   });
 }
 
+/* -----------------------------
+   Render Agricultural Project Cards
+----------------------------- */
+
 function renderAgriProjects() {
   const agriGrid = document.getElementById("agriGrid");
   const filterButtons = document.querySelectorAll(".filter-btn");
@@ -258,9 +325,19 @@ function renderAgriProjects() {
       const card = document.createElement("article");
       card.className = "agri-card glass";
 
+      const firstImage = getImageCandidates(project.imageFile)[0];
+
       card.innerHTML = `
         <div class="agri-image-wrap">
-          <img src="${project.image}" alt="${safeText(project.title)}" class="agri-image" />
+          <img
+            src="${firstImage}"
+            data-file="${project.imageFile}"
+            data-step="0"
+            onerror="handleImageError(this)"
+            alt="${safeText(project.title)}"
+            class="agri-image"
+          />
+
           <div class="agri-image-overlay">
             <span>${project.icon}</span>
             <strong>View Details</strong>
@@ -296,13 +373,26 @@ function renderAgriProjects() {
   });
 }
 
+/* -----------------------------
+   Project Modal
+----------------------------- */
+
 function openProjectModal(project) {
   const modal = document.getElementById("projectModal");
-
   if (!modal) return;
 
-  document.getElementById("modalImage").src = project.image;
-  document.getElementById("modalImage").alt = project.title;
+  const modalImage = document.getElementById("modalImage");
+  const firstImage = getImageCandidates(project.imageFile)[0];
+
+  modalImage.classList.remove("image-missing");
+  modalImage.src = firstImage;
+  modalImage.alt = project.title;
+  modalImage.dataset.file = project.imageFile;
+  modalImage.dataset.step = "0";
+  modalImage.onerror = function () {
+    handleImageError(this);
+  };
+
   document.getElementById("modalCategory").textContent = project.category;
   document.getElementById("modalTitle").textContent = project.title;
   document.getElementById("modalOriginal").textContent = project.originalTitle;
@@ -318,7 +408,6 @@ function openProjectModal(project) {
 
 function closeProjectModal() {
   const modal = document.getElementById("projectModal");
-
   if (!modal) return;
 
   modal.classList.remove("active");
@@ -337,6 +426,10 @@ function initModal() {
     }
   });
 }
+
+/* -----------------------------
+   Theme
+----------------------------- */
 
 function initThemeToggle() {
   const themeToggle = document.getElementById("themeToggle");
@@ -365,9 +458,12 @@ function initThemeToggle() {
   });
 }
 
+/* -----------------------------
+   Contact Form
+----------------------------- */
+
 function initContactForm() {
   const form = document.querySelector(".contact-form");
-
   if (!form) return;
 
   const status = document.createElement("div");
@@ -417,11 +513,13 @@ function initContactForm() {
         status.textContent = "Thank you! Your message has been sent successfully.";
       } else {
         status.className = "form-status error";
-        status.textContent = "Something went wrong. Please try again or contact me by email.";
+        status.textContent =
+          "Something went wrong. Please try again or contact me by email.";
       }
     } catch (error) {
       status.className = "form-status error";
-      status.textContent = "Network error. Please try again or contact me by email.";
+      status.textContent =
+        "Network error. Please try again or contact me by email.";
     } finally {
       if (submitButton) {
         submitButton.disabled = false;
@@ -430,6 +528,10 @@ function initContactForm() {
     }
   });
 }
+
+/* -----------------------------
+   Navigation Highlight
+----------------------------- */
 
 function initNavigationHighlight() {
   const sections = document.querySelectorAll("section[id]");
@@ -461,6 +563,10 @@ function initNavigationHighlight() {
   sections.forEach((section) => observer.observe(section));
 }
 
+/* -----------------------------
+   Reveal Animation
+----------------------------- */
+
 function initRevealAnimations() {
   const revealItems = document.querySelectorAll(
     ".glass, .section-heading, .project-card, .app-card, .agri-card"
@@ -486,6 +592,10 @@ function initRevealAnimations() {
   revealItems.forEach((item) => observer.observe(item));
 }
 
+/* -----------------------------
+   Footer Year
+----------------------------- */
+
 function setFooterYear() {
   const year = document.getElementById("year");
 
@@ -493,6 +603,10 @@ function setFooterYear() {
     year.textContent = new Date().getFullYear();
   }
 }
+
+/* -----------------------------
+   Init
+----------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
   renderProjects();
