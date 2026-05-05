@@ -4,29 +4,26 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>Mehmet Cam | AI & Data Science Portfolio</title>
+  <title>Mehmet Cam | AI, Data Science & AgriTech Portfolio</title>
 
   <meta
     name="description"
-    content="Mehmet Cam - AI, Data Science, EU Project Development, AgriTech Innovation and HealthTech portfolio."
+    content="Mehmet Cam - AI, Data Science, EU Project Development, AgriTech, FoodTech and HealthTech portfolio."
   />
 
   <meta name="author" content="Mehmet Cam" />
   <meta name="theme-color" content="#07111f" />
 
-  <!-- Open Graph -->
-  <meta property="og:title" content="Mehmet Cam | AI & Data Science Portfolio" />
+  <meta property="og:title" content="Mehmet Cam | AI & AgriTech Portfolio" />
   <meta
     property="og:description"
-    content="AI, Data Science, EU Project Development, AgriTech Innovation and HealthTech portfolio."
+    content="AI, Data Science, EU Project Development, AgriTech, FoodTech and HealthTech portfolio."
   />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://mehmetcamofficial.github.io" />
 
-  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
@@ -49,8 +46,9 @@
 
     <nav class="nav-links" aria-label="Main navigation">
       <a href="#about">About</a>
-      <a href="#projects">Projects</a>
-      <a href="#streamlit">Apps</a>
+      <a href="#tabit-projects">TABIT AIM</a>
+      <a href="#projects">AI Apps</a>
+      <a href="#streamlit">Streamlit</a>
       <a href="#contact">Contact</a>
     </nav>
 
@@ -88,8 +86,8 @@
               Download CV
             </a>
 
-            <a href="#projects" class="btn secondary">
-              View Projects
+            <a href="#tabit-projects" class="btn secondary">
+              Project Experience
             </a>
 
             <a href="#contact" class="btn ghost">
@@ -149,7 +147,7 @@
     <section id="about" class="section">
       <div class="section-heading">
         <p class="eyebrow">About Me</p>
-        <h2>Turning data into practical impact.</h2>
+        <h2>Turning data, research and field experience into practical impact.</h2>
       </div>
 
       <div class="about-grid">
@@ -167,9 +165,10 @@
           </p>
 
           <p>
-            I focus on building useful, accessible and scalable tools that help
-            researchers, entrepreneurs, project teams and organizations make
-            better decisions.
+            I have contributed to digital agriculture, smart village, smart
+            greenhouse, farmer engagement and data-driven reporting projects in
+            different roles including project management, research, training and
+            innovation support.
           </p>
         </div>
 
@@ -188,21 +187,66 @@
             <span>AgriTech</span>
             <span>FoodTech</span>
             <span>HealthTech</span>
+            <span>Project Management</span>
+            <span>Training</span>
             <span>Impact Strategy</span>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Projects -->
+    <!-- TABIT AIM Project Experience -->
+    <section id="tabit-projects" class="section tabit-section">
+      <div class="section-heading">
+        <p class="eyebrow">TABIT AIM Experience</p>
+        <h2>Agriculture, digital farming and smart village projects.</h2>
+      </div>
+
+      <div class="tabit-intro glass">
+        <div>
+          <p class="eyebrow">Project Portfolio</p>
+          <h3>Hands-on experience across smart agriculture initiatives.</h3>
+          <p>
+            I worked on TABIT AIM projects in different capacities including
+            project manager, researcher, contributor and trainer. These projects
+            connect agriculture, software, data, smart village concepts,
+            greenhouse technologies and farmer-focused business models.
+          </p>
+        </div>
+
+        <a
+          href="https://tabitaim.com//projelerimiz"
+          target="_blank"
+          rel="noopener"
+          class="btn secondary"
+        >
+          View Source Projects
+        </a>
+      </div>
+
+      <div class="project-filter">
+        <button class="filter-btn active" data-filter="All">All</button>
+        <button class="filter-btn" data-filter="Software">Software</button>
+        <button class="filter-btn" data-filter="Digital Farm">Digital Farm</button>
+        <button class="filter-btn" data-filter="Smart Village">Smart Village</button>
+        <button class="filter-btn" data-filter="Smart Greenhouse">Smart Greenhouse</button>
+        <button class="filter-btn" data-filter="Business Model">Business Model</button>
+      </div>
+
+      <div class="tabit-grid" id="tabitGrid">
+        <!-- TABIT cards inserted by script.js -->
+      </div>
+    </section>
+
+    <!-- AI / Streamlit Projects -->
     <section id="projects" class="section">
       <div class="section-heading">
-        <p class="eyebrow">Selected Work</p>
-        <h2>Projects & live demos</h2>
+        <p class="eyebrow">Selected AI Work</p>
+        <h2>AI tools, dashboards and live demos.</h2>
       </div>
 
       <div class="project-grid" id="projectGrid">
-        <!-- Project cards are inserted by script.js -->
+        <!-- Project cards inserted by script.js -->
       </div>
     </section>
 
@@ -210,11 +254,11 @@
     <section id="streamlit" class="section">
       <div class="section-heading">
         <p class="eyebrow">Interactive Apps</p>
-        <h2>Streamlit applications</h2>
+        <h2>Streamlit applications.</h2>
       </div>
 
       <div class="app-grid" id="appGrid">
-        <!-- App cards are inserted by script.js -->
+        <!-- App cards inserted by script.js -->
       </div>
 
       <div class="app-preview glass">
@@ -323,14 +367,13 @@
             <strong>Available for:</strong>
             <br />
             AI tools, data dashboards, EU project development, AgriTech,
-            FoodTech and HealthTech innovation collaborations.
+            FoodTech, HealthTech, project management and training collaborations.
           </div>
         </div>
       </div>
     </section>
   </main>
 
-  <!-- Footer -->
   <footer class="footer">
     <p>
       © <span id="year"></span> Mehmet Cam. Built with GitHub Pages.
