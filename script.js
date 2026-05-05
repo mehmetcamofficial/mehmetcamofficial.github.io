@@ -1,6 +1,6 @@
 /* =========================================================
    Mehmet Cam Portfolio - script.js
-   Updated image fallback system for GitHub Pages + Raw GitHub
+   Image fallback system optimized for GitHub Pages
    ========================================================= */
 
 /* -----------------------------
@@ -181,11 +181,12 @@ const repoRawBase =
 
 function getImageCandidates(fileName) {
   return [
+    `./${fileName}?v=20260505`,
+    `${fileName}?v=20260505`,
     `./assets/${fileName}?v=20260505`,
     `assets/${fileName}?v=20260505`,
-    `./${fileName}?v=20260505`,
-    `${repoRawBase}/assets/${fileName}`,
-    `${repoRawBase}/${fileName}`
+    `${repoRawBase}/${fileName}`,
+    `${repoRawBase}/assets/${fileName}`
   ];
 }
 
