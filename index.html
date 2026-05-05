@@ -5,26 +5,49 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <title>Mehmet Cam | AI & Data Science Portfolio</title>
-  <meta name="description" content="Mehmet Cam - AI, Data Science, EU Project Development and AgriTech Innovation Portfolio." />
 
+  <meta
+    name="description"
+    content="Mehmet Cam - AI, Data Science, EU Project Development, AgriTech Innovation and HealthTech portfolio."
+  />
+
+  <meta name="author" content="Mehmet Cam" />
+  <meta name="theme-color" content="#07111f" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Mehmet Cam | AI & Data Science Portfolio" />
+  <meta
+    property="og:description"
+    content="AI, Data Science, EU Project Development, AgriTech Innovation and HealthTech portfolio."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://mehmetcamofficial.github.io" />
+
+  <!-- CSS -->
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet"
+  />
 </head>
 
 <body>
   <div class="noise"></div>
   <div class="gradient-orb orb-1"></div>
   <div class="gradient-orb orb-2"></div>
+  <div class="gradient-orb orb-3"></div>
 
   <!-- Navbar -->
   <header class="navbar">
-    <a href="#" class="logo">MC<span>.</span></a>
+    <a href="#" class="logo" aria-label="Mehmet Cam homepage">
+      MC<span>.</span>
+    </a>
 
-    <nav class="nav-links">
+    <nav class="nav-links" aria-label="Main navigation">
       <a href="#about">About</a>
       <a href="#projects">Projects</a>
       <a href="#streamlit">Apps</a>
@@ -37,163 +60,297 @@
   </header>
 
   <!-- Hero -->
-  <section class="hero">
-    <div class="hero-card glass">
-      <div class="profile-wrap">
-        <img src="profile.jpg" alt="Mehmet Cam profile photo" class="profile-img" />
-        <div class="profile-ring"></div>
+  <main>
+    <section class="hero">
+      <div class="hero-card glass">
+        <div class="profile-wrap">
+          <div class="profile-ring"></div>
+
+          <!-- Repo içine profile.jpg yükle -->
+          <img
+            src="profile.jpg"
+            alt="Mehmet Cam profile photo"
+            class="profile-img"
+          />
+        </div>
+
+        <div class="hero-content">
+          <p class="eyebrow">AI • Data Science • EU Projects • AgriTech</p>
+
+          <h1>Mehmet Cam</h1>
+
+          <h2>
+            Building intelligent digital solutions for agriculture, food systems,
+            healthcare, sustainability and European innovation ecosystems.
+          </h2>
+
+          <div class="hero-buttons">
+            <!-- Repo içine Mehmet-Cam-CV.pdf yükle -->
+            <a href="Mehmet-Cam-CV.pdf" download class="btn primary">
+              Download CV
+            </a>
+
+            <a href="#projects" class="btn secondary">
+              View Projects
+            </a>
+
+            <a href="#contact" class="btn ghost">
+              Contact Me
+            </a>
+          </div>
+
+          <div class="socials">
+            <a
+              href="https://github.com/mehmetcamofficial"
+              target="_blank"
+              rel="noopener"
+            >
+              GitHub
+            </a>
+
+            <!-- Kendi LinkedIn linkinle değiştir -->
+            <a
+              href="https://www.linkedin.com/"
+              target="_blank"
+              rel="noopener"
+            >
+              LinkedIn
+            </a>
+
+            <!-- Kendi mail adresinle değiştir -->
+            <a href="mailto:yourmail@example.com">
+              Email
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats section" aria-label="Expertise highlights">
+      <div class="stat-card glass">
+        <span class="stat-number">AI</span>
+        <p>Automation & Intelligent Systems</p>
       </div>
 
-      <div class="hero-content">
-        <p class="eyebrow">AI • Data Science • EU Projects • AgriTech</p>
-        <h1>Mehmet Cam</h1>
-        <h2>
-          Building intelligent solutions for agriculture, health,
-          sustainability and European innovation ecosystems.
-        </h2>
+      <div class="stat-card glass">
+        <span class="stat-number">DS</span>
+        <p>Data Science & Analytics</p>
+      </div>
 
-        <div class="hero-buttons">
-          <a href="Mehmet-Cam-CV.pdf" download class="btn primary">
-            Download CV
+      <div class="stat-card glass">
+        <span class="stat-number">EU</span>
+        <p>EU Project Development</p>
+      </div>
+
+      <div class="stat-card glass">
+        <span class="stat-number">Agri</span>
+        <p>AgriTech & Food Innovation</p>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="about" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">About Me</p>
+        <h2>Turning data into practical impact.</h2>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-text glass">
+          <p>
+            I develop AI-powered solutions, data science tools and European
+            innovation projects focused on agriculture, food systems, health
+            and sustainability.
+          </p>
+
+          <p>
+            My work combines applied machine learning, automation, interactive
+            dashboards, digital transformation, EU project development and
+            real-world impact creation.
+          </p>
+
+          <p>
+            I focus on building useful, accessible and scalable tools that help
+            researchers, entrepreneurs, project teams and organizations make
+            better decisions.
+          </p>
+        </div>
+
+        <div class="skills glass">
+          <h3>Core Competencies</h3>
+
+          <div class="skill-tags">
+            <span>AI Automation</span>
+            <span>Data Science</span>
+            <span>Machine Learning</span>
+            <span>Streamlit</span>
+            <span>Python</span>
+            <span>Dashboards</span>
+            <span>EU Projects</span>
+            <span>Grant Discovery</span>
+            <span>AgriTech</span>
+            <span>FoodTech</span>
+            <span>HealthTech</span>
+            <span>Impact Strategy</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects -->
+    <section id="projects" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Selected Work</p>
+        <h2>Projects & live demos</h2>
+      </div>
+
+      <div class="project-grid" id="projectGrid">
+        <!-- Project cards are inserted by script.js -->
+      </div>
+    </section>
+
+    <!-- Streamlit Apps -->
+    <section id="streamlit" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Interactive Apps</p>
+        <h2>Streamlit applications</h2>
+      </div>
+
+      <div class="app-grid" id="appGrid">
+        <!-- App cards are inserted by script.js -->
+      </div>
+
+      <div class="streamlit-box glass">
+        <div class="streamlit-header">
+          <div>
+            <p class="eyebrow">Live Preview</p>
+            <h3 id="activeAppTitle">AgriVision AI</h3>
+          </div>
+
+          <a
+            id="openAppExternal"
+            href="https://agrivision-ai09.streamlit.app/"
+            target="_blank"
+            rel="noopener"
+            class="btn secondary"
+          >
+            Open Full App
           </a>
-          <a href="#projects" class="btn secondary">
-            View Projects
-          </a>
         </div>
 
-        <div class="socials">
-          <a href="https://github.com/mehmetcamofficial" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://www.linkedin.com/" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="mailto:yourmail@example.com">Email</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats -->
-  <section class="stats section">
-    <div class="stat-card glass">
-      <span class="stat-number">AI</span>
-      <p>Automation & Intelligent Systems</p>
-    </div>
-    <div class="stat-card glass">
-      <span class="stat-number">DS</span>
-      <p>Data Science & Analytics</p>
-    </div>
-    <div class="stat-card glass">
-      <span class="stat-number">EU</span>
-      <p>EU Project Development</p>
-    </div>
-    <div class="stat-card glass">
-      <span class="stat-number">Agri</span>
-      <p>AgriTech Innovation</p>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about" class="section">
-    <div class="section-heading">
-      <p class="eyebrow">About Me</p>
-      <h2>Turning data into practical impact.</h2>
-    </div>
-
-    <div class="about-grid">
-      <div class="about-text glass">
-        <p>
-          I develop AI-powered solutions, data science tools and European innovation
-          projects focused on agriculture, health and sustainability.
-        </p>
-        <p>
-          My work combines applied machine learning, automation, digital transformation,
-          project management and real-world impact.
-        </p>
-      </div>
-
-      <div class="skills glass">
-        <h3>Core Competencies</h3>
-        <div class="skill-tags">
-          <span>AI Automation</span>
-          <span>Data Science</span>
-          <span>Machine Learning</span>
-          <span>EU Projects</span>
-          <span>AgriTech</span>
-          <span>Streamlit Apps</span>
-          <span>Python</span>
-          <span>Analytics</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Projects -->
-  <section id="projects" class="section">
-    <div class="section-heading">
-      <p class="eyebrow">Selected Work</p>
-      <h2>Projects & live demos</h2>
-    </div>
-
-    <div class="project-grid" id="projectGrid">
-      <!-- JS ile otomatik kartlar gelecek -->
-    </div>
-  </section>
-
-  <!-- Streamlit Embed -->
-  <section id="streamlit" class="section">
-    <div class="section-heading">
-      <p class="eyebrow">Interactive App</p>
-      <h2>Streamlit application demo</h2>
-    </div>
-
-    <div class="streamlit-box glass">
-      <div class="streamlit-placeholder">
-        <h3>Embed your Streamlit app here</h3>
-        <p>
-          Streamlit uygulamanın linkini alınca aşağıdaki iframe içindeki URL'yi değiştireceğiz.
-        </p>
-
-        <!-- Buradaki src alanını kendi Streamlit app linkinle değiştir -->
         <iframe
-          src="https://streamlit.io"
+          id="streamlitFrame"
+          src="https://agrivision-ai09.streamlit.app/"
           title="Streamlit App"
-          loading="lazy">
-        </iframe>
+          loading="lazy"
+        ></iframe>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Contact -->
-  <section id="contact" class="section">
-    <div class="section-heading">
-      <p class="eyebrow">Contact</p>
-      <h2>Let’s build something impactful.</h2>
-    </div>
-
-    <div class="contact-grid">
-      <form class="contact-form glass" action="https://formspree.io/f/your-form-id" method="POST">
-        <input type="text" name="name" placeholder="Your name" required />
-        <input type="email" name="email" placeholder="Your email" required />
-        <textarea name="message" rows="6" placeholder="Your message" required></textarea>
-        <button type="submit" class="btn primary">Send Message</button>
-      </form>
-
-      <div class="contact-info glass">
-        <h3>Contact details</h3>
-        <p>Email: <a href="mailto:yourmail@example.com">yourmail@example.com</a></p>
-        <p>GitHub: <a href="https://github.com/mehmetcamofficial" target="_blank">mehmetcamofficial</a></p>
-        <p>Location: Türkiye / Europe</p>
+    <!-- Contact -->
+    <section id="contact" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Contact</p>
+        <h2>Let’s build something impactful.</h2>
       </div>
-    </div>
-  </section>
 
+      <div class="contact-grid">
+        <!-- Formspree kullanacaksan action URL'yi değiştir -->
+        <form
+          class="contact-form glass"
+          action="https://formspree.io/f/your-form-id"
+          method="POST"
+        >
+          <input
+            type="text"
+            name="name"
+            placeholder="Your name"
+            required
+          />
+
+          <input
+            type="email"
+            name="email"
+            placeholder="Your email"
+            required
+          />
+
+          <textarea
+            name="message"
+            rows="6"
+            placeholder="Your message"
+            required
+          ></textarea>
+
+          <button type="submit" class="btn primary">
+            Send Message
+          </button>
+        </form>
+
+        <div class="contact-info glass">
+          <h3>Contact details</h3>
+
+          <p>
+            Email:
+            <a href="mailto:yourmail@example.com">
+              yourmail@example.com
+            </a>
+          </p>
+
+          <p>
+            GitHub:
+            <a
+              href="https://github.com/mehmetcamofficial"
+              target="_blank"
+              rel="noopener"
+            >
+              mehmetcamofficial
+            </a>
+          </p>
+
+          <p>
+            Portfolio:
+            <a
+              href="https://mehmetcamofficial.github.io"
+              target="_blank"
+              rel="noopener"
+            >
+              mehmetcamofficial.github.io
+            </a>
+          </p>
+
+          <p>Location: Türkiye / Europe</p>
+
+          <div class="contact-note">
+            <strong>Available for:</strong>
+            <br />
+            AI tools, data dashboards, EU project development, AgriTech,
+            FoodTech and HealthTech innovation collaborations.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
   <footer class="footer">
-    <p>© <span id="year"></span> Mehmet Cam. Built with GitHub Pages.</p>
-    <p class="analytics-note">Visitor analytics can be connected with Plausible, GoatCounter or Google Analytics.</p>
+    <p>
+      © <span id="year"></span> Mehmet Cam. Built with GitHub Pages.
+    </p>
+
+    <p class="analytics-note">
+      Visitor analytics ready: Plausible, GoatCounter, Umami or Google Analytics.
+    </p>
   </footer>
 
-  <!-- Visitor analytics örneği. Şimdilik pasif. Domain alınca açarız. -->
+  <!-- Visitor Analytics Example - Domain alınca aktif ederiz -->
   <!--
-  <script data-goatcounter="https://yourname.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
+  <script
+    data-goatcounter="https://yourname.goatcounter.com/count"
+    async
+    src="//gc.zgo.at/count.js">
+  </script>
   -->
 
   <script src="script.js"></script>
