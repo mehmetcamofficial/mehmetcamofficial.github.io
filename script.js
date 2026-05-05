@@ -79,11 +79,11 @@ const agriProjects = [
     title: "Agricultural Solution Center",
     originalTitle: "Tarımsal Çözüm Merkezi",
     category: "Software",
-    role: "Proje Yöneticisi",
-    image: "agricultural-solution-center.jpg",
+    role: "Project Manager",
+    image: "./assets/agricultural-solution-center.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
-      "Tarım ve gıda sektöründe tedarik zincirindeki paydaşlara teknoloji destekli danışmanlık, süreç yönetimi ve karar destek yaklaşımı sunan bir yazılım konsepti. Projede çiftçilere bilgiye erişim, doğru karar alma, verimlilik ve dijital danışmanlık süreçleri açısından katkı sağladım.",
+      "A software-oriented agricultural solution concept designed to support stakeholders in the agriculture and food value chain through technology-enabled consulting, process management and decision support. I contributed to digital advisory workflows, farmer support mechanisms and solution design.",
     impact:
       "Digital advisory • Farmer support • Decision support software • Agricultural process management",
     icon: "🌱"
@@ -92,11 +92,11 @@ const agriProjects = [
     title: "Smart OASIS",
     originalTitle: "Smart OASIS",
     category: "Digital Farm",
-    role: "Araştırmacı",
-    image: "smart-oasis.jpg",
+    role: "Researcher",
+    image: "./assets/smart-oasis.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
-      "Dijital tarım, akıllı üretim altyapısı, IoT yaklaşımı, veri destekli izleme ve teknoloji odaklı üretim konseptleri üzerine kurgulanan entegre bir dijital çiftlik projesidir. Araştırmacı rolümle proje tasarımı, bilgi toplama, analiz ve inovasyon süreçlerine katkı sağladım.",
+      "An integrated digital farm initiative combining smart production infrastructure, IoT, data-driven monitoring and technology-oriented agricultural production concepts. I contributed as a researcher through project analysis, information gathering, innovation mapping and design support.",
     impact:
       "Digital farm • Smart production • IoT • AgriTech infrastructure",
     icon: "🛰️"
@@ -105,11 +105,11 @@ const agriProjects = [
     title: "Tabit Smart Village",
     originalTitle: "Tabit Akıllı Köy",
     category: "Smart Village",
-    role: "Araştırmacı",
-    image: "smart-village.jpg",
+    role: "Researcher",
+    image: "./assets/smart-village.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
-      "Kırsal kalkınma, tarımsal inovasyon, dijital dönüşüm ve teknoloji destekli üretim pratiklerini bir araya getiren akıllı köy modelidir. Araştırmacı olarak tarım teknolojileri, kullanıcı ihtiyaçları ve saha odaklı öğrenme süreçlerine katkı verdim.",
+      "A smart village model combining rural development, agricultural innovation, digital transformation and technology-enabled farming practices. I contributed to research activities, user needs analysis and field-oriented learning processes.",
     impact:
       "Smart village • Rural innovation • Digital transformation • Farmer-centered design",
     icon: "🏡"
@@ -118,11 +118,11 @@ const agriProjects = [
     title: "RIGEL",
     originalTitle: "Rapor ve İstatistik Geliştirme Uzayı",
     category: "Software",
-    role: "Proje Yöneticisi",
-    image: "rigel.jpg",
+    role: "Project Manager",
+    image: "./assets/rigel.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
-      "Tarımsal bilgi, raporlama, istatistik ve veri odaklı çıktıların düzenli şekilde geliştirilebilmesi için tasarlanan yazılım ve karar destek yaklaşımıdır. Proje yöneticisi olarak süreç planlama, çıktı takibi ve veri odaklı yapının geliştirilmesinde rol aldım.",
+      "A reporting and statistics-focused software concept designed to transform agricultural information into structured insights and decision-support outputs. As project manager, I contributed to process planning, output tracking and data-driven structure development.",
     impact:
       "Reporting • Statistics • Data-driven decisions • Structured agricultural insights",
     icon: "📊"
@@ -131,11 +131,11 @@ const agriProjects = [
     title: "Azmud Smart Greenhouse Sensor",
     originalTitle: "Azmud Akıllı Sera",
     category: "Smart Greenhouse",
-    role: "Araştırmacı",
-    image: "azmud.jpg",
+    role: "Researcher",
+    image: "./assets/azmud.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
-      "Kontrollü tarım, sera içi sensör teknolojileri, izleme ve veri destekli sera yönetimi üzerine odaklanan akıllı sera sensör projesidir. Araştırmacı olarak teknik ihtiyaç analizi, kullanım senaryoları ve tarımsal teknoloji değerlendirme süreçlerine katkı sağladım.",
+      "A smart greenhouse sensor initiative focused on controlled agriculture, sensor technologies, monitoring and data-supported greenhouse management. I contributed to technical needs analysis, use-case development and agricultural technology assessment.",
     impact:
       "Smart greenhouse • Sensors • Controlled agriculture • Monitoring",
     icon: "🌿"
@@ -144,11 +144,11 @@ const agriProjects = [
     title: "Vodafone Farmers Club",
     originalTitle: "Vodafone Çiftçi Kulübü",
     category: "Business Model",
-    role: "Katkı Sağlayan ve Eğitmen",
-    image: "vodafone-farmers-club.jpg",
+    role: "Contributor and Trainer",
+    image: "./assets/vodafone-farmers-club.jpg",
     source: "https://tabitaim.com//projelerimiz",
     description:
-      "Çiftçilere yönelik hizmet, iletişim, eğitim ve iş modeli geliştirme yaklaşımı üzerine kurgulanan bir tarımsal etkileşim ve destek projesidir. Katkı sağlayan ve eğitmen olarak çiftçi iletişimi, eğitim süreçleri ve saha odaklı bilgi aktarımı tarafında rol aldım.",
+      "A farmer-oriented service, communication, training and business model initiative. I contributed to farmer engagement, training processes and field-oriented knowledge transfer activities.",
     impact:
       "Farmer services • Business model • Training • Agricultural communication",
     icon: "📱"
@@ -255,10 +255,9 @@ function renderAgriProjects() {
         ? agriProjects
         : agriProjects.filter((project) => project.category === filter);
 
-    filteredProjects.forEach((project, index) => {
+    filteredProjects.forEach((project) => {
       const card = document.createElement("article");
       card.className = "agri-card glass";
-      card.style.animationDelay = `${index * 0.07}s`;
 
       card.innerHTML = `
         <div class="agri-image-wrap">
@@ -278,9 +277,7 @@ function renderAgriProjects() {
           <h3>${safeText(project.title)}</h3>
           <p class="agri-original">${safeText(project.originalTitle)}</p>
 
-          <p class="agri-short">
-            ${safeText(project.impact)}
-          </p>
+          <p class="agri-short">${safeText(project.impact)}</p>
         </div>
       `;
 
@@ -295,7 +292,6 @@ function renderAgriProjects() {
     button.addEventListener("click", () => {
       filterButtons.forEach((btn) => btn.classList.remove("active"));
       button.classList.add("active");
-
       createCards(button.dataset.filter);
     });
   });
@@ -303,26 +299,18 @@ function renderAgriProjects() {
 
 function openProjectModal(project) {
   const modal = document.getElementById("projectModal");
-  const modalImage = document.getElementById("modalImage");
-  const modalCategory = document.getElementById("modalCategory");
-  const modalTitle = document.getElementById("modalTitle");
-  const modalOriginal = document.getElementById("modalOriginal");
-  const modalRole = document.getElementById("modalRole");
-  const modalDescription = document.getElementById("modalDescription");
-  const modalImpact = document.getElementById("modalImpact");
-  const modalSource = document.getElementById("modalSource");
 
   if (!modal) return;
 
-  modalImage.src = project.image;
-  modalImage.alt = project.title;
-  modalCategory.textContent = project.category;
-  modalTitle.textContent = project.title;
-  modalOriginal.textContent = project.originalTitle;
-  modalRole.textContent = project.role;
-  modalDescription.textContent = project.description;
-  modalImpact.textContent = project.impact;
-  modalSource.href = project.source;
+  document.getElementById("modalImage").src = project.image;
+  document.getElementById("modalImage").alt = project.title;
+  document.getElementById("modalCategory").textContent = project.category;
+  document.getElementById("modalTitle").textContent = project.title;
+  document.getElementById("modalOriginal").textContent = project.originalTitle;
+  document.getElementById("modalRole").textContent = project.role;
+  document.getElementById("modalDescription").textContent = project.description;
+  document.getElementById("modalImpact").textContent = project.impact;
+  document.getElementById("modalSource").href = project.source;
 
   modal.classList.add("active");
   modal.setAttribute("aria-hidden", "false");
@@ -331,6 +319,7 @@ function openProjectModal(project) {
 
 function closeProjectModal() {
   const modal = document.getElementById("projectModal");
+
   if (!modal) return;
 
   modal.classList.remove("active");
@@ -478,8 +467,6 @@ function initRevealAnimations() {
     ".glass, .section-heading, .project-card, .app-card, .agri-card"
   );
 
-  if (!revealItems.length) return;
-
   revealItems.forEach((item) => {
     item.classList.add("reveal");
   });
@@ -502,6 +489,7 @@ function initRevealAnimations() {
 
 function setFooterYear() {
   const year = document.getElementById("year");
+
   if (year) {
     year.textContent = new Date().getFullYear();
   }
