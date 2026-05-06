@@ -755,12 +755,21 @@ function setFooterYear() {
 ----------------------------- */
 
 function injectOrbitMotionStyles() {
-  if (document.getElementById("orbitMotionRuntimeStyles")) return;
+  if (document.getElementById("portfolioRuntimeRepairStyles")) return;
 
   const style = document.createElement("style");
-  style.id = "orbitMotionRuntimeStyles";
+  style.id = "portfolioRuntimeRepairStyles";
 
   style.textContent = `
+    /* =====================================================
+       Runtime Repair Styles
+       Orbit Labels + Profile Ring + Agri Cards
+       ===================================================== */
+
+    /* -----------------------------
+       Profile Orbit System
+    ----------------------------- */
+
     .orbit-system {
       overflow: visible !important;
     }
@@ -773,14 +782,33 @@ function injectOrbitMotionStyles() {
 
     .profile-planet img {
       position: relative !important;
-      z-index: 5 !important;
+      z-index: 10 !important;
       border-radius: 50% !important;
+      background: #ffffff !important;
+    }
+
+    .runtime-profile-halo {
+      position: absolute !important;
+      inset: -58px !important;
+      z-index: 1 !important;
+      border-radius: 50% !important;
+      pointer-events: none !important;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(0, 111, 214, 0.2) 0%,
+          rgba(104, 76, 255, 0.14) 42%,
+          transparent 72%
+        ) !important;
+
+      animation: runtimeProfileHaloPulse 3.4s ease-in-out infinite !important;
     }
 
     .runtime-profile-ring {
       position: absolute !important;
-      inset: -18px !important;
-      z-index: 3 !important;
+      inset: -20px !important;
+      z-index: 4 !important;
       border-radius: 50% !important;
       pointer-events: none !important;
 
@@ -788,10 +816,10 @@ function injectOrbitMotionStyles() {
         conic-gradient(
           from 0deg,
           transparent 0deg,
-          transparent 190deg,
-          rgba(0, 111, 214, 0.15) 220deg,
-          #006fd6 250deg,
-          #684cff 292deg,
+          transparent 165deg,
+          rgba(0, 111, 214, 0.16) 205deg,
+          #006fd6 240deg,
+          #684cff 285deg,
           #009f61 330deg,
           transparent 360deg
         ) !important;
@@ -799,25 +827,25 @@ function injectOrbitMotionStyles() {
       -webkit-mask:
         radial-gradient(
           farthest-side,
-          transparent calc(100% - 16px),
-          #000 calc(100% - 15px)
+          transparent calc(100% - 17px),
+          #000 calc(100% - 16px)
         ) !important;
 
       mask:
         radial-gradient(
           farthest-side,
-          transparent calc(100% - 16px),
-          #000 calc(100% - 15px)
+          transparent calc(100% - 17px),
+          #000 calc(100% - 16px)
         ) !important;
 
-      animation: runtimeProfileRingSpin 2.4s linear infinite !important;
-      filter: drop-shadow(0 0 18px rgba(0, 111, 214, 0.42)) !important;
+      animation: runtimeProfileRingSpin 7.5s linear infinite !important;
+      filter: drop-shadow(0 0 20px rgba(0, 111, 214, 0.42)) !important;
     }
 
     .runtime-profile-ring::after {
       content: "" !important;
       position: absolute !important;
-      right: 12px !important;
+      right: 10px !important;
       top: 50% !important;
 
       width: 14px !important;
@@ -832,24 +860,6 @@ function injectOrbitMotionStyles() {
         0 0 28px #00d4ff !important;
 
       transform: translateY(-50%) !important;
-    }
-
-    .runtime-profile-halo {
-      position: absolute !important;
-      inset: -58px !important;
-      z-index: 1 !important;
-      border-radius: 50% !important;
-      pointer-events: none !important;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(0, 111, 214, 0.18) 0%,
-          rgba(104, 76, 255, 0.12) 42%,
-          transparent 72%
-        ) !important;
-
-      animation: runtimeProfileHaloPulse 3.4s ease-in-out infinite !important;
     }
 
     .orbit-runner {
@@ -881,15 +891,15 @@ function injectOrbitMotionStyles() {
     }
 
     .orbit-runner-1 {
-      animation: runtimeOrbitSpin 5.5s linear infinite !important;
+      animation: runtimeOrbitSpin 14s linear infinite !important;
     }
 
     .orbit-runner-2 {
-      animation: runtimeOrbitSpin 7.5s linear infinite reverse !important;
+      animation: runtimeOrbitSpin 22s linear infinite reverse !important;
     }
 
     .orbit-runner-3 {
-      animation: runtimeOrbitSpin 9.5s linear infinite !important;
+      animation: runtimeOrbitSpin 30s linear infinite !important;
     }
 
     .orbit-runner-2::before {
@@ -906,20 +916,42 @@ function injectOrbitMotionStyles() {
         0 0 24px #009f61 !important;
     }
 
+    .satellite {
+      position: absolute !important;
+      top: 50% !important;
+      left: 50% !important;
+      z-index: 50 !important;
+
+      pointer-events: auto !important;
+      will-change: transform !important;
+
+      transition:
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        background 0.25s ease !important;
+    }
+
+    .satellite:hover {
+      border-color: var(--border-strong) !important;
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.14),
+        0 0 32px rgba(0, 111, 214, 0.22) !important;
+    }
+
     html[data-theme="dark"] .runtime-profile-ring {
       background:
         conic-gradient(
           from 0deg,
           transparent 0deg,
-          transparent 190deg,
-          rgba(0, 212, 255, 0.15) 220deg,
-          #00d4ff 250deg,
-          #7b61ff 292deg,
+          transparent 165deg,
+          rgba(0, 212, 255, 0.18) 205deg,
+          #00d4ff 240deg,
+          #7b61ff 285deg,
           #00ff88 330deg,
           transparent 360deg
         ) !important;
 
-      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)) !important;
+      filter: drop-shadow(0 0 22px rgba(0, 212, 255, 0.5)) !important;
     }
 
     @keyframes runtimeProfileRingSpin {
@@ -954,6 +986,321 @@ function injectOrbitMotionStyles() {
         transform: rotate(360deg);
       }
     }
+
+    /* -----------------------------
+       Agricultural Cards Runtime Fix
+    ----------------------------- */
+
+    .agri-grid {
+      display: grid !important;
+      grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+      gap: 28px !important;
+      align-items: stretch !important;
+    }
+
+    .agri-card-premium {
+      min-height: 560px !important;
+      height: auto !important;
+
+      display: flex !important;
+      flex-direction: column !important;
+
+      border: 1px solid var(--border) !important;
+      border-radius: var(--radius-xl) !important;
+
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.9),
+          rgba(242, 248, 255, 0.78)
+        ) !important;
+
+      backdrop-filter: blur(18px) !important;
+      -webkit-backdrop-filter: blur(18px) !important;
+
+      box-shadow:
+        0 26px 76px rgba(28, 68, 110, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.34) !important;
+
+      overflow: hidden !important;
+      cursor: pointer !important;
+
+      transition:
+        transform 0.28s ease,
+        box-shadow 0.28s ease,
+        border-color 0.28s ease !important;
+    }
+
+    html[data-theme="dark"] .agri-card-premium {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.065),
+          rgba(255, 255, 255, 0.025)
+        ) !important;
+    }
+
+    .agri-card-premium:hover {
+      transform: translateY(-10px) !important;
+      border-color: var(--border-strong) !important;
+      box-shadow:
+        0 34px 90px rgba(28, 68, 110, 0.18),
+        0 0 60px rgba(0, 111, 214, 0.15) !important;
+    }
+
+    .agri-card-premium .agri-img-wrap {
+      position: relative !important;
+      width: 100% !important;
+      height: 250px !important;
+      min-height: 250px !important;
+      overflow: hidden !important;
+
+      border-bottom: 1px solid var(--border) !important;
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(0, 111, 214, 0.12),
+          rgba(104, 76, 255, 0.12)
+        ) !important;
+    }
+
+    .agri-card-premium .agri-img {
+      width: 100% !important;
+      height: 100% !important;
+      display: block !important;
+      transition: transform 0.5s ease !important;
+    }
+
+    .agri-card-premium .agri-img.cover-img {
+      object-fit: cover !important;
+      object-position: center !important;
+    }
+
+    .agri-card-premium .agri-img.contain-img {
+      object-fit: contain !important;
+      object-position: center !important;
+      padding: 34px !important;
+
+      background:
+        radial-gradient(
+          circle at center,
+          rgba(255, 255, 255, 0.98),
+          rgba(228, 240, 255, 0.9)
+        ) !important;
+    }
+
+    .agri-card-premium:hover .agri-img.cover-img {
+      transform: scale(1.08) !important;
+    }
+
+    .agri-card-premium:hover .agri-img.contain-img {
+      transform: scale(1.04) !important;
+    }
+
+    .agri-card-premium .agri-img-overlay {
+      position: absolute !important;
+      inset: 0 !important;
+
+      display: flex !important;
+      align-items: flex-end !important;
+      justify-content: space-between !important;
+
+      padding: 20px !important;
+
+      background:
+        linear-gradient(
+          0deg,
+          rgba(3, 7, 18, 0.86) 0%,
+          rgba(3, 7, 18, 0.42) 45%,
+          rgba(3, 7, 18, 0.04) 100%
+        ) !important;
+
+      opacity: 0 !important;
+      pointer-events: none !important;
+      transition: opacity 0.28s ease !important;
+    }
+
+    .agri-card-premium:hover .agri-img-overlay {
+      opacity: 1 !important;
+    }
+
+    .agri-card-premium .agri-overlay-icon {
+      width: 44px !important;
+      height: 44px !important;
+
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+
+      border-radius: 50% !important;
+
+      background: rgba(255, 255, 255, 0.18) !important;
+      backdrop-filter: blur(12px) !important;
+
+      font-size: 1.35rem !important;
+    }
+
+    .agri-card-premium .agri-img-overlay strong {
+      padding: 10px 15px !important;
+
+      border-radius: var(--radius-pill) !important;
+
+      color: #020617 !important;
+      background: rgba(255, 255, 255, 0.92) !important;
+
+      font-size: 0.82rem !important;
+      font-weight: 950 !important;
+    }
+
+    .agri-card-premium .agri-card-body {
+      padding: 26px !important;
+
+      display: flex !important;
+      flex-direction: column !important;
+      flex: 1 !important;
+    }
+
+    .agri-card-premium .agri-card-top {
+      margin-bottom: 16px !important;
+
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+    }
+
+    .agri-card-premium .agri-category,
+    .agri-card-premium .agri-role {
+      padding: 8px 11px !important;
+
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+
+      border-radius: var(--radius-pill) !important;
+      border: 1px solid var(--border) !important;
+
+      font-size: 0.72rem !important;
+      font-weight: 900 !important;
+      line-height: 1 !important;
+      white-space: nowrap !important;
+    }
+
+    .agri-card-premium .agri-category {
+      color: var(--primary) !important;
+      background: var(--primary-soft) !important;
+    }
+
+    .agri-card-premium .agri-role {
+      color: var(--text-strong) !important;
+      background: rgba(255, 255, 255, 0.55) !important;
+    }
+
+    .agri-card-premium h3 {
+      margin: 0 0 8px !important;
+
+      color: var(--text-strong) !important;
+
+      font-size: 1.28rem !important;
+      line-height: 1.18 !important;
+      letter-spacing: -0.04em !important;
+      font-weight: 950 !important;
+    }
+
+    .agri-card-premium .agri-original {
+      margin: 0 0 16px !important;
+
+      color: var(--primary) !important;
+
+      font-size: 0.92rem !important;
+      line-height: 1.45 !important;
+      font-weight: 850 !important;
+    }
+
+    .agri-impact-chips {
+      margin-bottom: 22px !important;
+
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 8px !important;
+    }
+
+    .agri-impact-chips span {
+      padding: 7px 10px !important;
+
+      border-radius: var(--radius-pill) !important;
+      border: 1px solid rgba(0, 159, 97, 0.2) !important;
+
+      color: var(--accent) !important;
+      background: var(--accent-soft) !important;
+
+      font-size: 0.74rem !important;
+      font-weight: 850 !important;
+      line-height: 1.2 !important;
+    }
+
+    .agri-card-premium .view-project-btn {
+      appearance: none !important;
+      -webkit-appearance: none !important;
+
+      margin-top: auto !important;
+      width: 100% !important;
+      min-height: 48px !important;
+      padding: 13px 18px !important;
+
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+
+      border: 0 !important;
+      border-radius: var(--radius-pill) !important;
+
+      color: #020617 !important;
+      background:
+        linear-gradient(
+          135deg,
+          var(--primary),
+          var(--purple)
+        ) !important;
+
+      box-shadow:
+        0 14px 34px rgba(0, 111, 214, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+
+      font-size: 0.92rem !important;
+      font-weight: 950 !important;
+      line-height: 1 !important;
+
+      cursor: pointer !important;
+      transition: 0.22s ease !important;
+    }
+
+    .agri-card-premium .view-project-btn:hover {
+      transform: translateY(-2px) !important;
+      filter: brightness(1.08) !important;
+      box-shadow: var(--shadow-glow) !important;
+    }
+
+    @media (max-width: 1100px) {
+      .agri-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .agri-grid {
+        grid-template-columns: 1fr !important;
+      }
+
+      .agri-card-premium {
+        min-height: auto !important;
+      }
+
+      .agri-card-premium .agri-img-wrap {
+        height: 220px !important;
+        min-height: 220px !important;
+      }
+    }
   `;
 
   document.head.appendChild(style);
@@ -985,9 +1332,87 @@ function enhanceOrbitMotion() {
 
     const runner = document.createElement("div");
     runner.className = `orbit-runner orbit-runner-${index + 1}`;
-
     orbit.appendChild(runner);
   });
+
+  animateSatelliteLabels();
+}
+
+function animateSatelliteLabels() {
+  if (window.__satelliteLabelAnimationStarted) return;
+  window.__satelliteLabelAnimationStarted = true;
+
+  const orbitSystem = document.querySelector(".orbit-system");
+  const satellites = Array.from(document.querySelectorAll(".satellite"));
+
+  if (!orbitSystem || !satellites.length) return;
+
+  const configs = [
+    {
+      selector: ".sat-1",
+      angle: -140,
+      radiusRatio: 0.86,
+      speed: 1
+    },
+    {
+      selector: ".sat-2",
+      angle: -20,
+      radiusRatio: 0.88,
+      speed: 1
+    },
+    {
+      selector: ".sat-3",
+      angle: 165,
+      radiusRatio: 0.84,
+      speed: 1
+    },
+    {
+      selector: ".sat-4",
+      angle: 45,
+      radiusRatio: 0.86,
+      speed: 1
+    }
+  ];
+
+  const duration = 28000;
+
+  function tick() {
+    const rect = orbitSystem.getBoundingClientRect();
+    const size = Math.min(rect.width, rect.height);
+    const baseRadius = size / 2;
+
+    const now = performance.now();
+    const progress = (now % duration) / duration;
+    const globalAngle = progress * Math.PI * 2;
+
+    configs.forEach((config) => {
+      const item = document.querySelector(config.selector);
+      if (!item) return;
+
+      const startAngle = (config.angle * Math.PI) / 180;
+      const angle = startAngle + globalAngle * config.speed;
+      const radius = baseRadius * config.radiusRatio;
+
+      const x = Math.cos(angle) * radius;
+      const y = Math.sin(angle) * radius;
+
+      item.style.left = "50%";
+      item.style.top = "50%";
+      item.style.right = "auto";
+      item.style.bottom = "auto";
+
+      item.style.transform = `
+        translate(-50%, -50%)
+        translate(${x}px, ${y}px)
+      `;
+
+      item.style.zIndex = "60";
+    });
+
+    requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
 }
 
 /* -----------------------------
