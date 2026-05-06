@@ -3,7 +3,57 @@
    ========================================================= */
 
 /* -----------------------------
-   AI Apps & Tools (Birleştirildi)
+   Stars Canvas
+----------------------------- */
+
+(function initStars() {
+  const canvas = document.getElementById("starsCanvas");
+  if (!canvas) return;
+  const ctx = canvas.getContext("2d");
+  let stars = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function createStars() {
+    stars = [];
+    const count = Math.floor((canvas.width * canvas.height) / 6000);
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.4 + 0.2,
+        o: Math.random() * 0.7 + 0.2,
+        speed: Math.random() * 0.3 + 0.05
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const theme = document.documentElement.getAttribute("data-theme");
+    stars.forEach((s) => {
+      s.o += Math.sin(Date.now() * s.speed * 0.001) * 0.005;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = theme === "dark"
+        ? `rgba(180, 210, 255, ${Math.abs(s.o)})`
+        : `rgba(21, 137, 232, ${Math.abs(s.o) * 0.3})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  createStars();
+  draw();
+  window.addEventListener("resize", () => { resize(); createStars(); });
+})();
+
+/* -----------------------------
+   AI Apps
 ----------------------------- */
 
 const apps = [
@@ -15,7 +65,7 @@ const apps = [
     demo: "https://agrivision-ai09.streamlit.app/",
     badge: "AgriTech",
     icon: "🌾",
-    color: "linear-gradient(135deg, #1aa3ff 0%, #20c878 100%)"
+    gradient: "linear-gradient(135deg, #00c853 0%, #1aa3ff 100%)"
   },
   {
     title: "Food Regulatory Dashboard",
@@ -25,7 +75,7 @@ const apps = [
     demo: "https://food-regulatory-dashboard-09.streamlit.app/",
     badge: "FoodTech",
     icon: "🍽️",
-    color: "linear-gradient(135deg, #ff9a3c 0%, #ff6b6b 100%)"
+    gradient: "linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)"
   },
   {
     title: "GrantMirror AI",
@@ -35,7 +85,7 @@ const apps = [
     demo: "https://grantmirror-ai.streamlit.app/",
     badge: "EU Grants",
     icon: "🔍",
-    color: "linear-gradient(135deg, #8b75ff 0%, #1aa3ff 100%)"
+    gradient: "linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%)"
   },
   {
     title: "MeetAlign",
@@ -45,17 +95,17 @@ const apps = [
     demo: "https://meetalign.streamlit.app/",
     badge: "Productivity",
     icon: "🤝",
-    color: "linear-gradient(135deg, #00d2ff 0%, #20c878 100%)"
+    gradient: "linear-gradient(135deg, #00bfa5 0%, #1aa3ff 100%)"
   },
   {
-    title: "OncoConnect Co-Creation App",
+    title: "OncoConnect Co-Creation",
     description: "Oncology-focused co-creation concept for stakeholder engagement, collaboration and healthcare innovation.",
     tags: ["HealthTech", "Oncology", "Co-Creation"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://oncoconnect-co-creation-app.streamlit.app/",
     badge: "HealthTech",
     icon: "💊",
-    color: "linear-gradient(135deg, #ff6b9d 0%, #8b75ff 100%)"
+    gradient: "linear-gradient(135deg, #e91e8c 0%, #7b61ff 100%)"
   }
 ];
 
@@ -71,8 +121,7 @@ const agriProjects = [
     role: "Project Manager",
     imageFile: "agricultural-solution-center.jpg",
     source: "https://tabitaim.com//projelerimiz",
-    description:
-      "A software-oriented agricultural solution concept designed to support stakeholders in the agriculture and food value chain through technology-enabled consulting, process management and decision support.",
+    description: "A software-oriented agricultural solution concept designed to support stakeholders in the agriculture and food value chain through technology-enabled consulting, process management and decision support.",
     impact: "Digital advisory • Farmer support • Decision support software • Agricultural process management",
     icon: "🌱"
   },
@@ -83,8 +132,7 @@ const agriProjects = [
     role: "Researcher",
     imageFile: "smart-oasis.jpg",
     source: "https://tabitaim.com//projelerimiz",
-    description:
-      "An integrated digital farm initiative combining smart production infrastructure, IoT, data-driven monitoring and technology-oriented agricultural production concepts.",
+    description: "An integrated digital farm initiative combining smart production infrastructure, IoT, data-driven monitoring and technology-oriented agricultural production concepts.",
     impact: "Digital farm • Smart production • IoT • AgriTech infrastructure",
     icon: "🛰️"
   },
@@ -95,8 +143,7 @@ const agriProjects = [
     role: "Researcher",
     imageFile: "smart-village.jpg",
     source: "https://tabitaim.com//projelerimiz",
-    description:
-      "A smart village model combining rural development, agricultural innovation, digital transformation and technology-enabled farming practices.",
+    description: "A smart village model combining rural development, agricultural innovation, digital transformation and technology-enabled farming practices.",
     impact: "Smart village • Rural innovation • Digital transformation • Farmer-centered design",
     icon: "🏡"
   },
@@ -107,20 +154,18 @@ const agriProjects = [
     role: "Project Manager",
     imageFile: "rigel.jpg",
     source: "https://tabitaim.com//projelerimiz",
-    description:
-      "A reporting and statistics-focused software concept designed to transform agricultural information into structured insights and decision-support outputs.",
+    description: "A reporting and statistics-focused software concept designed to transform agricultural information into structured insights and decision-support outputs.",
     impact: "Reporting • Statistics • Data-driven decisions • Structured agricultural insights",
     icon: "📊"
   },
   {
-    title: "Azmud Smart Greenhouse Sensor",
+    title: "Azmud Smart Greenhouse",
     originalTitle: "Azmud Akıllı Sera",
     category: "Smart Greenhouse",
     role: "Researcher",
     imageFile: "azmud.jpg",
     source: "https://tabitaim.com//projelerimiz",
-    description:
-      "A smart greenhouse sensor initiative focused on controlled agriculture, sensor technologies, monitoring and data-supported greenhouse management.",
+    description: "A smart greenhouse sensor initiative focused on controlled agriculture, sensor technologies, monitoring and data-supported greenhouse management.",
     impact: "Smart greenhouse • Sensors • Controlled agriculture • Monitoring",
     icon: "🌿"
   },
@@ -131,15 +176,14 @@ const agriProjects = [
     role: "Contributor and Trainer",
     imageFile: "vodafone-farmers-club.jpg",
     source: "https://tabitaim.com//projelerimiz",
-    description:
-      "A farmer-oriented service, communication, training and business model initiative focused on farmer engagement and knowledge transfer.",
+    description: "A farmer-oriented service, communication, training and business model initiative focused on farmer engagement and knowledge transfer.",
     impact: "Farmer services • Business model • Training • Agricultural communication",
     icon: "📱"
   }
 ];
 
 /* -----------------------------
-   Image Fallback System
+   Image Fallback
 ----------------------------- */
 
 const repoBase =
@@ -165,7 +209,7 @@ window.handleImageError = function (img) {
   } else {
     img.onerror = null;
     img.classList.add("image-missing");
-    img.alt = "Project image could not be loaded";
+    img.alt = "Image not available";
   }
 };
 
@@ -173,8 +217,8 @@ window.handleImageError = function (img) {
    Helpers
 ----------------------------- */
 
-function safeText(value) {
-  return String(value)
+function safeText(v) {
+  return String(v)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -191,50 +235,43 @@ function isValidFormspreeUrl(url) {
 }
 
 /* -----------------------------
-   Render AI Apps & Tools
+   Render AI Apps
 ----------------------------- */
 
 function renderApps() {
-  const appsGrid = document.getElementById("appsGrid");
-  if (!appsGrid) return;
-
-  appsGrid.innerHTML = "";
+  const grid = document.getElementById("appsGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
 
   apps.forEach((app) => {
     const card = document.createElement("article");
-    card.className = "app-tool-card glass";
+    card.className = "app-card-new";
 
-    const tagsHtml = app.tags
-      .map((tag) => `<span>${safeText(tag)}</span>`)
-      .join("");
+    const tagsHtml = app.tags.map((t) => `<span>${safeText(t)}</span>`).join("");
 
     card.innerHTML = `
-      <div class="app-tool-banner" style="background: ${app.color}">
-        <span class="app-tool-icon">${app.icon}</span>
-        <span class="app-tool-badge-top">${safeText(app.badge)}</span>
-        <div class="app-tool-glow"></div>
+      <div class="app-card-top" style="background:${app.gradient}">
+        <div class="app-card-top-glow"></div>
+        <span class="app-big-icon">${app.icon}</span>
+        <span class="app-badge-pill">${safeText(app.badge)}</span>
       </div>
-      <div class="app-tool-body">
+      <div class="app-card-body">
         <h3>${safeText(app.title)}</h3>
         <p>${safeText(app.description)}</p>
-        <div class="app-tool-tags">${tagsHtml}</div>
-        <div class="app-tool-actions">
-          <a href="${app.github}" target="_blank" rel="noopener" class="btn-tool ghost">
-            GitHub
-          </a>
-          <a href="${app.demo}" target="_blank" rel="noopener" class="btn-tool primary">
-            Open App →
-          </a>
+        <div class="app-tags">${tagsHtml}</div>
+        <div class="app-actions">
+          <a href="${app.github}" target="_blank" rel="noopener" class="app-btn-ghost">GitHub</a>
+          <a href="${app.demo}" target="_blank" rel="noopener" class="app-btn-primary">Open App →</a>
         </div>
       </div>
     `;
 
-    appsGrid.appendChild(card);
+    grid.appendChild(card);
   });
 }
 
 /* -----------------------------
-   Render Agricultural Project Cards
+   Render Agri Cards
 ----------------------------- */
 
 function renderAgriProjects() {
@@ -244,39 +281,38 @@ function renderAgriProjects() {
 
   function createCards(filter = "All") {
     agriGrid.innerHTML = "";
-    const filtered =
-      filter === "All"
-        ? agriProjects
-        : agriProjects.filter((p) => p.category === filter);
+    const filtered = filter === "All"
+      ? agriProjects
+      : agriProjects.filter((p) => p.category === filter);
 
     filtered.forEach((project) => {
       const card = document.createElement("article");
-      card.className = "agri-card glass";
+      card.className = "agri-card";
       const firstImage = getImageCandidates(project.imageFile)[0];
 
       card.innerHTML = `
-        <div class="agri-image-wrap">
+        <div class="agri-img-wrap">
           <img
             src="${firstImage}"
             data-file="${project.imageFile}"
             data-step="0"
             onerror="handleImageError(this)"
             alt="${safeText(project.title)}"
-            class="agri-image"
+            class="agri-img"
           />
-          <div class="agri-image-overlay">
+          <div class="agri-img-overlay">
             <span>${project.icon}</span>
-            <strong>View Details</strong>
+            <strong>View Details →</strong>
           </div>
         </div>
-        <div class="agri-card-body">
-          <div class="agri-card-top">
-            <span class="agri-category">${safeText(project.category)}</span>
-            <span class="agri-role-mini">${safeText(project.role)}</span>
+        <div class="agri-body">
+          <div class="agri-top">
+            <span class="agri-cat">${safeText(project.category)}</span>
+            <span class="agri-role">${safeText(project.role)}</span>
           </div>
           <h3>${safeText(project.title)}</h3>
-          <p class="agri-original">${safeText(project.originalTitle)}</p>
-          <p class="agri-short">${safeText(project.impact)}</p>
+          <p class="agri-orig">${safeText(project.originalTitle)}</p>
+          <p class="agri-impact">${safeText(project.impact)}</p>
         </div>
       `;
 
@@ -287,17 +323,17 @@ function renderAgriProjects() {
 
   createCards();
 
-  filterButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      filterButtons.forEach((btn) => btn.classList.remove("active"));
-      button.classList.add("active");
-      createCards(button.dataset.filter);
+  filterButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      filterButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      createCards(btn.dataset.filter);
     });
   });
 }
 
 /* -----------------------------
-   Project Modal
+   Modal
 ----------------------------- */
 
 function openProjectModal(project) {
@@ -349,25 +385,19 @@ function initModal() {
 ----------------------------- */
 
 function initThemeToggle() {
-  const themeToggle = document.getElementById("themeToggle");
+  const btn = document.getElementById("themeToggle");
   const html = document.documentElement;
-  if (!themeToggle || !html) return;
+  if (!btn) return;
 
-  const savedTheme = localStorage.getItem("theme");
-  if (savedTheme === "dark" || savedTheme === "light") {
-    html.setAttribute("data-theme", savedTheme);
-    themeToggle.textContent = savedTheme === "dark" ? "🌙" : "☀️";
-  } else {
-    html.setAttribute("data-theme", "light");
-    themeToggle.textContent = "☀️";
-  }
+  const saved = localStorage.getItem("theme") || "dark";
+  html.setAttribute("data-theme", saved);
+  btn.textContent = saved === "dark" ? "🌙" : "☀️";
 
-  themeToggle.addEventListener("click", () => {
-    const current = html.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
+  btn.addEventListener("click", () => {
+    const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
     html.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
-    themeToggle.textContent = next === "dark" ? "🌙" : "☀️";
+    btn.textContent = next === "dark" ? "🌙" : "☀️";
   });
 }
 
@@ -384,62 +414,55 @@ function initContactForm() {
   status.style.display = "none";
   form.appendChild(status);
 
-  form.addEventListener("submit", async (event) => {
+  form.addEventListener("submit", async (e) => {
     const actionUrl = form.getAttribute("action");
 
     if (!isValidFormspreeUrl(actionUrl)) {
-      event.preventDefault();
+      e.preventDefault();
       status.style.display = "block";
-      status.textContent = "Formspree URL is not configured correctly.";
       status.className = "form-status warning";
+      status.textContent = "Formspree URL is not configured correctly.";
       return;
     }
 
-    event.preventDefault();
-
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalText = submitButton ? submitButton.textContent : "";
-    if (submitButton) {
-      submitButton.disabled = true;
-      submitButton.textContent = "Sending...";
-    }
+    e.preventDefault();
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const origText = submitBtn?.textContent;
+    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
 
     status.style.display = "block";
     status.className = "form-status info";
-    status.textContent = "Sending your message...";
+    status.textContent = "Sending...";
 
     try {
-      const response = await fetch(actionUrl, {
+      const res = await fetch(actionUrl, {
         method: "POST",
         body: new FormData(form),
         headers: { Accept: "application/json" }
       });
 
-      if (response.ok) {
+      if (res.ok) {
         form.reset();
         status.className = "form-status success";
-        status.textContent = "Thank you! Your message has been sent successfully.";
+        status.textContent = "Message sent successfully!";
       } else {
         status.className = "form-status error";
-        status.textContent = "Something went wrong. Please try again or contact me by email.";
+        status.textContent = "Something went wrong. Please try again.";
       }
     } catch {
       status.className = "form-status error";
-      status.textContent = "Network error. Please try again or contact me by email.";
+      status.textContent = "Network error. Please try again.";
     } finally {
-      if (submitButton) {
-        submitButton.disabled = false;
-        submitButton.textContent = originalText;
-      }
+      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
     }
   });
 }
 
 /* -----------------------------
-   Navigation Highlight
+   Nav Highlight
 ----------------------------- */
 
-function initNavigationHighlight() {
+function initNavHighlight() {
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".nav-links a");
   if (!sections.length || !navLinks.length) return;
@@ -451,25 +474,23 @@ function initNavigationHighlight() {
         const id = entry.target.getAttribute("id");
         navLinks.forEach((link) => {
           link.classList.remove("active-nav");
-          if (link.getAttribute("href") === `#${id}`) {
-            link.classList.add("active-nav");
-          }
+          if (link.getAttribute("href") === `#${id}`) link.classList.add("active-nav");
         });
       });
     },
     { threshold: 0.35 }
   );
 
-  sections.forEach((section) => observer.observe(section));
+  sections.forEach((s) => observer.observe(s));
 }
 
 /* -----------------------------
-   Reveal Animation
+   Reveal
 ----------------------------- */
 
-function initRevealAnimations() {
+function initReveal() {
   const items = document.querySelectorAll(
-    ".glass, .section-heading, .app-tool-card, .agri-card, .stat-card"
+    ".glass-card, .section-heading, .app-card-new, .agri-card, .stat-item"
   );
 
   items.forEach((item) => item.classList.add("reveal"));
@@ -482,7 +503,7 @@ function initRevealAnimations() {
         observer.unobserve(entry.target);
       });
     },
-    { threshold: 0.1 }
+    { threshold: 0.08 }
   );
 
   items.forEach((item) => observer.observe(item));
@@ -492,9 +513,9 @@ function initRevealAnimations() {
    Footer Year
 ----------------------------- */
 
-function setFooterYear() {
-  const year = document.getElementById("year");
-  if (year) year.textContent = new Date().getFullYear();
+function setYear() {
+  const el = document.getElementById("year");
+  if (el) el.textContent = new Date().getFullYear();
 }
 
 /* -----------------------------
@@ -507,7 +528,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initModal();
   initThemeToggle();
   initContactForm();
-  initNavigationHighlight();
-  setFooterYear();
-  initRevealAnimations();
+  initNavHighlight();
+  setYear();
+  initReveal();
 });
