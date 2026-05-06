@@ -3444,3 +3444,167 @@ body .orbit-3::before {
     inset: 32px !important;
   }
 }
+/* =========================================================
+   BUTTON CONTRAST FIX
+   Add to the END of style.css
+   ========================================================= */
+
+/* Ana gradient butonlar */
+.btn.primary,
+.view-project-btn,
+.agri-card-premium .view-project-btn,
+.apps-grid .app-btn.primary,
+.app-btn.primary,
+.contact-form .btn.primary {
+  color: #ffffff !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0077ff 0%,
+      #245cff 48%,
+      #6a4cff 100%
+    ) !important;
+
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22) !important;
+
+  box-shadow:
+    0 14px 34px rgba(0, 111, 214, 0.26),
+    0 0 26px rgba(104, 76, 255, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+}
+
+/* Hover durumunda daha parlak */
+.btn.primary:hover,
+.view-project-btn:hover,
+.agri-card-premium .view-project-btn:hover,
+.apps-grid .app-btn.primary:hover,
+.app-btn.primary:hover,
+.contact-form .btn.primary:hover {
+  color: #ffffff !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #008cff 0%,
+      #336dff 48%,
+      #7b61ff 100%
+    ) !important;
+
+  filter: none !important;
+
+  box-shadow:
+    0 18px 44px rgba(0, 111, 214, 0.34),
+    0 0 38px rgba(104, 76, 255, 0.24),
+    inset 0 1px 0 rgba(255, 255, 255, 0.38) !important;
+}
+
+/* Tarımsal kart View Project butonu */
+.agri-grid .view-project-btn,
+.agri-grid .agri-card .view-project-btn,
+body .agri-grid .agri-card .view-project-btn {
+  color: #ffffff !important;
+
+  font-weight: 950 !important;
+  letter-spacing: -0.01em !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0077ff 0%,
+      #245cff 52%,
+      #674cff 100%
+    ) !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.26) !important;
+
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22) !important;
+}
+
+/* App Open App butonları */
+.apps-grid .app-btn.primary {
+  color: #ffffff !important;
+}
+
+/* GitHub / secondary app butonları daha okunaklı */
+.apps-grid .app-btn.ghost,
+.app-btn.ghost,
+.btn.secondary,
+.btn.ghost {
+  color: var(--primary) !important;
+
+  background:
+    rgba(255, 255, 255, 0.76) !important;
+
+  border: 1px solid var(--border) !important;
+
+  box-shadow:
+    0 10px 24px rgba(28, 68, 110, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32) !important;
+}
+
+.apps-grid .app-btn.ghost:hover,
+.app-btn.ghost:hover,
+.btn.secondary:hover,
+.btn.ghost:hover {
+  color: #ffffff !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #0077ff 0%,
+      #684cff 100%
+    ) !important;
+
+  border-color: transparent !important;
+}
+
+/* Contact Me gibi açık mavi butonlarda kontrast */
+.btn.ghost {
+  color: #006fd6 !important;
+  font-weight: 950 !important;
+}
+
+/* Dark mode butonları */
+html[data-theme="dark"] .btn.primary,
+html[data-theme="dark"] .view-project-btn,
+html[data-theme="dark"] .agri-card-premium .view-project-btn,
+html[data-theme="dark"] .apps-grid .app-btn.primary,
+html[data-theme="dark"] .app-btn.primary {
+  color: #020617 !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #00d4ff 0%,
+      #00ff88 100%
+    ) !important;
+
+  text-shadow: none !important;
+}
+
+html[data-theme="dark"] .apps-grid .app-btn.ghost,
+html[data-theme="dark"] .app-btn.ghost,
+html[data-theme="dark"] .btn.secondary,
+html[data-theme="dark"] .btn.ghost {
+  color: #dbeafe !important;
+
+  background:
+    rgba(255, 255, 255, 0.065) !important;
+
+  border-color: rgba(0, 212, 255, 0.2) !important;
+}
+
+html[data-theme="dark"] .apps-grid .app-btn.ghost:hover,
+html[data-theme="dark"] .app-btn.ghost:hover,
+html[data-theme="dark"] .btn.secondary:hover,
+html[data-theme="dark"] .btn.ghost:hover {
+  color: #020617 !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      #00d4ff,
+      #00ff88
+    ) !important;
+}
