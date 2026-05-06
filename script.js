@@ -1,116 +1,133 @@
 /* =========================================================
-   Mehmet Cam Portfolio - script.js
+   Mehmet Cam Portfolio - NASA Style script.js
    ========================================================= */
 
 /* -----------------------------
    Stars Canvas
 ----------------------------- */
 
-(function initStars() {
+(function initStarsCanvas() {
   const canvas = document.getElementById("starsCanvas");
   if (!canvas) return;
+
   const ctx = canvas.getContext("2d");
   let stars = [];
 
-  function resize() {
+  function resizeCanvas() {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
   }
 
   function createStars() {
     stars = [];
-    const count = Math.floor((canvas.width * canvas.height) / 6000);
+
+    const count = Math.floor((canvas.width * canvas.height) / 6500);
+
     for (let i = 0; i < count; i++) {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 1.4 + 0.2,
-        o: Math.random() * 0.7 + 0.2,
-        speed: Math.random() * 0.3 + 0.05
+        radius: Math.random() * 1.3 + 0.25,
+        alpha: Math.random() * 0.75 + 0.2,
+        speed: Math.random() * 0.25 + 0.05
       });
     }
   }
 
-  function draw() {
+  function drawStars() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const theme = document.documentElement.getAttribute("data-theme");
-    stars.forEach((s) => {
-      s.o += Math.sin(Date.now() * s.speed * 0.001) * 0.005;
+
+    const isDark =
+      document.documentElement.getAttribute("data-theme") === "dark";
+
+    stars.forEach((star) => {
+      star.alpha += Math.sin(Date.now() * star.speed * 0.001) * 0.004;
+
       ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = theme === "dark"
-        ? `rgba(180, 210, 255, ${Math.abs(s.o)})`
-        : `rgba(21, 137, 232, ${Math.abs(s.o) * 0.3})`;
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = isDark
+        ? `rgba(190, 220, 255, ${Math.abs(star.alpha)})`
+        : `rgba(0, 80, 160, ${Math.abs(star.alpha) * 0.25})`;
       ctx.fill();
     });
-    requestAnimationFrame(draw);
+
+    requestAnimationFrame(drawStars);
   }
 
-  resize();
+  resizeCanvas();
   createStars();
-  draw();
-  window.addEventListener("resize", () => { resize(); createStars(); });
+  drawStars();
+
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    createStars();
+  });
 })();
 
 /* -----------------------------
-   AI Apps
+   AI Apps & Tools
 ----------------------------- */
 
 const apps = [
   {
     title: "AgriVision AI",
-    description: "AI-powered agriculture intelligence application for data-driven insights, smart decision support and AgriTech innovation.",
+    description:
+      "AI-powered agriculture intelligence application for data-driven insights, smart decision support and AgriTech innovation.",
     tags: ["AI", "AgriTech", "Streamlit"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://agrivision-ai09.streamlit.app/",
     badge: "AgriTech",
     icon: "🌾",
-    gradient: "linear-gradient(135deg, #00c853 0%, #1aa3ff 100%)"
+    gradient: "linear-gradient(135deg, #00d084 0%, #00d4ff 100%)"
   },
   {
     title: "Food Regulatory Dashboard",
-    description: "Interactive dashboard for food regulatory monitoring, compliance insights, analytics and visualization.",
+    description:
+      "Interactive dashboard for food regulatory monitoring, compliance insights, analytics and visualization.",
     tags: ["FoodTech", "Regulatory", "Dashboard"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://food-regulatory-dashboard-09.streamlit.app/",
     badge: "FoodTech",
     icon: "🍽️",
-    gradient: "linear-gradient(135deg, #ff6b35 0%, #ff1744 100%)"
+    gradient: "linear-gradient(135deg, #ff8a3d 0%, #ff3864 100%)"
   },
   {
     title: "GrantMirror AI",
-    description: "AI-assisted grant discovery and project development tool for innovation funding opportunities and EU projects.",
+    description:
+      "AI-assisted grant discovery and project development tool for innovation funding opportunities and EU projects.",
     tags: ["AI", "EU Projects", "Grants"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://grantmirror-ai.streamlit.app/",
     badge: "EU Grants",
-    icon: "🔍",
+    icon: "🔎",
     gradient: "linear-gradient(135deg, #7b61ff 0%, #00d4ff 100%)"
   },
   {
     title: "MeetAlign",
-    description: "Smart meeting alignment and collaboration assistant designed to improve productivity, planning and decision-making.",
+    description:
+      "Smart meeting alignment and collaboration assistant designed to improve productivity, planning and decision-making.",
     tags: ["Productivity", "AI", "Meetings"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://meetalign.streamlit.app/",
     badge: "Productivity",
     icon: "🤝",
-    gradient: "linear-gradient(135deg, #00bfa5 0%, #1aa3ff 100%)"
+    gradient: "linear-gradient(135deg, #00c2ff 0%, #00d084 100%)"
   },
   {
     title: "OncoConnect Co-Creation",
-    description: "Oncology-focused co-creation concept for stakeholder engagement, collaboration and healthcare innovation.",
+    description:
+      "Oncology-focused co-creation concept for stakeholder engagement, collaboration and healthcare innovation.",
     tags: ["HealthTech", "Oncology", "Co-Creation"],
     github: "https://github.com/mehmetcamofficial",
     demo: "https://oncoconnect-co-creation-app.streamlit.app/",
     badge: "HealthTech",
     icon: "💊",
-    gradient: "linear-gradient(135deg, #e91e8c 0%, #7b61ff 100%)"
+    gradient: "linear-gradient(135deg, #ff4ca8 0%, #7b61ff 100%)"
   }
 ];
 
 /* -----------------------------
-   Agricultural Projects
+   Agricultural Project Experience
 ----------------------------- */
 
 const agriProjects = [
@@ -120,9 +137,12 @@ const agriProjects = [
     category: "Software",
     role: "Project Manager",
     imageFile: "agricultural-solution-center.jpg",
+    imageMode: "cover",
     source: "https://tabitaim.com//projelerimiz",
-    description: "A software-oriented agricultural solution concept designed to support stakeholders in the agriculture and food value chain through technology-enabled consulting, process management and decision support.",
-    impact: "Digital advisory • Farmer support • Decision support software • Agricultural process management",
+    description:
+      "A software-oriented agricultural solution concept designed to support stakeholders in the agriculture and food value chain through technology-enabled consulting, process management and decision support. I contributed to digital advisory workflows, farmer support mechanisms and solution design.",
+    impact:
+      "Digital advisory • Farmer support • Decision support software • Agricultural process management",
     icon: "🌱"
   },
   {
@@ -131,9 +151,12 @@ const agriProjects = [
     category: "Digital Farm",
     role: "Researcher",
     imageFile: "smart-oasis.jpg",
+    imageMode: "cover",
     source: "https://tabitaim.com//projelerimiz",
-    description: "An integrated digital farm initiative combining smart production infrastructure, IoT, data-driven monitoring and technology-oriented agricultural production concepts.",
-    impact: "Digital farm • Smart production • IoT • AgriTech infrastructure",
+    description:
+      "An integrated digital farm initiative combining smart production infrastructure, IoT, data-driven monitoring and technology-oriented agricultural production concepts. I contributed as a researcher through project analysis, information gathering, innovation mapping and design support.",
+    impact:
+      "Digital farm • Smart production • IoT • AgriTech infrastructure",
     icon: "🛰️"
   },
   {
@@ -142,9 +165,12 @@ const agriProjects = [
     category: "Smart Village",
     role: "Researcher",
     imageFile: "smart-village.jpg",
+    imageMode: "cover",
     source: "https://tabitaim.com//projelerimiz",
-    description: "A smart village model combining rural development, agricultural innovation, digital transformation and technology-enabled farming practices.",
-    impact: "Smart village • Rural innovation • Digital transformation • Farmer-centered design",
+    description:
+      "A smart village model combining rural development, agricultural innovation, digital transformation and technology-enabled farming practices. I contributed to research activities, user needs analysis and field-oriented learning processes.",
+    impact:
+      "Smart village • Rural innovation • Digital transformation • Farmer-centered design",
     icon: "🏡"
   },
   {
@@ -153,9 +179,12 @@ const agriProjects = [
     category: "Software",
     role: "Project Manager",
     imageFile: "rigel.jpg",
+    imageMode: "contain",
     source: "https://tabitaim.com//projelerimiz",
-    description: "A reporting and statistics-focused software concept designed to transform agricultural information into structured insights and decision-support outputs.",
-    impact: "Reporting • Statistics • Data-driven decisions • Structured agricultural insights",
+    description:
+      "A reporting and statistics-focused software concept designed to transform agricultural information into structured insights and decision-support outputs. As project manager, I contributed to process planning, output tracking and data-driven structure development.",
+    impact:
+      "Reporting • Statistics • Data-driven decisions • Structured agricultural insights",
     icon: "📊"
   },
   {
@@ -164,9 +193,12 @@ const agriProjects = [
     category: "Smart Greenhouse",
     role: "Researcher",
     imageFile: "azmud.jpg",
+    imageMode: "contain",
     source: "https://tabitaim.com//projelerimiz",
-    description: "A smart greenhouse sensor initiative focused on controlled agriculture, sensor technologies, monitoring and data-supported greenhouse management.",
-    impact: "Smart greenhouse • Sensors • Controlled agriculture • Monitoring",
+    description:
+      "A smart greenhouse sensor initiative focused on controlled agriculture, sensor technologies, monitoring and data-supported greenhouse management. I contributed to technical needs analysis, use-case development and agricultural technology assessment.",
+    impact:
+      "Smart greenhouse • Sensors • Controlled agriculture • Monitoring",
     icon: "🌿"
   },
   {
@@ -175,15 +207,18 @@ const agriProjects = [
     category: "Business Model",
     role: "Contributor and Trainer",
     imageFile: "vodafone-farmers-club.jpg",
+    imageMode: "cover",
     source: "https://tabitaim.com//projelerimiz",
-    description: "A farmer-oriented service, communication, training and business model initiative focused on farmer engagement and knowledge transfer.",
-    impact: "Farmer services • Business model • Training • Agricultural communication",
+    description:
+      "A farmer-oriented service, communication, training and business model initiative. I contributed to farmer engagement, training processes and field-oriented knowledge transfer activities.",
+    impact:
+      "Farmer services • Business model • Training • Agricultural communication",
     icon: "📱"
   }
 ];
 
 /* -----------------------------
-   Image Fallback
+   Image Fallback System
 ----------------------------- */
 
 const repoBase =
@@ -201,15 +236,17 @@ function getImageCandidates(fileName) {
 window.handleImageError = function (img) {
   const fileName = img.dataset.file;
   let step = Number(img.dataset.step || "0");
+
   const candidates = getImageCandidates(fileName);
   step += 1;
+
   if (step < candidates.length) {
     img.dataset.step = String(step);
     img.src = candidates[step];
   } else {
     img.onerror = null;
     img.classList.add("image-missing");
-    img.alt = "Image not available";
+    img.alt = "Project image could not be loaded";
   }
 };
 
@@ -217,8 +254,8 @@ window.handleImageError = function (img) {
    Helpers
 ----------------------------- */
 
-function safeText(v) {
-  return String(v)
+function safeText(value) {
+  return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -239,79 +276,100 @@ function isValidFormspreeUrl(url) {
 ----------------------------- */
 
 function renderApps() {
-  const grid = document.getElementById("appsGrid");
-  if (!grid) return;
-  grid.innerHTML = "";
+  const appsGrid = document.getElementById("appsGrid");
+  if (!appsGrid) return;
+
+  appsGrid.innerHTML = "";
 
   apps.forEach((app) => {
     const card = document.createElement("article");
-    card.className = "app-card-new";
+    card.className = "app-card";
 
-    const tagsHtml = app.tags.map((t) => `<span>${safeText(t)}</span>`).join("");
+    const tagsHtml = app.tags
+      .map((tag) => `<span>${safeText(tag)}</span>`)
+      .join("");
 
     card.innerHTML = `
-      <div class="app-card-top" style="background:${app.gradient}">
-        <div class="app-card-top-glow"></div>
-        <span class="app-big-icon">${app.icon}</span>
-        <span class="app-badge-pill">${safeText(app.badge)}</span>
+      <div class="app-card-visual" style="background:${app.gradient}">
+        <div class="app-card-glow"></div>
+        <span class="app-icon">${app.icon}</span>
+        <span class="app-badge">${safeText(app.badge)}</span>
       </div>
+
       <div class="app-card-body">
         <h3>${safeText(app.title)}</h3>
         <p>${safeText(app.description)}</p>
-        <div class="app-tags">${tagsHtml}</div>
+
+        <div class="app-tags">
+          ${tagsHtml}
+        </div>
+
         <div class="app-actions">
-          <a href="${app.github}" target="_blank" rel="noopener" class="app-btn-ghost">GitHub</a>
-          <a href="${app.demo}" target="_blank" rel="noopener" class="app-btn-primary">Open App →</a>
+          <a href="${app.github}" target="_blank" rel="noopener" class="app-btn ghost">
+            GitHub
+          </a>
+          <a href="${app.demo}" target="_blank" rel="noopener" class="app-btn primary">
+            Open App →
+          </a>
         </div>
       </div>
     `;
 
-    grid.appendChild(card);
+    appsGrid.appendChild(card);
   });
 }
 
 /* -----------------------------
-   Render Agri Cards
+   Render Agricultural Projects
 ----------------------------- */
 
 function renderAgriProjects() {
   const agriGrid = document.getElementById("agriGrid");
   const filterButtons = document.querySelectorAll(".filter-btn");
+
   if (!agriGrid) return;
 
   function createCards(filter = "All") {
     agriGrid.innerHTML = "";
-    const filtered = filter === "All"
-      ? agriProjects
-      : agriProjects.filter((p) => p.category === filter);
+
+    const filtered =
+      filter === "All"
+        ? agriProjects
+        : agriProjects.filter((project) => project.category === filter);
 
     filtered.forEach((project) => {
       const card = document.createElement("article");
       card.className = "agri-card";
-      const firstImage = getImageCandidates(project.imageFile)[0];
+
+      const firstImage = getImageCandidates(project.imageFile);
+      const imageClass =
+        project.imageMode === "contain" ? "contain-img" : "cover-img";
 
       card.innerHTML = `
         <div class="agri-img-wrap">
           <img
-            src="${firstImage}"
+            src="${firstImage[0]}"
             data-file="${project.imageFile}"
             data-step="0"
             onerror="handleImageError(this)"
             alt="${safeText(project.title)}"
-            class="agri-img"
+            class="agri-img ${imageClass}"
           />
+
           <div class="agri-img-overlay">
             <span>${project.icon}</span>
             <strong>View Details →</strong>
           </div>
         </div>
-        <div class="agri-body">
-          <div class="agri-top">
-            <span class="agri-cat">${safeText(project.category)}</span>
+
+        <div class="agri-card-body">
+          <div class="agri-card-top">
+            <span class="agri-category">${safeText(project.category)}</span>
             <span class="agri-role">${safeText(project.role)}</span>
           </div>
+
           <h3>${safeText(project.title)}</h3>
-          <p class="agri-orig">${safeText(project.originalTitle)}</p>
+          <p class="agri-original">${safeText(project.originalTitle)}</p>
           <p class="agri-impact">${safeText(project.impact)}</p>
         </div>
       `;
@@ -323,17 +381,17 @@ function renderAgriProjects() {
 
   createCards();
 
-  filterButtons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      filterButtons.forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
-      createCards(btn.dataset.filter);
+  filterButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      filterButtons.forEach((btn) => btn.classList.remove("active"));
+      button.classList.add("active");
+      createCards(button.dataset.filter);
     });
   });
 }
 
 /* -----------------------------
-   Modal
+   Project Modal
 ----------------------------- */
 
 function openProjectModal(project) {
@@ -348,7 +406,15 @@ function openProjectModal(project) {
   modalImage.alt = project.title;
   modalImage.dataset.file = project.imageFile;
   modalImage.dataset.step = "0";
-  modalImage.onerror = function () { handleImageError(this); };
+  modalImage.onerror = function () {
+    handleImageError(this);
+  };
+
+  if (project.imageMode === "contain") {
+    modalImage.classList.add("modal-contain");
+  } else {
+    modalImage.classList.remove("modal-contain");
+  }
 
   document.getElementById("modalCategory").textContent = project.category;
   document.getElementById("modalTitle").textContent = project.title;
@@ -366,6 +432,7 @@ function openProjectModal(project) {
 function closeProjectModal() {
   const modal = document.getElementById("projectModal");
   if (!modal) return;
+
   modal.classList.remove("active");
   modal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
@@ -375,29 +442,33 @@ function initModal() {
   document.querySelectorAll("[data-close-modal]").forEach((item) => {
     item.addEventListener("click", closeProjectModal);
   });
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeProjectModal();
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeProjectModal();
   });
 }
 
 /* -----------------------------
-   Theme
+   Theme Toggle
 ----------------------------- */
 
 function initThemeToggle() {
-  const btn = document.getElementById("themeToggle");
+  const themeToggle = document.getElementById("themeToggle");
   const html = document.documentElement;
-  if (!btn) return;
 
-  const saved = localStorage.getItem("theme") || "dark";
-  html.setAttribute("data-theme", saved);
-  btn.textContent = saved === "dark" ? "🌙" : "☀️";
+  if (!themeToggle) return;
 
-  btn.addEventListener("click", () => {
-    const next = html.getAttribute("data-theme") === "dark" ? "light" : "dark";
-    html.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-    btn.textContent = next === "dark" ? "🌙" : "☀️";
+  const savedTheme = localStorage.getItem("theme") || "dark";
+  html.setAttribute("data-theme", savedTheme);
+  themeToggle.textContent = savedTheme === "dark" ? "🌙" : "☀️";
+
+  themeToggle.addEventListener("click", () => {
+    const currentTheme = html.getAttribute("data-theme");
+    const nextTheme = currentTheme === "dark" ? "light" : "dark";
+
+    html.setAttribute("data-theme", nextTheme);
+    localStorage.setItem("theme", nextTheme);
+    themeToggle.textContent = nextTheme === "dark" ? "🌙" : "☀️";
   });
 }
 
@@ -414,86 +485,108 @@ function initContactForm() {
   status.style.display = "none";
   form.appendChild(status);
 
-  form.addEventListener("submit", async (e) => {
+  form.addEventListener("submit", async (event) => {
     const actionUrl = form.getAttribute("action");
 
     if (!isValidFormspreeUrl(actionUrl)) {
-      e.preventDefault();
+      event.preventDefault();
       status.style.display = "block";
-      status.className = "form-status warning";
       status.textContent = "Formspree URL is not configured correctly.";
+      status.className = "form-status warning";
       return;
     }
 
-    e.preventDefault();
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const origText = submitBtn?.textContent;
-    if (submitBtn) { submitBtn.disabled = true; submitBtn.textContent = "Sending..."; }
+    event.preventDefault();
+
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton ? submitButton.textContent : "";
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Sending...";
+    }
 
     status.style.display = "block";
     status.className = "form-status info";
-    status.textContent = "Sending...";
+    status.textContent = "Sending your message...";
 
     try {
-      const res = await fetch(actionUrl, {
+      const response = await fetch(actionUrl, {
         method: "POST",
         body: new FormData(form),
-        headers: { Accept: "application/json" }
+        headers: {
+          Accept: "application/json"
+        }
       });
 
-      if (res.ok) {
+      if (response.ok) {
         form.reset();
         status.className = "form-status success";
-        status.textContent = "Message sent successfully!";
+        status.textContent = "Thank you! Your message has been sent successfully.";
       } else {
         status.className = "form-status error";
-        status.textContent = "Something went wrong. Please try again.";
+        status.textContent =
+          "Something went wrong. Please try again or contact me by email.";
       }
     } catch {
       status.className = "form-status error";
-      status.textContent = "Network error. Please try again.";
+      status.textContent =
+        "Network error. Please try again or contact me by email.";
     } finally {
-      if (submitBtn) { submitBtn.disabled = false; submitBtn.textContent = origText; }
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = originalText;
+      }
     }
   });
 }
 
 /* -----------------------------
-   Nav Highlight
+   Navigation Highlight
 ----------------------------- */
 
-function initNavHighlight() {
+function initNavigationHighlight() {
   const sections = document.querySelectorAll("section[id]");
   const navLinks = document.querySelectorAll(".nav-links a");
+
   if (!sections.length || !navLinks.length) return;
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
+
         const id = entry.target.getAttribute("id");
+
         navLinks.forEach((link) => {
           link.classList.remove("active-nav");
-          if (link.getAttribute("href") === `#${id}`) link.classList.add("active-nav");
+
+          if (link.getAttribute("href") === `#${id}`) {
+            link.classList.add("active-nav");
+          }
         });
       });
     },
-    { threshold: 0.35 }
+    {
+      threshold: 0.35
+    }
   );
 
-  sections.forEach((s) => observer.observe(s));
+  sections.forEach((section) => observer.observe(section));
 }
 
 /* -----------------------------
-   Reveal
+   Reveal Animation
 ----------------------------- */
 
-function initReveal() {
-  const items = document.querySelectorAll(
-    ".glass-card, .section-heading, .app-card-new, .agri-card, .stat-item"
+function initRevealAnimations() {
+  const revealItems = document.querySelectorAll(
+    ".section-heading, .glass-panel, .stat-card, .agri-card, .app-card"
   );
 
-  items.forEach((item) => item.classList.add("reveal"));
+  revealItems.forEach((item) => {
+    item.classList.add("reveal");
+  });
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -503,19 +596,23 @@ function initReveal() {
         observer.unobserve(entry.target);
       });
     },
-    { threshold: 0.08 }
+    {
+      threshold: 0.1
+    }
   );
 
-  items.forEach((item) => observer.observe(item));
+  revealItems.forEach((item) => observer.observe(item));
 }
 
 /* -----------------------------
    Footer Year
 ----------------------------- */
 
-function setYear() {
-  const el = document.getElementById("year");
-  if (el) el.textContent = new Date().getFullYear();
+function setFooterYear() {
+  const year = document.getElementById("year");
+  if (year) {
+    year.textContent = new Date().getFullYear();
+  }
 }
 
 /* -----------------------------
@@ -528,7 +625,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initModal();
   initThemeToggle();
   initContactForm();
-  initNavHighlight();
-  setYear();
-  initReveal();
+  initNavigationHighlight();
+  initRevealAnimations();
+  setFooterYear();
 });
