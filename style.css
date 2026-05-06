@@ -1894,3 +1894,679 @@ body.modal-open {
     padding: 22px;
   }
 }
+/* =========================================================
+   FIX PATCH - Hero image, floating tags, app cards, agri labels
+   Bu bölümü style.css dosyasının EN ALTINA ekle
+   ========================================================= */
+
+/* -----------------------------
+   HERO VISUAL FIX
+----------------------------- */
+
+.hero-visual {
+  position: relative !important;
+  height: 520px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  overflow: visible !important;
+}
+
+.profile-wrap,
+.orbit-system {
+  position: relative !important;
+
+  width: 330px !important;
+  height: 330px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Eğer eski index.html profile-wrap kullanıyorsa */
+.profile-ring {
+  position: absolute !important;
+  inset: -18px !important;
+  z-index: 1 !important;
+
+  border-radius: 50% !important;
+
+  background: conic-gradient(
+    from 180deg,
+    var(--primary),
+    var(--purple),
+    var(--accent),
+    var(--primary)
+  ) !important;
+
+  animation: orbitSpin 16s linear infinite !important;
+  opacity: 0.95 !important;
+}
+
+.profile-ring::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 10px !important;
+
+  border-radius: 50% !important;
+
+  background: rgba(5, 9, 20, 0.92) !important;
+}
+
+html[data-theme="light"] .profile-ring::after {
+  background: rgba(238, 246, 255, 0.92) !important;
+}
+
+/* Profil fotoğrafı: dikdörtgen görünmesini engeller */
+.profile-img,
+.profile-planet img {
+  position: relative !important;
+  z-index: 4 !important;
+
+  width: 280px !important;
+  height: 280px !important;
+
+  max-width: 280px !important;
+  max-height: 280px !important;
+
+  object-fit: cover !important;
+  object-position: center top !important;
+
+  border-radius: 50% !important;
+
+  border: 5px solid rgba(255, 255, 255, 0.78) !important;
+
+  box-shadow:
+    0 0 50px rgba(0, 212, 255, 0.28),
+    0 30px 80px rgba(0, 0, 0, 0.38) !important;
+}
+
+html[data-theme="dark"] .profile-img,
+html[data-theme="dark"] .profile-planet img {
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Orbit çizgileri */
+.orbit,
+.orb-ring {
+  position: absolute !important;
+
+  top: 50% !important;
+  left: 50% !important;
+
+  border-radius: 50% !important;
+  border: 1px solid rgba(0, 212, 255, 0.22) !important;
+
+  transform: translate(-50%, -50%) !important;
+
+  pointer-events: none !important;
+}
+
+.orbit-1,
+.ring-1 {
+  width: 330px !important;
+  height: 330px !important;
+  animation: orbitSpinFixed 18s linear infinite !important;
+}
+
+.orbit-2,
+.ring-2 {
+  width: 400px !important;
+  height: 400px !important;
+
+  border-color: rgba(123, 97, 255, 0.2) !important;
+
+  animation: orbitSpinFixed 26s linear infinite reverse !important;
+}
+
+.orbit-3,
+.ring-3 {
+  width: 470px !important;
+  height: 470px !important;
+
+  border-color: rgba(0, 255, 136, 0.14) !important;
+
+  animation: orbitSpinFixed 34s linear infinite !important;
+}
+
+@keyframes orbitSpinFixed {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* Fotoğraf altına kayan AI/EU/DS/AGRI düzeltmesi */
+.satellite,
+.floating-tag {
+  position: absolute !important;
+  z-index: 10 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: auto !important;
+  height: auto !important;
+
+  padding: 9px 15px !important;
+
+  border-radius: var(--radius-pill) !important;
+  border: 1px solid rgba(0, 212, 255, 0.24) !important;
+
+  color: var(--text-strong) !important;
+  background: rgba(5, 9, 20, 0.78) !important;
+
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+
+  font-size: 0.82rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.04em !important;
+
+  box-shadow:
+    0 16px 36px rgba(0, 0, 0, 0.28),
+    0 0 24px rgba(0, 212, 255, 0.1) !important;
+
+  white-space: nowrap !important;
+}
+
+html[data-theme="light"] .satellite,
+html[data-theme="light"] .floating-tag {
+  color: #06111f !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+}
+
+/* Yeni HTML için */
+.sat-1 {
+  top: 10px !important;
+  left: 10px !important;
+  color: var(--primary) !important;
+}
+
+.sat-2 {
+  top: 72px !important;
+  right: -34px !important;
+  color: var(--purple) !important;
+}
+
+.sat-3 {
+  left: -36px !important;
+  bottom: 94px !important;
+  color: var(--accent) !important;
+}
+
+.sat-4 {
+  right: 4px !important;
+  bottom: 22px !important;
+  color: var(--primary) !important;
+}
+
+/* Eski HTML floating-tag için */
+.tag-1 {
+  top: 16px !important;
+  left: -28px !important;
+}
+
+.tag-2 {
+  top: 80px !important;
+  right: -54px !important;
+}
+
+.tag-3 {
+  bottom: 90px !important;
+  left: -62px !important;
+}
+
+.tag-4 {
+  bottom: 20px !important;
+  right: -34px !important;
+}
+
+/* -----------------------------
+   HERO LAYOUT IMPROVEMENT
+----------------------------- */
+
+.hero {
+  align-items: center !important;
+}
+
+.hero-title {
+  max-width: 780px !important;
+}
+
+.hero-description {
+  max-width: 760px !important;
+}
+
+/* -----------------------------
+   AGRI CARD LABEL FIX
+----------------------------- */
+
+/* Eski/yeni class adlarını birlikte destekle */
+.agri-card-top,
+.agri-top {
+  margin-bottom: 16px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 10px !important;
+}
+
+.agri-category,
+.agri-cat {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: fit-content !important;
+
+  padding: 6px 12px !important;
+
+  border-radius: var(--radius-pill) !important;
+  border: 1px solid rgba(0, 212, 255, 0.22) !important;
+
+  color: var(--primary) !important;
+  background: var(--primary-soft) !important;
+
+  font-size: 0.76rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.agri-role,
+.agri-role-mini {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: fit-content !important;
+
+  padding: 6px 12px !important;
+
+  border-radius: var(--radius-pill) !important;
+  border: 1px solid rgba(0, 255, 136, 0.18) !important;
+
+  color: var(--accent) !important;
+  background: var(--accent-soft) !important;
+
+  font-size: 0.76rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+html[data-theme="light"] .agri-role,
+html[data-theme="light"] .agri-role-mini {
+  color: #009f61 !important;
+}
+
+.agri-card-body,
+.agri-body {
+  padding: 26px !important;
+
+  flex: 1 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.agri-card h3,
+.agri-body h3 {
+  margin-bottom: 10px !important;
+
+  color: var(--text-strong) !important;
+
+  font-size: 1.32rem !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.035em !important;
+  font-weight: 950 !important;
+}
+
+.agri-original,
+.agri-orig {
+  margin-bottom: 14px !important;
+
+  color: var(--primary) !important;
+
+  font-size: 0.92rem !important;
+  line-height: 1.35 !important;
+  font-weight: 850 !important;
+}
+
+.agri-impact,
+.agri-short {
+  margin-top: auto !important;
+
+  color: var(--muted) !important;
+
+  font-size: 0.93rem !important;
+  line-height: 1.65 !important;
+}
+
+/* Kart yüksekliğini daha dengeli yap */
+.agri-card {
+  min-height: 470px !important;
+}
+
+.agri-img-wrap,
+.agri-image-wrap {
+  height: 250px !important;
+}
+
+/* Eski image class desteği */
+.agri-image,
+.agri-img {
+  width: 100% !important;
+  height: 100% !important;
+
+  transition: 0.5s ease !important;
+}
+
+.agri-image {
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* RIGEL / Azmud gibi logo görselleri için */
+.agri-img.contain-img,
+.agri-image.contain-img {
+  object-fit: contain !important;
+  object-position: center !important;
+
+  padding: 32px !important;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.98),
+      rgba(228, 240, 255, 0.9)
+    ) !important;
+}
+
+.agri-img.cover-img,
+.agri-image.cover-img {
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+/* -----------------------------
+   AI APPS OLD/NEW CLASS FIX
+----------------------------- */
+
+/* Eğer script.js eski app-tool-card üretiyorsa onu da destekle */
+.app-tool-card,
+.app-card {
+  display: flex !important;
+  flex-direction: column !important;
+
+  min-height: 430px !important;
+
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-xl) !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.03) 100%
+    ) !important;
+
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+
+  overflow: hidden !important;
+
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+
+  transition: 0.32s ease !important;
+}
+
+html[data-theme="light"] .app-tool-card,
+html[data-theme="light"] .app-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.94) 0%,
+      rgba(245, 250, 255, 0.86) 100%
+    ) !important;
+}
+
+.app-tool-card:hover,
+.app-card:hover {
+  transform: translateY(-12px) !important;
+  border-color: var(--border-strong) !important;
+
+  box-shadow:
+    0 34px 90px rgba(0, 0, 0, 0.25),
+    0 0 60px rgba(0, 212, 255, 0.16) !important;
+}
+
+/* Eski app-tool-banner ve yeni app-card-visual birlikte */
+.app-tool-banner,
+.app-card-visual,
+.app-card-top {
+  position: relative !important;
+
+  height: 140px !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  overflow: hidden !important;
+}
+
+.app-tool-icon,
+.app-icon,
+.app-big-icon {
+  position: relative !important;
+  z-index: 2 !important;
+
+  font-size: 3.4rem !important;
+  line-height: 1 !important;
+
+  filter: drop-shadow(0 6px 18px rgba(0, 0, 0, 0.35)) !important;
+}
+
+.app-tool-badge-top,
+.app-badge,
+.app-badge-pill {
+  position: absolute !important;
+  top: 14px !important;
+  right: 14px !important;
+  z-index: 3 !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 6px 12px !important;
+
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: var(--radius-pill) !important;
+
+  color: white !important;
+  background: rgba(0, 0, 0, 0.28) !important;
+
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+
+  font-size: 0.76rem !important;
+  line-height: 1 !important;
+  font-weight: 900 !important;
+}
+
+.app-tool-glow,
+.app-card-glow,
+.app-card-top-glow {
+  position: absolute !important;
+  inset: 0 !important;
+
+  background:
+    radial-gradient(
+      circle at 50% 120%,
+      rgba(255, 255, 255, 0.28),
+      transparent 60%
+    ) !important;
+}
+
+.app-tool-body,
+.app-card-body {
+  padding: 28px !important;
+
+  flex: 1 !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.app-tool-body h3,
+.app-card-body h3 {
+  margin-bottom: 12px !important;
+
+  color: var(--text-strong) !important;
+
+  font-size: 1.28rem !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.035em !important;
+  font-weight: 950 !important;
+}
+
+.app-tool-body p,
+.app-card-body p {
+  color: var(--muted) !important;
+
+  font-size: 0.95rem !important;
+  line-height: 1.7 !important;
+
+  flex: 1 !important;
+}
+
+.app-tool-tags,
+.app-tags {
+  margin-top: 18px !important;
+
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.app-tool-tags span,
+.app-tags span {
+  display: inline-flex !important;
+
+  padding: 6px 12px !important;
+
+  border-radius: var(--radius-pill) !important;
+  border: 1px solid var(--border) !important;
+
+  color: var(--primary) !important;
+  background: var(--primary-soft) !important;
+
+  font-size: 0.8rem !important;
+  line-height: 1 !important;
+  font-weight: 850 !important;
+}
+
+.app-tool-actions,
+.app-actions {
+  margin-top: 22px !important;
+
+  display: flex !important;
+  gap: 10px !important;
+}
+
+.btn-tool,
+.app-btn {
+  min-height: 44px !important;
+  padding: 10px 16px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: var(--radius-pill) !important;
+
+  font-size: 0.88rem !important;
+  font-weight: 900 !important;
+
+  transition: 0.22s ease !important;
+}
+
+.btn-tool.primary,
+.app-btn.primary {
+  flex: 1 !important;
+
+  color: #020617 !important;
+  background: linear-gradient(135deg, var(--primary), var(--purple)) !important;
+
+  box-shadow: 0 12px 26px rgba(0, 212, 255, 0.22) !important;
+}
+
+.btn-tool.ghost,
+.app-btn.ghost {
+  color: var(--muted) !important;
+  background: rgba(255, 255, 255, 0.045) !important;
+  border: 1px solid var(--border) !important;
+}
+
+/* -----------------------------
+   DESKTOP / MOBILE HERO FIX
+----------------------------- */
+
+@media (min-width: 1121px) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) 430px !important;
+  }
+}
+
+@media (max-width: 1120px) {
+  .hero {
+    grid-template-columns: 1fr !important;
+    text-align: center !important;
+  }
+
+  .hero-description {
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .hero-buttons,
+  .socials {
+    justify-content: center !important;
+  }
+
+  .hero-visual {
+    height: 430px !important;
+  }
+}
+
+@media (max-width: 720px) {
+  .hero-visual {
+    display: none !important;
+  }
+
+  .hero-title {
+    font-size: 3.6rem !important;
+  }
+
+  .app-tool-actions,
+  .app-actions {
+    flex-direction: column !important;
+  }
+
+  .btn-tool,
+  .app-btn {
+    width: 100% !important;
+  }
+}
