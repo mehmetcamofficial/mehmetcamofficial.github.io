@@ -339,6 +339,15 @@ function renderAgriProjects() {
 
   if (!agriGrid) return;
 
+  function createImpactChips(impactText) {
+    return impactText
+      .split("•")
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .map((item) => `<span>${safeText(item)}</span>`)
+      .join("");
+  }
+
   function createCards(filter = "All") {
     agriGrid.innerHTML = "";
 
@@ -349,7 +358,7 @@ function renderAgriProjects() {
 
     filtered.forEach((project) => {
       const card = document.createElement("article");
-      card.className = "agri-card";
+      card.className = "agri-card agri-card-premium";
       card.setAttribute("tabindex", "0");
       card.setAttribute("role", "button");
       card.setAttribute("aria-label", `View project: ${project.title}`);
@@ -387,9 +396,9 @@ function renderAgriProjects() {
             ${safeText(project.originalTitle)}
           </p>
 
-          <p class="agri-impact">
-            ${safeText(project.impact)}
-          </p>
+          <div class="agri-impact-chips">
+            ${createImpactChips(project.impact)}
+          </div>
 
           <button type="button" class="view-project-btn">
             View Project →
