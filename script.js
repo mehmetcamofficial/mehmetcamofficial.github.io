@@ -1,5 +1,5 @@
 /* =========================================================
-   Mehmet Cam Portfolio - NASA Style script.js
+   Mehmet Cam Portfolio - Final Premium CV Version
    ========================================================= */
 
 /* -----------------------------
@@ -20,16 +20,15 @@
 
   function createStars() {
     stars = [];
-
-    const count = Math.floor((canvas.width * canvas.height) / 6500);
+    const count = Math.floor((canvas.width * canvas.height) / 7000);
 
     for (let i = 0; i < count; i++) {
       stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 1.3 + 0.25,
-        alpha: Math.random() * 0.75 + 0.2,
-        speed: Math.random() * 0.25 + 0.05
+        radius: Math.random() * 1.2 + 0.25,
+        alpha: Math.random() * 0.65 + 0.15,
+        speed: Math.random() * 0.22 + 0.04
       });
     }
   }
@@ -47,7 +46,7 @@
       ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
       ctx.fillStyle = isDark
         ? `rgba(190, 220, 255, ${Math.abs(star.alpha)})`
-        : `rgba(0, 80, 160, ${Math.abs(star.alpha) * 0.25})`;
+        : `rgba(0, 80, 160, ${Math.abs(star.alpha) * 0.28})`;
       ctx.fill();
     });
 
@@ -65,7 +64,7 @@
 })();
 
 /* -----------------------------
-   AI Apps & Tools
+   AI Apps & Applied Prototypes
 ----------------------------- */
 
 const apps = [
@@ -218,7 +217,7 @@ const agriProjects = [
 ];
 
 /* -----------------------------
-   Image Fallback System
+   Image Fallback
 ----------------------------- */
 
 const repoBase =
@@ -341,14 +340,14 @@ function renderAgriProjects() {
       const card = document.createElement("article");
       card.className = "agri-card";
 
-      const firstImage = getImageCandidates(project.imageFile);
+      const firstImage = getImageCandidates(project.imageFile)[0];
       const imageClass =
         project.imageMode === "contain" ? "contain-img" : "cover-img";
 
       card.innerHTML = `
         <div class="agri-img-wrap">
           <img
-            src="${firstImage[0]}"
+            src="${firstImage}"
             data-file="${project.imageFile}"
             data-step="0"
             onerror="handleImageError(this)"
@@ -402,6 +401,8 @@ function openProjectModal(project) {
   const firstImage = getImageCandidates(project.imageFile)[0];
 
   modalImage.classList.remove("image-missing");
+  modalImage.classList.remove("modal-contain");
+
   modalImage.src = firstImage;
   modalImage.alt = project.title;
   modalImage.dataset.file = project.imageFile;
@@ -412,8 +413,6 @@ function openProjectModal(project) {
 
   if (project.imageMode === "contain") {
     modalImage.classList.add("modal-contain");
-  } else {
-    modalImage.classList.remove("modal-contain");
   }
 
   document.getElementById("modalCategory").textContent = project.category;
@@ -458,7 +457,7 @@ function initThemeToggle() {
 
   if (!themeToggle) return;
 
-  const savedTheme = localStorage.getItem("theme") || "dark";
+  const savedTheme = localStorage.getItem("theme") || "light";
   html.setAttribute("data-theme", savedTheme);
   themeToggle.textContent = savedTheme === "dark" ? "🌙" : "☀️";
 
@@ -581,7 +580,7 @@ function initNavigationHighlight() {
 
 function initRevealAnimations() {
   const revealItems = document.querySelectorAll(
-    ".section-heading, .glass-panel, .stat-card, .agri-card, .app-card"
+    ".section-heading, .glass-panel, .stat-card, .agri-card, .app-card, .focus-card, .timeline-item, .training-card"
   );
 
   revealItems.forEach((item) => {
