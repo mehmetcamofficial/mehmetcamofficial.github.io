@@ -2735,3 +2735,712 @@ html[data-theme="dark"] .agri-grid .agri-card {
 
 .agri-grid .agri-role {
   color: var(--accent) !important<span class="ml-2" /><span class="inline-block w-3 h-3 rounded-full bg-neutral-a12 align-middle mb-[0.1rem]" />
+/* =========================================================
+   HARD FIX PATCH
+   Agricultural Cards + View Project Button + Visible Orbit Ring
+   Put this at the VERY END of style.css
+   ========================================================= */
+
+/* -----------------------------
+   Agricultural Project Cards - Clean Premium Layout
+----------------------------- */
+
+body .agri-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  gap: 28px !important;
+  align-items: stretch !important;
+}
+
+body .agri-grid .agri-card {
+  min-height: 560px !important;
+  height: auto !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-xl) !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.9),
+      rgba(242, 248, 255, 0.78)
+    ) !important;
+
+  backdrop-filter: blur(18px) !important;
+  -webkit-backdrop-filter: blur(18px) !important;
+
+  box-shadow:
+    0 26px 76px rgba(28, 68, 110, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.34) !important;
+
+  overflow: hidden !important;
+  cursor: pointer !important;
+
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    border-color 0.28s ease !important;
+}
+
+html[data-theme="dark"] body .agri-grid .agri-card {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.065),
+      rgba(255, 255, 255, 0.025)
+    ) !important;
+}
+
+body .agri-grid .agri-card:hover {
+  transform: translateY(-10px) !important;
+  border-color: var(--border-strong) !important;
+  box-shadow:
+    0 34px 90px rgba(28, 68, 110, 0.18),
+    0 0 60px rgba(0, 111, 214, 0.15) !important;
+}
+
+/* Image area */
+
+body .agri-grid .agri-img-wrap {
+  position: relative !important;
+
+  width: 100% !important;
+  height: 250px !important;
+  min-height: 250px !important;
+
+  overflow: hidden !important;
+
+  border-bottom: 1px solid var(--border) !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(0, 111, 214, 0.12),
+      rgba(104, 76, 255, 0.12)
+    ) !important;
+}
+
+body .agri-grid .agri-img {
+  width: 100% !important;
+  height: 100% !important;
+
+  display: block !important;
+
+  transition: transform 0.5s ease !important;
+}
+
+body .agri-grid .agri-img.cover-img {
+  object-fit: cover !important;
+  object-position: center !important;
+}
+
+body .agri-grid .agri-img.contain-img {
+  object-fit: contain !important;
+  object-position: center !important;
+
+  padding: 34px !important;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(255, 255, 255, 0.98),
+      rgba(228, 240, 255, 0.9)
+    ) !important;
+}
+
+body .agri-grid .agri-card:hover .agri-img.cover-img {
+  transform: scale(1.08) !important;
+}
+
+body .agri-grid .agri-card:hover .agri-img.contain-img {
+  transform: scale(1.04) !important;
+}
+
+/* Image hover overlay */
+
+body .agri-grid .agri-img-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+
+  display: flex !important;
+  align-items: flex-end !important;
+  justify-content: space-between !important;
+  gap: 14px !important;
+
+  padding: 20px !important;
+
+  color: #ffffff !important;
+
+  background:
+    linear-gradient(
+      0deg,
+      rgba(3, 7, 18, 0.86) 0%,
+      rgba(3, 7, 18, 0.42) 45%,
+      rgba(3, 7, 18, 0.04) 100%
+    ) !important;
+
+  opacity: 0 !important;
+  pointer-events: none !important;
+
+  transition: opacity 0.28s ease !important;
+}
+
+body .agri-grid .agri-card:hover .agri-img-overlay {
+  opacity: 1 !important;
+}
+
+body .agri-grid .agri-overlay-icon,
+body .agri-grid .agri-img-overlay span {
+  width: 44px !important;
+  height: 44px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 50% !important;
+
+  background: rgba(255, 255, 255, 0.18) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+
+  font-size: 1.35rem !important;
+}
+
+body .agri-grid .agri-img-overlay strong {
+  padding: 10px 15px !important;
+
+  border-radius: var(--radius-pill) !important;
+
+  color: #020617 !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+
+  font-size: 0.82rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+}
+
+/* Card body */
+
+body .agri-grid .agri-card-body {
+  padding: 26px !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+
+  min-height: 0 !important;
+}
+
+body .agri-grid .agri-card-top {
+  margin-bottom: 16px !important;
+
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+body .agri-grid .agri-category,
+body .agri-grid .agri-role {
+  padding: 8px 11px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: var(--radius-pill) !important;
+  border: 1px solid var(--border) !important;
+
+  font-size: 0.72rem !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+}
+
+body .agri-grid .agri-category {
+  color: var(--primary) !important;
+  background: var(--primary-soft) !important;
+}
+
+body .agri-grid .agri-role {
+  color: var(--text-strong) !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+}
+
+html[data-theme="dark"] body .agri-grid .agri-role {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+body .agri-grid .agri-card-body h3 {
+  margin: 0 0 8px !important;
+
+  color: var(--text-strong) !important;
+
+  font-size: 1.28rem !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.04em !important;
+  font-weight: 950 !important;
+}
+
+body .agri-grid .agri-original {
+  margin: 0 0 14px !important;
+
+  color: var(--primary) !important;
+
+  font-size: 0.92rem !important;
+  line-height: 1.45 !important;
+  font-weight: 850 !important;
+}
+
+body .agri-grid .agri-impact {
+  margin: 0 0 22px !important;
+
+  color: var(--muted) !important;
+
+  font-size: 0.95rem !important;
+  line-height: 1.58 !important;
+  font-weight: 600 !important;
+}
+
+/* Real button fix */
+
+body .agri-grid .agri-card .view-project-btn {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+
+  margin-top: auto !important;
+
+  width: 100% !important;
+  min-height: 48px !important;
+  padding: 13px 18px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border: 0 !important;
+  border-radius: var(--radius-pill) !important;
+
+  color: #020617 !important;
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--purple)
+    ) !important;
+
+  box-shadow:
+    0 14px 34px rgba(0, 111, 214, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
+
+  font-size: 0.92rem !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+
+  cursor: pointer !important;
+
+  transition:
+    transform 0.22s ease,
+    filter 0.22s ease,
+    box-shadow 0.22s ease !important;
+}
+
+body .agri-grid .agri-card .view-project-btn:hover {
+  transform: translateY(-2px) !important;
+  filter: brightness(1.08) !important;
+  box-shadow: var(--shadow-glow) !important;
+}
+
+/* Remove ugly default button background from browsers */
+body .agri-grid .agri-card button.view-project-btn {
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary),
+      var(--purple)
+    ) !important;
+}
+
+/* -----------------------------
+   Project Modal Stability
+----------------------------- */
+
+body .project-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 9999 !important;
+
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  padding: 24px !important;
+}
+
+body .project-modal.active {
+  display: flex !important;
+}
+
+body .project-modal-backdrop {
+  position: absolute !important;
+  inset: 0 !important;
+
+  background: rgba(3, 7, 18, 0.74) !important;
+
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+body .project-modal-panel {
+  position: relative !important;
+  z-index: 2 !important;
+
+  width: min(980px, 100%) !important;
+  max-height: min(820px, calc(100vh - 48px)) !important;
+
+  display: grid !important;
+  grid-template-columns: 0.9fr 1.1fr !important;
+
+  border: 1px solid var(--border-strong) !important;
+  border-radius: var(--radius-xl) !important;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.96),
+      rgba(241, 248, 255, 0.92)
+    ) !important;
+
+  overflow: hidden !important;
+
+  box-shadow:
+    0 40px 120px rgba(0, 0, 0, 0.38),
+    0 0 80px rgba(0, 212, 255, 0.18) !important;
+}
+
+html[data-theme="dark"] body .project-modal-panel {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 14, 30, 0.98),
+      rgba(5, 9, 20, 0.96)
+    ) !important;
+}
+
+body .project-modal .modal-close {
+  position: absolute !important;
+  top: 18px !important;
+  right: 18px !important;
+  z-index: 5 !important;
+
+  width: 44px !important;
+  height: 44px !important;
+
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  border-radius: 50% !important;
+  border: 1px solid var(--border) !important;
+
+  color: var(--text-strong) !important;
+  background: rgba(255, 255, 255, 0.88) !important;
+
+  font-size: 1.5rem !important;
+  line-height: 1 !important;
+
+  cursor: pointer !important;
+}
+
+body .project-modal .modal-image-wrap {
+  min-height: 100% !important;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--primary-soft),
+      var(--purple-soft)
+    ) !important;
+
+  overflow: hidden !important;
+}
+
+body .project-modal .modal-image {
+  width: 100% !important;
+  height: 100% !important;
+
+  object-fit: cover !important;
+}
+
+body .project-modal .modal-image.modal-contain {
+  object-fit: contain !important;
+  padding: 36px !important;
+  background: rgba(255, 255, 255, 0.92) !important;
+}
+
+body .project-modal .modal-content {
+  padding: 36px !important;
+  overflow-y: auto !important;
+}
+
+body.modal-open {
+  overflow: hidden !important;
+}
+
+/* -----------------------------
+   Profile Photo Ring - Actually Visible Rotating Ring
+----------------------------- */
+
+/*
+  Eski ring simetrik olduğu için dönüş belli olmuyordu.
+  Burada tek tarafı parlak "comet arc" gibi yaptık.
+*/
+
+body .orbit-system {
+  overflow: visible !important;
+}
+
+body .profile-planet {
+  position: absolute !important;
+  inset: 45px !important;
+  z-index: 5 !important;
+
+  padding: 0 !important;
+
+  border-radius: 50% !important;
+
+  background: transparent !important;
+
+  overflow: visible !important;
+  isolation: isolate !important;
+
+  animation: profileFloatOnly 5s ease-in-out infinite !important;
+}
+
+body .profile-planet::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: -18px !important;
+  z-index: 1 !important;
+
+  border-radius: 50% !important;
+
+  background:
+    conic-gradient(
+      from 0deg,
+      transparent 0deg,
+      transparent 210deg,
+      rgba(0, 111, 214, 0.25) 230deg,
+      var(--primary) 255deg,
+      var(--purple) 292deg,
+      var(--accent) 330deg,
+      transparent 360deg
+    ) !important;
+
+  -webkit-mask:
+    radial-gradient(
+      farthest-side,
+      transparent calc(100% - 16px),
+      #000 calc(100% - 15px)
+    ) !important;
+
+  mask:
+    radial-gradient(
+      farthest-side,
+      transparent calc(100% - 16px),
+      #000 calc(100% - 15px)
+    ) !important;
+
+  animation: profileVisibleRingSpin 2.8s linear infinite !important;
+
+  filter: drop-shadow(0 0 16px rgba(0, 111, 214, 0.35)) !important;
+}
+
+body .profile-planet::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -54px !important;
+  z-index: -1 !important;
+
+  border-radius: 50% !important;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0, 111, 214, 0.18) 0%,
+      rgba(104, 76, 255, 0.12) 42%,
+      transparent 72%
+    ) !important;
+
+  animation: profileHaloPulseHard 3.6s ease-in-out infinite !important;
+}
+
+body .profile-planet img {
+  position: relative !important;
+  z-index: 3 !important;
+
+  width: 100% !important;
+  height: 100% !important;
+
+  border-radius: 50% !important;
+
+  object-fit: cover !important;
+  object-position: center top !important;
+
+  border: 6px solid rgba(255, 255, 255, 0.92) !important;
+
+  background: #ffffff !important;
+
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.22),
+    0 0 0 8px rgba(0, 111, 214, 0.18) !important;
+}
+
+/* Orbit çizgileri ve hareket noktaları */
+
+body .orbit {
+  overflow: visible !important;
+  will-change: transform !important;
+}
+
+body .orbit-1 {
+  animation: orbitSpinHard 15s linear infinite !important;
+}
+
+body .orbit-2 {
+  animation: orbitSpinHard 23s linear infinite reverse !important;
+}
+
+body .orbit-3 {
+  animation: orbitSpinHard 32s linear infinite !important;
+}
+
+body .orbit::before {
+  content: "" !important;
+  position: absolute !important;
+
+  top: -5px !important;
+  left: 50% !important;
+
+  width: 10px !important;
+  height: 10px !important;
+
+  border-radius: 50% !important;
+
+  transform: translateX(-50%) !important;
+
+  background: var(--primary) !important;
+
+  box-shadow:
+    0 0 10px var(--primary),
+    0 0 24px var(--primary) !important;
+}
+
+body .orbit-2::before {
+  background: var(--purple) !important;
+
+  box-shadow:
+    0 0 10px var(--purple),
+    0 0 24px var(--purple) !important;
+}
+
+body .orbit-3::before {
+  background: var(--accent) !important;
+
+  box-shadow:
+    0 0 10px var(--accent),
+    0 0 24px var(--accent) !important;
+}
+
+@keyframes profileVisibleRingSpin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes profileHaloPulseHard {
+  0%,
+  100% {
+    opacity: 0.58;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes profileFloatOnly {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes orbitSpinHard {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+/* -----------------------------
+   Responsive Agricultural Cards
+----------------------------- */
+
+@media (max-width: 1100px) {
+  body .agri-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  body .project-modal-panel {
+    grid-template-columns: 1fr !important;
+  }
+
+  body .project-modal .modal-image-wrap {
+    max-height: 320px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  body .agri-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  body .agri-grid .agri-card {
+    min-height: auto !important;
+  }
+
+  body .agri-grid .agri-img-wrap {
+    height: 220px !important;
+    min-height: 220px !important;
+  }
+
+  body .project-modal {
+    padding: 14px !important;
+  }
+
+  body .project-modal .modal-content {
+    padding: 24px !important;
+  }
+
+  body .profile-planet {
+    inset: 32px !important;
+  }
+}
