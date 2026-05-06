@@ -284,7 +284,7 @@ function isValidFormspreeUrl(url) {
 }
 
 /* -----------------------------
-   Render AI Apps
+   Render AI Apps - Fixed Premium Cards
 ----------------------------- */
 
 function renderApps() {
@@ -304,12 +304,17 @@ function renderApps() {
     card.innerHTML = `
       <div class="app-card-visual" style="background:${app.gradient}">
         <div class="app-card-glow"></div>
-        <span class="app-icon">${app.icon}</span>
+
+        <div class="app-icon-wrap">
+          <span class="app-icon">${app.icon}</span>
+        </div>
+
         <span class="app-badge">${safeText(app.badge)}</span>
       </div>
 
       <div class="app-card-body">
         <h3>${safeText(app.title)}</h3>
+
         <p>${safeText(app.description)}</p>
 
         <div class="app-tags">
@@ -320,6 +325,7 @@ function renderApps() {
           <a href="${app.github}" target="_blank" rel="noopener" class="app-btn ghost">
             GitHub
           </a>
+
           <a href="${app.demo}" target="_blank" rel="noopener" class="app-btn primary">
             Open App →
           </a>
@@ -332,7 +338,7 @@ function renderApps() {
 }
 
 /* -----------------------------
-   Render Agricultural Projects
+   Render Agricultural Projects - Fixed Cards + Modal Button
 ----------------------------- */
 
 function renderAgriProjects() {
@@ -352,6 +358,9 @@ function renderAgriProjects() {
     filtered.forEach((project) => {
       const card = document.createElement("article");
       card.className = "agri-card";
+      card.setAttribute("tabindex", "0");
+      card.setAttribute("role", "button");
+      card.setAttribute("aria-label", `View project: ${project.title}`);
 
       const firstImage = getImageCandidates(project.imageFile)[0];
       const imageClass =
@@ -369,7 +378,7 @@ function renderAgriProjects() {
           />
 
           <div class="agri-img-overlay">
-            <span>${project.icon}</span>
+            <span class="agri-overlay-icon">${project.icon}</span>
             <strong>View Details →</strong>
           </div>
         </div>
@@ -381,12 +390,32 @@ function renderAgriProjects() {
           </div>
 
           <h3>${safeText(project.title)}</h3>
-          <p class="agri-original">${safeText(project.originalTitle)}</p>
-          <p class="agri-impact">${safeText(project.impact)}</p>
+
+          <p class="agri-original">
+            ${safeText(project.originalTitle)}
+          </p>
+
+          <p class="agri-impact">
+            ${safeText(project.impact)}
+          </p>
+
+          <button type="button" class="view-project-btn">
+            View Project →
+          </button>
         </div>
       `;
 
-      card.addEventListener("click", () => openProjectModal(project));
+      card.addEventListener("click", () => {
+        openProjectModal(project);
+      });
+
+      card.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" || event.key === " ") {
+          event.preventDefault();
+          openProjectModal(project);
+        }
+      });
+
       agriGrid.appendChild(card);
     });
   }
@@ -404,7 +433,7 @@ function renderAgriProjects() {
 }
 
 /* -----------------------------
-   Project Modal
+   Project Modal - Fixed
 ----------------------------- */
 
 function openProjectModal(project) {
@@ -462,6 +491,7 @@ function openProjectModal(project) {
   }
 
   modal.classList.add("active");
+  modal.style.display = "flex";
   modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
 }
@@ -471,20 +501,9 @@ function closeProjectModal() {
   if (!modal) return;
 
   modal.classList.remove("active");
+  modal.style.display = "";
   modal.setAttribute("aria-hidden", "true");
   document.body.classList.remove("modal-open");
-}
-
-function initModal() {
-  document.querySelectorAll("[data-close-modal]").forEach((item) => {
-    item.addEventListener("click", closeProjectModal);
-  });
-
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      closeProjectModal();
-    }
-  });
 }
 
 /* -----------------------------
