@@ -176,6 +176,8 @@ function getImageCandidates(fileName) {
   return [
     `./${fileName}`,
     `${fileName}`,
+    `./images/${fileName}`,
+    `./assets/${fileName}`,
     `${repoBase}/${fileName}`,
     `https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/${fileName}`
   ];
@@ -512,11 +514,6 @@ function initProjectModal() {
   const modal = document.getElementById("projectModal");
   if (!modal) return;
 
-  /*
-    Event delegation:
-    Böylece çarpı butonu, backdrop veya data-close-modal olan her şey
-    kesin olarak modalı kapatır.
-  */
   document.addEventListener("click", (event) => {
     const closeTarget = event.target.closest(
       "[data-close-modal], .modal-close, .project-modal-backdrop"
@@ -533,10 +530,6 @@ function initProjectModal() {
 
   if (panel) {
     panel.addEventListener("click", (event) => {
-      /*
-        Modal panelin içindeki normal tıklamalar backdrop gibi davranmasın.
-        Çarpı butonu delegation ile zaten yukarıda yakalanıyor.
-      */
       if (!event.target.closest("[data-close-modal], .modal-close")) {
         event.stopPropagation();
       }
@@ -728,10 +721,6 @@ function initRevealAnimations() {
 
   revealItems.forEach((item) => observer.observe(item));
 
-  /*
-    Güvenlik:
-    Observer takılırsa içerikler görünmeden kalmasın.
-  */
   setTimeout(() => {
     revealItems.forEach(showItem);
   }, 900);
@@ -750,8 +739,8 @@ function setFooterYear() {
 }
 
 /* -----------------------------
-   Orbit / Profile Motion Repair
-   CSS çalışmasa bile JS görünür hareket katmanı ekler.
+   Runtime Styles
+   Orbit + Agri Cards
 ----------------------------- */
 
 function injectOrbitMotionStyles() {
@@ -761,15 +750,6 @@ function injectOrbitMotionStyles() {
   style.id = "portfolioRuntimeRepairStyles";
 
   style.textContent = `
-    /* =====================================================
-       Runtime Repair Styles
-       Orbit Labels + Profile Ring + Agri Cards
-       ===================================================== */
-
-    /* -----------------------------
-       Profile Orbit System
-    ----------------------------- */
-
     .orbit-system {
       overflow: visible !important;
     }
@@ -921,7 +901,6 @@ function injectOrbitMotionStyles() {
       top: 50% !important;
       left: 50% !important;
       z-index: 50 !important;
-
       pointer-events: auto !important;
       will-change: transform !important;
 
@@ -986,10 +965,6 @@ function injectOrbitMotionStyles() {
         transform: rotate(360deg);
       }
     }
-
-    /* -----------------------------
-       Agricultural Cards Runtime Fix
-    ----------------------------- */
 
     .agri-grid {
       display: grid !important;
@@ -1255,30 +1230,12 @@ function injectOrbitMotionStyles() {
       border: 0 !important;
       border-radius: var(--radius-pill) !important;
 
-      color: #020617 !important;
-      background:
-        linear-gradient(
-          135deg,
-          var(--primary),
-          var(--purple)
-        ) !important;
-
-      box-shadow:
-        0 14px 34px rgba(0, 111, 214, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
-
       font-size: 0.92rem !important;
       font-weight: 950 !important;
       line-height: 1 !important;
 
       cursor: pointer !important;
       transition: 0.22s ease !important;
-    }
-
-    .agri-card-premium .view-project-btn:hover {
-      transform: translateY(-2px) !important;
-      filter: brightness(1.08) !important;
-      box-shadow: var(--shadow-glow) !important;
     }
 
     @media (max-width: 1100px) {
@@ -1305,6 +1262,10 @@ function injectOrbitMotionStyles() {
 
   document.head.appendChild(style);
 }
+
+/* -----------------------------
+   Orbit Motion
+----------------------------- */
 
 function enhanceOrbitMotion() {
   injectOrbitMotionStyles();
@@ -1416,6 +1377,163 @@ function animateSatelliteLabels() {
 }
 
 /* -----------------------------
+   Button Contrast Runtime Fix
+----------------------------- */
+
+function injectButtonContrastFix() {
+  if (document.getElementById("buttonContrastRuntimeFix")) return;
+
+  const style = document.createElement("style");
+  style.id = "buttonContrastRuntimeFix";
+
+  style.textContent = `
+    .btn.primary,
+    .view-project-btn,
+    .agri-card-premium .view-project-btn,
+    .agri-grid .view-project-btn,
+    .agri-grid .agri-card .view-project-btn,
+    body .agri-grid .agri-card .view-project-btn,
+    .apps-grid .app-btn.primary,
+    .app-btn.primary,
+    .contact-form .btn.primary {
+      color: #ffffff !important;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0077ff 0%,
+          #245cff 52%,
+          #674cff 100%
+        ) !important;
+
+      border: 1px solid rgba(255, 255, 255, 0.32) !important;
+
+      text-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.38) !important;
+
+      box-shadow:
+        0 16px 36px rgba(0, 111, 214, 0.28),
+        0 0 28px rgba(104, 76, 255, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.34) !important;
+    }
+
+    .btn.primary *,
+    .view-project-btn *,
+    .agri-card-premium .view-project-btn *,
+    .apps-grid .app-btn.primary *,
+    .app-btn.primary * {
+      color: #ffffff !important;
+    }
+
+    .btn.primary:hover,
+    .view-project-btn:hover,
+    .agri-card-premium .view-project-btn:hover,
+    .agri-grid .view-project-btn:hover,
+    .apps-grid .app-btn.primary:hover,
+    .app-btn.primary:hover,
+    .contact-form .btn.primary:hover {
+      color: #ffffff !important;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0090ff 0%,
+          #336dff 52%,
+          #7b61ff 100%
+        ) !important;
+
+      filter: none !important;
+
+      box-shadow:
+        0 20px 46px rgba(0, 111, 214, 0.36),
+        0 0 42px rgba(104, 76, 255, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.42) !important;
+    }
+
+    .apps-grid .app-btn.ghost,
+    .app-btn.ghost,
+    .btn.secondary,
+    .btn.ghost {
+      color: #006fd6 !important;
+
+      background:
+        rgba(255, 255, 255, 0.84) !important;
+
+      border: 1px solid rgba(0, 111, 214, 0.22) !important;
+
+      text-shadow: none !important;
+
+      box-shadow:
+        0 10px 24px rgba(28, 68, 110, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.34) !important;
+    }
+
+    .apps-grid .app-btn.ghost:hover,
+    .app-btn.ghost:hover,
+    .btn.secondary:hover,
+    .btn.ghost:hover {
+      color: #ffffff !important;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0077ff 0%,
+          #684cff 100%
+        ) !important;
+
+      border-color: transparent !important;
+    }
+
+    html[data-theme="dark"] .btn.primary,
+    html[data-theme="dark"] .view-project-btn,
+    html[data-theme="dark"] .agri-card-premium .view-project-btn,
+    html[data-theme="dark"] .agri-grid .view-project-btn,
+    html[data-theme="dark"] .apps-grid .app-btn.primary,
+    html[data-theme="dark"] .app-btn.primary,
+    html[data-theme="dark"] .contact-form .btn.primary {
+      color: #020617 !important;
+
+      background:
+        linear-gradient(
+          135deg,
+          #00d4ff 0%,
+          #00ff88 100%
+        ) !important;
+
+      text-shadow: none !important;
+    }
+
+    html[data-theme="dark"] .apps-grid .app-btn.ghost,
+    html[data-theme="dark"] .app-btn.ghost,
+    html[data-theme="dark"] .btn.secondary,
+    html[data-theme="dark"] .btn.ghost {
+      color: #dbeafe !important;
+
+      background:
+        rgba(255, 255, 255, 0.065) !important;
+
+      border-color: rgba(0, 212, 255, 0.2) !important;
+    }
+
+    html[data-theme="dark"] .apps-grid .app-btn.ghost:hover,
+    html[data-theme="dark"] .app-btn.ghost:hover,
+    html[data-theme="dark"] .btn.secondary:hover,
+    html[data-theme="dark"] .btn.ghost:hover {
+      color: #020617 !important;
+
+      background:
+        linear-gradient(
+          135deg,
+          #00d4ff,
+          #00ff88
+        ) !important;
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+
+/* -----------------------------
    Init
 ----------------------------- */
 
@@ -1432,6 +1550,12 @@ document.addEventListener("DOMContentLoaded", () => {
   initRevealAnimations();
 
   enhanceOrbitMotion();
+
+  /*
+    En son çalışmalı.
+    Çünkü runtime card/orbit CSS'lerinden sonra buton kontrastını override ediyor.
+  */
+  injectButtonContrastFix();
 
   setFooterYear();
 });
