@@ -1,83 +1,10 @@
 /* =========================================================
-   Mehmet Cam Portfolio - Final Premium CV Version
-   script.js
+   Mehmet Cam Portfolio
+   Final Compatible script.js
    ========================================================= */
 
 /* -----------------------------
-   Stars Canvas
------------------------------ */
-
-(function initStarsCanvas() {
-  const canvas = document.getElementById("starsCanvas");
-  if (!canvas) return;
-
-  const ctx = canvas.getContext("2d");
-  let stars = [];
-  let animationFrame;
-
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  function createStars() {
-    stars = [];
-
-    const count = Math.floor((canvas.width * canvas.height) / 7000);
-
-    for (let i = 0; i < count; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 1.2 + 0.25,
-        alpha: Math.random() * 0.65 + 0.15,
-        speed: Math.random() * 0.22 + 0.04,
-        phase: Math.random() * Math.PI * 2
-      });
-    }
-  }
-
-  function drawStars() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const isDark =
-      document.documentElement.getAttribute("data-theme") === "dark";
-
-    const time = Date.now() * 0.001;
-
-    stars.forEach((star) => {
-      const pulse = Math.sin(time * star.speed + star.phase) * 0.18;
-      const alpha = Math.max(0.05, star.alpha + pulse);
-
-      ctx.beginPath();
-      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-
-      ctx.fillStyle = isDark
-        ? `rgba(190, 220, 255, ${alpha})`
-        : `rgba(0, 80, 160, ${alpha * 0.28})`;
-
-      ctx.fill();
-    });
-
-    animationFrame = requestAnimationFrame(drawStars);
-  }
-
-  resizeCanvas();
-  createStars();
-  drawStars();
-
-  window.addEventListener("resize", () => {
-    resizeCanvas();
-    createStars();
-  });
-
-  window.addEventListener("beforeunload", () => {
-    cancelAnimationFrame(animationFrame);
-  });
-})();
-
-/* -----------------------------
-   AI Apps & Applied Prototypes
+   AI Apps Data
 ----------------------------- */
 
 const apps = [
@@ -139,7 +66,7 @@ const apps = [
 ];
 
 /* -----------------------------
-   Agricultural Project Experience
+   Agricultural Projects Data
 ----------------------------- */
 
 const agriProjects = [
@@ -230,22 +157,31 @@ const agriProjects = [
 ];
 
 /* -----------------------------
-   Image Fallback
+   Helpers
 ----------------------------- */
 
 const repoBase =
   "https://cdn.jsdelivr.net/gh/mehmetcamofficial/mehmetcamofficial.github.io@main";
 
+function safeText(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
 function getImageCandidates(fileName) {
   return [
     `./${fileName}`,
-    `/${fileName}`,
+    `${fileName}`,
     `${repoBase}/${fileName}`,
     `https://raw.githubusercontent.com/mehmetcamofficial/mehmetcamofficial.github.io/main/${fileName}`
   ];
 }
 
-window.handleImageError = function (img) {
+window.handleImageError = function handleImageError(img) {
   const fileName = img.dataset.file;
   let step = Number(img.dataset.step || "0");
 
@@ -262,19 +198,6 @@ window.handleImageError = function (img) {
   }
 };
 
-/* -----------------------------
-   Helpers
------------------------------ */
-
-function safeText(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
 function isValidFormspreeUrl(url) {
   return (
     typeof url === "string" &&
@@ -284,7 +207,80 @@ function isValidFormspreeUrl(url) {
 }
 
 /* -----------------------------
-   Render AI Apps - Fixed Premium Cards
+   Stars Canvas
+----------------------------- */
+
+function initStarsCanvas() {
+  const canvas = document.getElementById("starsCanvas");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
+  let stars = [];
+  let animationFrame = null;
+
+  function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function createStars() {
+    stars = [];
+
+    const count = Math.floor((canvas.width * canvas.height) / 7000);
+
+    for (let i = 0; i < count; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.25 + 0.2,
+        alpha: Math.random() * 0.65 + 0.15,
+        speed: Math.random() * 0.25 + 0.05,
+        phase: Math.random() * Math.PI * 2
+      });
+    }
+  }
+
+  function drawStars() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const isDark =
+      document.documentElement.getAttribute("data-theme") === "dark";
+
+    const t = Date.now() * 0.001;
+
+    stars.forEach((star) => {
+      const pulse = Math.sin(t * star.speed + star.phase) * 0.2;
+      const alpha = Math.max(0.05, star.alpha + pulse);
+
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+
+      ctx.fillStyle = isDark
+        ? `rgba(190, 220, 255, ${alpha})`
+        : `rgba(0, 80, 160, ${alpha * 0.3})`;
+
+      ctx.fill();
+    });
+
+    animationFrame = requestAnimationFrame(drawStars);
+  }
+
+  resizeCanvas();
+  createStars();
+  drawStars();
+
+  window.addEventListener("resize", () => {
+    resizeCanvas();
+    createStars();
+  });
+
+  window.addEventListener("beforeunload", () => {
+    if (animationFrame) cancelAnimationFrame(animationFrame);
+  });
+}
+
+/* -----------------------------
+   Render AI Apps
 ----------------------------- */
 
 function renderApps() {
@@ -304,11 +300,7 @@ function renderApps() {
     card.innerHTML = `
       <div class="app-card-visual" style="background:${app.gradient}">
         <div class="app-card-glow"></div>
-
-        <div class="app-icon-wrap">
-          <span class="app-icon">${app.icon}</span>
-        </div>
-
+        <span class="app-icon">${safeText(app.icon)}</span>
         <span class="app-badge">${safeText(app.badge)}</span>
       </div>
 
@@ -338,7 +330,7 @@ function renderApps() {
 }
 
 /* -----------------------------
-   Render Agricultural Projects - Fixed Cards + Modal Button
+   Render Agricultural Projects
 ----------------------------- */
 
 function renderAgriProjects() {
@@ -378,7 +370,7 @@ function renderAgriProjects() {
           />
 
           <div class="agri-img-overlay">
-            <span class="agri-overlay-icon">${project.icon}</span>
+            <span class="agri-overlay-icon">${safeText(project.icon)}</span>
             <strong>View Details →</strong>
           </div>
         </div>
@@ -420,20 +412,22 @@ function renderAgriProjects() {
     });
   }
 
-  createCards();
+  createCards("All");
 
   filterButtons.forEach((button) => {
     button.addEventListener("click", () => {
+      const filterValue = button.dataset.filter || "All";
+
       filterButtons.forEach((btn) => btn.classList.remove("active"));
       button.classList.add("active");
 
-      createCards(button.dataset.filter || "All");
+      createCards(filterValue);
     });
   });
 }
 
 /* -----------------------------
-   Project Modal - Fixed
+   Project Modal
 ----------------------------- */
 
 function openProjectModal(project) {
@@ -452,8 +446,7 @@ function openProjectModal(project) {
   const firstImage = getImageCandidates(project.imageFile)[0];
 
   if (modalImage) {
-    modalImage.classList.remove("image-missing");
-    modalImage.classList.remove("modal-contain");
+    modalImage.classList.remove("image-missing", "modal-contain");
 
     modalImage.src = firstImage;
     modalImage.alt = project.title;
@@ -491,8 +484,8 @@ function openProjectModal(project) {
   }
 
   modal.classList.add("active");
-  modal.style.display = "flex";
   modal.setAttribute("aria-hidden", "false");
+
   document.body.classList.add("modal-open");
 }
 
@@ -501,9 +494,51 @@ function closeProjectModal() {
   if (!modal) return;
 
   modal.classList.remove("active");
-  modal.style.display = "";
   modal.setAttribute("aria-hidden", "true");
+
   document.body.classList.remove("modal-open");
+}
+
+function initProjectModal() {
+  const modal = document.getElementById("projectModal");
+  if (!modal) return;
+
+  /*
+    Event delegation:
+    Böylece çarpı butonu, backdrop veya data-close-modal olan her şey
+    kesin olarak modalı kapatır.
+  */
+  document.addEventListener("click", (event) => {
+    const closeTarget = event.target.closest(
+      "[data-close-modal], .modal-close, .project-modal-backdrop"
+    );
+
+    if (closeTarget) {
+      event.preventDefault();
+      event.stopPropagation();
+      closeProjectModal();
+    }
+  });
+
+  const panel = modal.querySelector(".project-modal-panel");
+
+  if (panel) {
+    panel.addEventListener("click", (event) => {
+      /*
+        Modal panelin içindeki normal tıklamalar backdrop gibi davranmasın.
+        Çarpı butonu delegation ile zaten yukarıda yakalanıyor.
+      */
+      if (!event.target.closest("[data-close-modal], .modal-close")) {
+        event.stopPropagation();
+      }
+    });
+  }
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeProjectModal();
+    }
+  });
 }
 
 /* -----------------------------
@@ -543,6 +578,7 @@ function initContactForm() {
   const status = document.createElement("div");
   status.className = "form-status";
   status.style.display = "none";
+
   form.appendChild(status);
 
   form.addEventListener("submit", async (event) => {
@@ -552,8 +588,8 @@ function initContactForm() {
       event.preventDefault();
 
       status.style.display = "block";
-      status.textContent = "Formspree URL is not configured correctly.";
       status.className = "form-status warning";
+      status.textContent = "Formspree URL is not configured correctly.";
 
       return;
     }
@@ -632,7 +668,7 @@ function initNavigationHighlight() {
       });
     },
     {
-      threshold: 0.35
+      threshold: 0.3
     }
   );
 
@@ -640,37 +676,56 @@ function initNavigationHighlight() {
 }
 
 /* -----------------------------
-   Reveal Animation
+   Reveal Animations
 ----------------------------- */
 
 function initRevealAnimations() {
   const revealItems = document.querySelectorAll(
-    ".section-heading, .glass-panel, .stat-card, .agri-card, .app-card, .focus-card, .timeline-item, .training-card, .skill-column, .education-card"
+    ".section-heading, .glass-panel, .stat-card, .agri-card, .app-card, .focus-card, .timeline-item, .training-card, .skill-column, .education-card, .publication-card, .contact-form, .contact-info"
   );
+
+  if (!revealItems.length) return;
+
+  document.documentElement.classList.add("js-reveal");
 
   revealItems.forEach((item) => {
     item.classList.add("reveal");
   });
+
+  function showItem(item) {
+    item.classList.add("visible");
+    item.classList.add("revealed");
+  }
+
+  if (!("IntersectionObserver" in window)) {
+    revealItems.forEach(showItem);
+    return;
+  }
 
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
 
-        /*
-          CSS tarafında .reveal.visible kullanıldığı için
-          burada .visible ekliyoruz.
-        */
-        entry.target.classList.add("visible");
+        showItem(entry.target);
         observer.unobserve(entry.target);
       });
     },
     {
-      threshold: 0.1
+      threshold: 0.08,
+      rootMargin: "0px 0px -40px 0px"
     }
   );
 
   revealItems.forEach((item) => observer.observe(item));
+
+  /*
+    Güvenlik:
+    Observer takılırsa içerikler görünmeden kalmasın.
+  */
+  setTimeout(() => {
+    revealItems.forEach(showItem);
+  }, 900);
 }
 
 /* -----------------------------
@@ -686,16 +741,263 @@ function setFooterYear() {
 }
 
 /* -----------------------------
+   Orbit / Profile Motion Repair
+   CSS çalışmasa bile JS görünür hareket katmanı ekler.
+----------------------------- */
+
+function injectOrbitMotionStyles() {
+  if (document.getElementById("orbitMotionRuntimeStyles")) return;
+
+  const style = document.createElement("style");
+  style.id = "orbitMotionRuntimeStyles";
+
+  style.textContent = `
+    .orbit-system {
+      overflow: visible !important;
+    }
+
+    .profile-planet {
+      overflow: visible !important;
+      isolation: isolate !important;
+      background: transparent !important;
+    }
+
+    .profile-planet img {
+      position: relative !important;
+      z-index: 5 !important;
+      border-radius: 50% !important;
+    }
+
+    .runtime-profile-ring {
+      position: absolute !important;
+      inset: -18px !important;
+      z-index: 3 !important;
+      border-radius: 50% !important;
+      pointer-events: none !important;
+
+      background:
+        conic-gradient(
+          from 0deg,
+          transparent 0deg,
+          transparent 190deg,
+          rgba(0, 111, 214, 0.15) 220deg,
+          #006fd6 250deg,
+          #684cff 292deg,
+          #009f61 330deg,
+          transparent 360deg
+        ) !important;
+
+      -webkit-mask:
+        radial-gradient(
+          farthest-side,
+          transparent calc(100% - 16px),
+          #000 calc(100% - 15px)
+        ) !important;
+
+      mask:
+        radial-gradient(
+          farthest-side,
+          transparent calc(100% - 16px),
+          #000 calc(100% - 15px)
+        ) !important;
+
+      animation: runtimeProfileRingSpin 2.4s linear infinite !important;
+      filter: drop-shadow(0 0 18px rgba(0, 111, 214, 0.42)) !important;
+    }
+
+    .runtime-profile-ring::after {
+      content: "" !important;
+      position: absolute !important;
+      right: 12px !important;
+      top: 50% !important;
+
+      width: 14px !important;
+      height: 14px !important;
+
+      border-radius: 50% !important;
+
+      background: #00ff88 !important;
+
+      box-shadow:
+        0 0 12px #00ff88,
+        0 0 28px #00d4ff !important;
+
+      transform: translateY(-50%) !important;
+    }
+
+    .runtime-profile-halo {
+      position: absolute !important;
+      inset: -58px !important;
+      z-index: 1 !important;
+      border-radius: 50% !important;
+      pointer-events: none !important;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(0, 111, 214, 0.18) 0%,
+          rgba(104, 76, 255, 0.12) 42%,
+          transparent 72%
+        ) !important;
+
+      animation: runtimeProfileHaloPulse 3.4s ease-in-out infinite !important;
+    }
+
+    .orbit-runner {
+      position: absolute !important;
+      inset: 0 !important;
+      border-radius: 50% !important;
+      pointer-events: none !important;
+      transform-origin: 50% 50% !important;
+    }
+
+    .orbit-runner::before {
+      content: "" !important;
+      position: absolute !important;
+      top: -5px !important;
+      left: 50% !important;
+
+      width: 10px !important;
+      height: 10px !important;
+
+      border-radius: 50% !important;
+
+      transform: translateX(-50%) !important;
+
+      background: #006fd6 !important;
+
+      box-shadow:
+        0 0 10px #006fd6,
+        0 0 24px #006fd6 !important;
+    }
+
+    .orbit-runner-1 {
+      animation: runtimeOrbitSpin 5.5s linear infinite !important;
+    }
+
+    .orbit-runner-2 {
+      animation: runtimeOrbitSpin 7.5s linear infinite reverse !important;
+    }
+
+    .orbit-runner-3 {
+      animation: runtimeOrbitSpin 9.5s linear infinite !important;
+    }
+
+    .orbit-runner-2::before {
+      background: #684cff !important;
+      box-shadow:
+        0 0 10px #684cff,
+        0 0 24px #684cff !important;
+    }
+
+    .orbit-runner-3::before {
+      background: #009f61 !important;
+      box-shadow:
+        0 0 10px #009f61,
+        0 0 24px #009f61 !important;
+    }
+
+    html[data-theme="dark"] .runtime-profile-ring {
+      background:
+        conic-gradient(
+          from 0deg,
+          transparent 0deg,
+          transparent 190deg,
+          rgba(0, 212, 255, 0.15) 220deg,
+          #00d4ff 250deg,
+          #7b61ff 292deg,
+          #00ff88 330deg,
+          transparent 360deg
+        ) !important;
+
+      filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5)) !important;
+    }
+
+    @keyframes runtimeProfileRingSpin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes runtimeProfileHaloPulse {
+      0%,
+      100% {
+        opacity: 0.58;
+        transform: scale(1);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.08);
+      }
+    }
+
+    @keyframes runtimeOrbitSpin {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  `;
+
+  document.head.appendChild(style);
+}
+
+function enhanceOrbitMotion() {
+  injectOrbitMotionStyles();
+
+  const profilePlanet = document.querySelector(".profile-planet");
+  const profileImage = profilePlanet
+    ? profilePlanet.querySelector("img")
+    : null;
+
+  if (profilePlanet && !profilePlanet.querySelector(".runtime-profile-ring")) {
+    const halo = document.createElement("div");
+    halo.className = "runtime-profile-halo";
+
+    const ring = document.createElement("div");
+    ring.className = "runtime-profile-ring";
+
+    profilePlanet.insertBefore(halo, profileImage || profilePlanet.firstChild);
+    profilePlanet.insertBefore(ring, profileImage || profilePlanet.firstChild);
+  }
+
+  const orbits = document.querySelectorAll(".orbit");
+
+  orbits.forEach((orbit, index) => {
+    if (orbit.querySelector(".orbit-runner")) return;
+
+    const runner = document.createElement("div");
+    runner.className = `orbit-runner orbit-runner-${index + 1}`;
+
+    orbit.appendChild(runner);
+  });
+}
+
+/* -----------------------------
    Init
 ----------------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
+  initStarsCanvas();
+
   renderApps();
   renderAgriProjects();
-  initModal();
+
+  initProjectModal();
   initThemeToggle();
   initContactForm();
   initNavigationHighlight();
   initRevealAnimations();
+
+  enhanceOrbitMotion();
+
   setFooterYear();
 });
