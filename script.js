@@ -1,5 +1,6 @@
 /* =========================================================
    Mehmet Cam Portfolio - Final Premium CV Version
+   script.js
    ========================================================= */
 
 /* -----------------------------
@@ -12,6 +13,7 @@
 
   const ctx = canvas.getContext("2d");
   let stars = [];
+  let animationFrame;
 
   function resizeCanvas() {
     canvas.width = window.innerWidth;
@@ -20,6 +22,7 @@
 
   function createStars() {
     stars = [];
+
     const count = Math.floor((canvas.width * canvas.height) / 7000);
 
     for (let i = 0; i < count; i++) {
@@ -28,7 +31,8 @@
         y: Math.random() * canvas.height,
         radius: Math.random() * 1.2 + 0.25,
         alpha: Math.random() * 0.65 + 0.15,
-        speed: Math.random() * 0.22 + 0.04
+        speed: Math.random() * 0.22 + 0.04,
+        phase: Math.random() * Math.PI * 2
       });
     }
   }
@@ -39,18 +43,23 @@
     const isDark =
       document.documentElement.getAttribute("data-theme") === "dark";
 
+    const time = Date.now() * 0.001;
+
     stars.forEach((star) => {
-      star.alpha += Math.sin(Date.now() * star.speed * 0.001) * 0.004;
+      const pulse = Math.sin(time * star.speed + star.phase) * 0.18;
+      const alpha = Math.max(0.05, star.alpha + pulse);
 
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+
       ctx.fillStyle = isDark
-        ? `rgba(190, 220, 255, ${Math.abs(star.alpha)})`
-        : `rgba(0, 80, 160, ${Math.abs(star.alpha) * 0.28})`;
+        ? `rgba(190, 220, 255, ${alpha})`
+        : `rgba(0, 80, 160, ${alpha * 0.28})`;
+
       ctx.fill();
     });
 
-    requestAnimationFrame(drawStars);
+    animationFrame = requestAnimationFrame(drawStars);
   }
 
   resizeCanvas();
@@ -60,6 +69,10 @@
   window.addEventListener("resize", () => {
     resizeCanvas();
     createStars();
+  });
+
+  window.addEventListener("beforeunload", () => {
+    cancelAnimationFrame(animationFrame);
   });
 })();
 
@@ -254,7 +267,7 @@ window.handleImageError = function (img) {
 ----------------------------- */
 
 function safeText(value) {
-  return String(value)
+  return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -348,7 +361,7 @@ function renderAgriProjects() {
         <div class="agri-img-wrap">
           <img
             src="${firstImage}"
-            data-file="${project.imageFile}"
+            data-file="${safeText(project.imageFile)}"
             data-step="0"
             onerror="handleImageError(this)"
             alt="${safeText(project.title)}"
@@ -384,7 +397,8 @@ function renderAgriProjects() {
     button.addEventListener("click", () => {
       filterButtons.forEach((btn) => btn.classList.remove("active"));
       button.classList.add("active");
-      createCards(button.dataset.filter);
+
+      createCards(button.dataset.filter || "All");
     });
   });
 }
@@ -398,30 +412,54 @@ function openProjectModal(project) {
   if (!modal) return;
 
   const modalImage = document.getElementById("modalImage");
+  const modalCategory = document.getElementById("modalCategory");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalOriginal = document.getElementById("modalOriginal");
+  const modalRole = document.getElementById("modalRole");
+  const modalDescription = document.getElementById("modalDescription");
+  const modalImpact = document.getElementById("modalImpact");
+  const modalSource = document.getElementById("modalSource");
+
   const firstImage = getImageCandidates(project.imageFile)[0];
 
-  modalImage.classList.remove("image-missing");
-  modalImage.classList.remove("modal-contain");
+  if (modalImage) {
+    modalImage.classList.remove("image-missing");
+    modalImage.classList.remove("modal-contain");
 
-  modalImage.src = firstImage;
-  modalImage.alt = project.title;
-  modalImage.dataset.file = project.imageFile;
-  modalImage.dataset.step = "0";
-  modalImage.onerror = function () {
-    handleImageError(this);
-  };
+    modalImage.src = firstImage;
+    modalImage.alt = project.title;
+    modalImage.dataset.file = project.imageFile;
+    modalImage.dataset.step = "0";
 
-  if (project.imageMode === "contain") {
-    modalImage.classList.add("modal-contain");
+    modalImage.onerror = function () {
+      handleImageError(this);
+    };
+
+    if (project.imageMode === "contain") {
+      modalImage.classList.add("modal-contain");
+    }
   }
 
-  document.getElementById("modalCategory").textContent = project.category;
-  document.getElementById("modalTitle").textContent = project.title;
-  document.getElementById("modalOriginal").textContent = project.originalTitle;
-  document.getElementById("modalRole").textContent = project.role;
-  document.getElementById("modalDescription").textContent = project.description;
-  document.getElementById("modalImpact").textContent = project.impact;
-  document.getElementById("modalSource").href = project.source;
+  if (modalCategory) modalCategory.textContent = project.category;
+  if (modalTitle) modalTitle.textContent = project.title;
+  if (modalOriginal) modalOriginal.textContent = project.originalTitle;
+  if (modalRole) modalRole.textContent = project.role;
+  if (modalDescription) modalDescription.textContent = project.description;
+
+  if (modalImpact) {
+    const impactItems = project.impact
+      .split("•")
+      .map((item) => item.trim())
+      .filter(Boolean);
+
+    modalImpact.innerHTML = impactItems
+      .map((item) => `<span>${safeText(item)}</span>`)
+      .join("");
+  }
+
+  if (modalSource) {
+    modalSource.href = project.source;
+  }
 
   modal.classList.add("active");
   modal.setAttribute("aria-hidden", "false");
@@ -443,7 +481,9 @@ function initModal() {
   });
 
   document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") closeProjectModal();
+    if (event.key === "Escape") {
+      closeProjectModal();
+    }
   });
 }
 
@@ -458,6 +498,7 @@ function initThemeToggle() {
   if (!themeToggle) return;
 
   const savedTheme = localStorage.getItem("theme") || "light";
+
   html.setAttribute("data-theme", savedTheme);
   themeToggle.textContent = savedTheme === "dark" ? "🌙" : "☀️";
 
@@ -467,6 +508,7 @@ function initThemeToggle() {
 
     html.setAttribute("data-theme", nextTheme);
     localStorage.setItem("theme", nextTheme);
+
     themeToggle.textContent = nextTheme === "dark" ? "🌙" : "☀️";
   });
 }
@@ -489,9 +531,11 @@ function initContactForm() {
 
     if (!isValidFormspreeUrl(actionUrl)) {
       event.preventDefault();
+
       status.style.display = "block";
       status.textContent = "Formspree URL is not configured correctly.";
       status.className = "form-status warning";
+
       return;
     }
 
@@ -520,8 +564,10 @@ function initContactForm() {
 
       if (response.ok) {
         form.reset();
+
         status.className = "form-status success";
-        status.textContent = "Thank you! Your message has been sent successfully.";
+        status.textContent =
+          "Thank you! Your message has been sent successfully.";
       } else {
         status.className = "form-status error";
         status.textContent =
@@ -580,7 +626,7 @@ function initNavigationHighlight() {
 
 function initRevealAnimations() {
   const revealItems = document.querySelectorAll(
-    ".section-heading, .glass-panel, .stat-card, .agri-card, .app-card, .focus-card, .timeline-item, .training-card"
+    ".section-heading, .glass-panel, .stat-card, .agri-card, .app-card, .focus-card, .timeline-item, .training-card, .skill-column, .education-card"
   );
 
   revealItems.forEach((item) => {
@@ -591,7 +637,12 @@ function initRevealAnimations() {
     (entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        entry.target.classList.add("revealed");
+
+        /*
+          CSS tarafında .reveal.visible kullanıldığı için
+          burada .visible ekliyoruz.
+        */
+        entry.target.classList.add("visible");
         observer.unobserve(entry.target);
       });
     },
@@ -609,6 +660,7 @@ function initRevealAnimations() {
 
 function setFooterYear() {
   const year = document.getElementById("year");
+
   if (year) {
     year.textContent = new Date().getFullYear();
   }
