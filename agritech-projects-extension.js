@@ -37,8 +37,7 @@
         originalTitle: "AI-Powered Weed & Crop Detection",
         category: "Applied AI",
         role: "AI Developer",
-        imageFile:
-          "https://raw.githubusercontent.com/mehmetcamofficial/agrivision-ai/main/screenshots/detection.png",
+        imageFile: "agrivision-card.svg",
         imageMode: "cover",
         source: "https://github.com/mehmetcamofficial/agrivision-ai",
         description:
