@@ -22,7 +22,8 @@ const KNOWLEDGE = [
     title: "TourPilot",
     keywords: ["tourpilot","tur operasyon","tour operations","rezervasyon","reservation","operasyon platformu"],
     tr: "TourPilot, tur operatörlerinin gerçek operasyon akışlarına göre geliştirilen bir operasyon platformudur. Rezervasyon işleme, operasyon planlama, müşteri ve tedarikçi yönetimi, turlar, teklifler, muhasebe akışları, RBAC, denetlenebilirlik, veri kalitesi ve otomasyon gibi alanları kapsar. AI, belirli yardımcı akışlarda ve Claude Code/Codex ile mühendislik sürecinde kullanılır; her özellik doğrudan AI değildir.",
-    en: "TourPilot is an operations platform built around real tour-operator workflows. It covers reservation processing, operational planning, customers, suppliers, tours, quotations, accounting workflows, RBAC, auditability, data quality and automation. AI supports selected workflows and the engineering process; not every feature is directly AI-powered."
+    en: "TourPilot is an operations platform built around real tour-operator workflows. It covers reservation processing, operational planning, customers, suppliers, tours, quotations, accounting workflows, RBAC, auditability, data quality and automation. AI supports selected workflows and the engineering process; not every feature is directly AI-powered.",
+    source: "https://tourpilot.com.tr/"
   },
   {
     id: "ai-workflow",
@@ -50,35 +51,40 @@ const KNOWLEDGE = [
     title: "Evalora",
     keywords: ["evalora"],
     tr: "Evalora, Mehmet'in bağımsız olarak geliştirdiği; uygulamalı AI ve veri odaklı kullanıcı deneyimlerini araştıran dijital ürünlerinden biridir.",
-    en: "Evalora is an independently developed digital product by Mehmet exploring applied AI and data-driven user experiences."
+    en: "Evalora is an independently developed digital product by Mehmet exploring applied AI and data-driven user experiences.",
+    source: "https://www.evalora.com.tr/"
   },
   {
     id: "oncoconnect",
     title: "OncoConnect",
     keywords: ["oncoconnect","oncoconnect ai"],
     tr: "OncoConnect, teknoloji destekli bilgi ve bağlantılı kullanıcı deneyimlerine odaklanan bir dijital platform projesidir.",
-    en: "OncoConnect is a digital platform project focused on technology-enabled information and connected user experiences."
+    en: "OncoConnect is a digital platform project focused on technology-enabled information and connected user experiences.",
+    source: "https://oncoconnectai.com.tr/"
   },
   {
     id: "search-intelligence",
     title: "Search Intelligence",
     keywords: ["search intelligence","arama zekası","arama analizi"],
     tr: "Search Intelligence, arama zekâsı ve AI destekli analiz üzerine geliştirilmiş etkileşimli bir Streamlit uygulamasıdır.",
-    en: "Search Intelligence is an interactive Streamlit application focused on search intelligence and AI-assisted analysis."
+    en: "Search Intelligence is an interactive Streamlit application focused on search intelligence and AI-assisted analysis.",
+    source: "https://mehmetcam-search-intelligence.streamlit.app/"
   },
   {
     id: "histopathology",
     title: "Colon Cancer Histopathology AI",
     keywords: ["colon cancer","histopathology","histopatoloji","kolon kanseri"],
     tr: "Colon Cancer Histopathology AI, kolon kanseri kullanım senaryosunda histopatoloji tabanlı analizi araştıran bir AI uygulamasıdır. Portföy bunu bir uygulamalı AI çalışması olarak sunar; tıbbi tanı iddiasında bulunmaz.",
-    en: "Colon Cancer Histopathology AI is an AI application exploring histopathology-based analysis in a colon cancer use case. The portfolio presents it as an applied AI project, not as a medical diagnostic claim."
+    en: "Colon Cancer Histopathology AI is an AI application exploring histopathology-based analysis in a colon cancer use case. The portfolio presents it as an applied AI project, not as a medical diagnostic claim.",
+    source: "https://colon-cancer-histopathology-ai.streamlit.app/"
   },
   {
     id: "enrich",
     title: "ENRICH Triage Engine",
     keywords: ["enrich","triage","triage engine","triyaj"],
     tr: "ENRICH Triage Engine, uygulamalı bir karar destek akışını gösteren etkileşimli bir triyaj motoru prototipidir.",
-    en: "ENRICH Triage Engine is an interactive triage-engine prototype demonstrating an applied decision-support workflow."
+    en: "ENRICH Triage Engine is an interactive triage-engine prototype demonstrating an applied decision-support workflow.",
+    source: "https://enrich-triage-engine-2.streamlit.app/"
   },
   {
     id: "n8n-automation",
@@ -114,6 +120,78 @@ const KNOWLEDGE = [
     keywords: ["publication","yayın","yayin","springer","kasaplar","smart agriculture","akıllı tarım"],
     tr: "Mehmet Çam ve Ö. Y. Saatçioğlu'nun “Transition to Smart Agriculture: Case of Kasaplar Village” başlıklı çalışması, Springer Nature tarafından yayımlanan Engineering and Technology Management in Challenging Times kitabında 2024 yılında yer aldı.",
     en: "Mehmet Çam and Ö. Y. Saatçioğlu authored “Transition to Smart Agriculture: Case of Kasaplar Village,” published by Springer Nature in Engineering and Technology Management in Challenging Times in 2024."
+  },
+  {
+    id: "experience-scale-ai",
+    title: "Experience: Scale AI",
+    keywords: ["scale ai","ai trainer","data scientist","model evaluation","multilingual","annotation quality","2023 present","2023-present"],
+    tr: "Mehmet, 2023'ten itibaren Scale AI'da uzaktan AI Trainer & Data Scientist olarak büyük ölçekli AI modellerinin çok dilli ortamlarda eğitimi ve değerlendirilmesi, veri anotasyon kalitesinin iyileştirilmesi ve model performansının yapılandırılmış değerlendirmesi üzerinde çalıştı. Uluslararası araştırma ve mühendislik ekipleriyle iş birliği yaptı.",
+    en: "Since 2023, Mehmet has worked remotely as an AI Trainer & Data Scientist at Scale AI, contributing to training and evaluating large-scale AI models in multilingual environments, improving annotation quality and model performance through structured evaluation, and collaborating with international research and engineering teams.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "experience-tabit",
+    title: "Experience: Tabit Smart Agriculture Technologies",
+    keywords: ["tabit","smart agriculture","ar-ge müdürü","ar-ge manager","research and development manager","azmud","horizon 2020","2021 2023"],
+    tr: "Mehmet, 2021–2023 arasında Tabit Smart Agriculture Technologies'te Research and Development Manager olarak akıllı tarım ve karar destek sistemleri üzerine uygulamalı araştırma projeleri tasarlayıp koordine etti. Literatür taraması, araştırma tasarımı, nitel/nicel veri analizi, teknik raporlama, proje önerileri ve paydaş dokümantasyonu yürüttü; AI destekli çiftçi karar sistemlerine odaklanan Horizon 2020 AZMUD Projesi'ne katkı sağladı.",
+    en: "From 2021 to 2023, Mehmet worked as Research and Development Manager at Tabit Smart Agriculture Technologies, designing and coordinating applied research projects in smart agriculture and decision-support systems. His work included literature reviews, research design, qualitative and quantitative analysis, technical reporting, project proposals and stakeholder documentation, including contributions to the Horizon 2020 AZMUD project on AI-supported farmer decision systems.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "experience-undp",
+    title: "Experience: UNDP Algeria",
+    keywords: ["undp","algeria","cezayir","teaching professional","sustainable development","capacity building","2015 2016"],
+    tr: "Mehmet, 2015–2016 döneminde UNDP kapsamında Cezayir'de Teaching Professional olarak sürdürülebilir kalkınma ve kapasite geliştirme eğitimleri verdi; farklı paydaş grupları için eğitim ve atölye çalışmalarının tasarım ve yürütülmesine katkıda bulundu.",
+    en: "During 2015–2016, Mehmet worked in Algeria as a Teaching Professional in a UNDP context, delivering training on sustainable development and capacity building and designing and facilitating workshops for diverse stakeholder groups.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "experience-evs-romania",
+    title: "Experience: European Voluntary Service",
+    keywords: ["european voluntary service","evs","romania","craiova","ecology","social inclusion","2016 2017"],
+    tr: "Mehmet, 2016–2017 arasında Romanya'nın Craiova kentinde European Voluntary Service kapsamında ekoloji, sosyal kapsayıcılık ve toplum katılımı faaliyetlerinde yer aldı. Programa uluslararası rekabetçi bir seçim süreciyle kabul edildi.",
+    en: "From 2016 to 2017, Mehmet took part in European Voluntary Service activities in Craiova, Romania, working on ecology, social inclusion and community engagement after selection through a competitive international process.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "education-msc-thesis",
+    title: "MSc: R&D and Innovation",
+    keywords: ["msc","yüksek lisans","yüksek lisans tezi","master thesis","dokuz eylül","ar-ge inovasyon","kasaplar village","human-centered society"],
+    tr: "Mehmet, Dokuz Eylül Üniversitesi'nde 2019–2023 arasında Ar-Ge ve İnovasyon alanında yüksek lisans yaptı. Tez konusu, insan merkezli toplum yaklaşımında yenilikçi tarımsal uygulamalar ve Kasaplar Köyü örneğidir.",
+    en: "Mehmet completed an MSc in R&D and Innovation at Dokuz Eylül University from 2019 to 2023. His thesis focused on innovative agricultural practices in a human-centered society, using Kasaplar Village as the case.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "education-bsc-thesis",
+    title: "BSc: Economics",
+    keywords: ["bsc","lisans","iktisat","economics","adnan menderes","youth unemployment","genç işsizlik","eu policy"],
+    tr: "Mehmet, 2009–2013 arasında Adnan Menderes Üniversitesi İktisat bölümünde lisans eğitimini tamamladı. Lisans tezinde Türkiye'de genç işsizliği ve AB politika perspektiflerini ele aldı.",
+    en: "Mehmet completed a BSc in Economics at Adnan Menderes University from 2009 to 2013. His bachelor's thesis examined youth unemployment in Türkiye and EU policy perspectives.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "training-data-science",
+    title: "Training: Data Science Bootcamp",
+    keywords: ["miuul","data science bootcamp","python machine learning statistics","bootcamp"],
+    tr: "Mehmet, Miuul Data Science Bootcamp kapsamında Python, makine öğrenmesi ve istatistik alanlarında ek eğitim aldı.",
+    en: "Mehmet completed additional training through the Miuul Data Science Bootcamp, covering Python, machine learning and statistics.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "training-ai-summer-school",
+    title: "Training: Artificial Intelligence Summer School",
+    keywords: ["bilkent","artificial intelligence summer school","ai summer school","yapay zeka yaz okulu"],
+    tr: "Mehmet, Bilkent University Artificial Intelligence Summer School programına katıldı.",
+    en: "Mehmet attended the Artificial Intelligence Summer School at Bilkent University.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "training-ttgv",
+    title: "Training: TTGV 250K Entrepreneurship Program",
+    keywords: ["ttgv","250k","entrepreneurship","girişimcilik"],
+    tr: "Mehmet, TTGV 250K Entrepreneurship Program kapsamında girişimcilik odaklı ek eğitim aldı.",
+    en: "Mehmet completed additional entrepreneurship-focused training through the TTGV 250K Entrepreneurship Program.",
+    source: "CV / Portfolio"
   },
   {
     id: "professional-profile",
@@ -371,7 +449,7 @@ export default {
     }
 
     if (url.pathname === "/" || url.pathname === "/health") {
-      return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-") && x.id !== "medium-profile").length }, 200, origin);
+      return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-") && x.id !== "medium-profile").length, cvExperienceItems: KNOWLEDGE.filter(x => x.id.startsWith("experience-") || x.id.startsWith("education-") || x.id.startsWith("training-")).length }, 200, origin);
     }
 
     if (url.pathname !== "/chat") return jsonResponse({ error: "Not found" }, 404, origin);
@@ -415,7 +493,7 @@ export default {
       return jsonResponse({
         ok: true,
         answer: isTurkish(message) ? top.tr : top.en,
-        sources: [top.title],
+        sources: [{ title: top.title, url: top.source || null }],
         route: "knowledge-fallback",
         grounded: true
       }, 200, origin);
@@ -455,7 +533,7 @@ export default {
     return jsonResponse({
       ok: true,
       answer: isTurkish(message) ? top.tr : top.en,
-      sources: [top.title],
+      sources: [{ title: top.title, url: top.source || null }],
       route: "graceful-fallback",
       grounded: true
     }, 200, origin);
