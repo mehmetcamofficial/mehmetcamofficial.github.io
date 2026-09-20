@@ -551,7 +551,7 @@ function sanitizeSiteConfig(input = {}) {
       category: cleanText(item?.category, 100),
       description: cleanText(item?.description, 900),
       url: safeHref(item?.url),
-      image: safeHref(item?.image),
+      image: cleanText(item?.image, 500) ? safeHref(item?.image) : "",
       content: cleanText(item?.content, 6000),
       tags: Array.isArray(item?.tags) ? item.tags.slice(0, 8).map(x => cleanText(x, 30)).filter(Boolean) : [],
       status: item?.status === "draft" ? "draft" : "published",
@@ -563,7 +563,7 @@ function sanitizeSiteConfig(input = {}) {
       excerpt: cleanText(item?.excerpt, 700),
       url: safeHref(item?.url),
       date: cleanText(item?.date, 40),
-      image: safeHref(item?.image),
+      image: cleanText(item?.image, 500) ? safeHref(item?.image) : "",
       content: cleanText(item?.content, 8000),
       status: item?.status === "draft" ? "draft" : "published",
       enabled: item?.enabled !== false
@@ -602,6 +602,8 @@ async function readSiteConfig(env) {
   try {
     const parsed = JSON.parse(raw);
     const merged = { ...DEFAULT_SITE_CONFIG, ...parsed };
+    merged.projects = (merged.projects || []).map(item => ({ ...item, image: item?.image === "#" ? "" : (item?.image || "") }));
+    merged.posts = (merged.posts || []).map(item => ({ ...item, image: item?.image === "#" ? "" : (item?.image || "") }));
     if (!Number(parsed.schemaVersion) || Number(parsed.schemaVersion) < 3) {
       if (!Array.isArray(parsed.posts) || parsed.posts.length === 0) merged.posts = DEFAULT_SITE_CONFIG.posts;
       merged.navigation = (Array.isArray(merged.navigation) ? merged.navigation : DEFAULT_SITE_CONFIG.navigation).map(item =>
