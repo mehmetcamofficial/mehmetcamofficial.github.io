@@ -607,7 +607,7 @@ function createMetrics() {
             if (!item?.label || !item?.href) return;
             const a = document.createElement("a");
             a.textContent = item.label;
-            a.href = item.href;
+            a.href = (item.href === "#blog" || String(item.label).toLowerCase() === "writing") ? "/blog.html" : item.href;
             if (/^https:\/\//i.test(item.href)) {
               a.target = "_blank";
               a.rel = "noopener";
@@ -646,11 +646,14 @@ function createMetrics() {
               project.tags.forEach(tag => { const s=document.createElement("span"); s.textContent=tag; tags.appendChild(s); });
               card.appendChild(tags);
             }
+            const actions=document.createElement("div");actions.className="cms-card-actions";
+            const detail=document.createElement("a");detail.className="btn primary";detail.href="/project.html?id="+encodeURIComponent(project.id);detail.textContent="View case study →";actions.appendChild(detail);
             if (project.url && project.url !== "#") {
-              const a=document.createElement("a");a.className="btn secondary";a.href=project.url;a.textContent="Open project ↗";
-              if (/^https:\/\//i.test(project.url)){a.target="_blank";a.rel="noopener";}
-              card.appendChild(a);
+              const live=document.createElement("a");live.className="btn secondary";live.href=project.url;live.textContent="Open live ↗";
+              if (/^https:\/\//i.test(project.url)){live.target="_blank";live.rel="noopener";}
+              actions.appendChild(live);
             }
+            card.appendChild(actions);
             grid.appendChild(card);
           });
         }
@@ -669,7 +672,7 @@ function createMetrics() {
             if(post.image&&/^https:\/\//i.test(post.image)){const img=document.createElement("img");img.className="cms-card-image";img.src=post.image;img.alt=post.title;img.loading="lazy";article.appendChild(img);}
             if(post.date){const d=document.createElement("small");d.textContent=post.date;article.appendChild(d);}
             const h3=document.createElement("h3");h3.textContent=post.title;const p=document.createElement("p");p.textContent=post.excerpt||"";article.append(h3,p);
-            if(post.url&&post.url!=="#"){const a=document.createElement("a");a.className="btn secondary";a.href=post.url;a.textContent="Read article ↗";if(/^https:\/\//i.test(post.url)){a.target="_blank";a.rel="noopener";}article.appendChild(a);}
+            const a=document.createElement("a");a.className="btn secondary";a.href="/post.html?id="+encodeURIComponent(post.id);a.textContent="Read article →";article.appendChild(a);
             grid.appendChild(article);
           });
         }
