@@ -637,17 +637,40 @@ async function readSiteConfig(env) {
   } catch { return DEFAULT_SITE_CONFIG; }
 }
 
-async function isAdminAuthorized(env, request) {
+async function getAdminActor(env, request) {
   const auth = request.headers.get("Authorization") || "";
   const bearer = auth.startsWith("Bearer ") ? auth.slice(7) : "";
-  if (env.ADMIN_TOKEN && bearer === env.ADMIN_TOKEN) return true;
-  if (!bearer || !env.UNANSWERED_KV) return false;
-  return Boolean(await env.UNANSWERED_KV.get("admin-session:" + bearer));
+  if (env.ADMIN_TOKEN && bearer === env.ADMIN_TOKEN) {
+    return { id:"owner", username:"owner", name:"Portfolio Owner", role:"owner", active:true };
+  }
+  if (!bearer || !env.UNANSWERED_KV) return null;
+  const raw = await env.UNANSWERED_KV.get("admin-session:" + bearer);
+  if (!raw) return null;
+  try {
+    const session = JSON.parse(raw);
+    return session.actor || { id:"owner", username:"owner", name:"Portfolio Owner", role:"owner", active:true };
+  } catch {
+    return { id:"owner", username:"owner", name:"Portfolio Owner", role:"owner", active:true };
+  }
 }
 
-async function createAdminSession(env) {
+async function isAdminAuthorized(env, request) {
+  return Boolean(await getAdminActor(env, request));
+}
+
+async function isOwnerAuthorized(env, request) {
+  const actor = await getAdminActor(env, request);
+  return Boolean(actor && actor.role === "owner");
+}
+
+async function canWriteContent(env, request) {
+  const actor = await getAdminActor(env, request);
+  return Boolean(actor && ["owner","admin","editor"].includes(actor.role));
+}
+
+async function createAdminSession(env, actor = { id:"owner", username:"owner", name:"Portfolio Owner", role:"owner", active:true }) {
   const token = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "");
-  await env.UNANSWERED_KV.put("admin-session:" + token, JSON.stringify({ createdAt: new Date().toISOString() }), { expirationTtl: 43200 });
+  await env.UNANSWERED_KV.put("admin-session:" + token, JSON.stringify({ createdAt: new Date().toISOString(), actor }), { expirationTtl: 43200 });
   return token;
 }
 
@@ -772,10 +795,10 @@ export default {
       if (request.method !== "POST") return jsonResponse({ error:"GET or POST required" },405,origin);
       let body; try { body=await request.json(); } catch { return jsonResponse({error:"Invalid JSON"},400,origin); }
       const current = await readAdminAuthConfig(env);
-      const authorized = await isAdminAuthorized(env, request);
+      const ownerAuthorized = await isOwnerAuthorized(env, request);
       const setupCode = typeof body?.setupCode === "string" ? body.setupCode : "";
-      if (!authorized && (current.configured || !env.ADMIN_TOKEN || setupCode !== env.ADMIN_TOKEN)) {
-        return jsonResponse({ error:"Unauthorized" },401,origin);
+      if (!ownerAuthorized && (current.configured || !env.ADMIN_TOKEN || setupCode !== env.ADMIN_TOKEN)) {
+        return jsonResponse({ error:"Owner authorization required" },403,origin);
       }
       const next = { ...current, updatedAt:new Date().toISOString() };
       if (typeof body?.enabled === "boolean") next.enabled=body.enabled;
@@ -797,12 +820,106 @@ export default {
       let body;
       try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
       const password = typeof body?.password === "string" ? body.password : "";
+      const username = cleanText(body?.username || "owner", 80).toLowerCase();
       const cfg = await readAdminAuthConfig(env);
       if (!cfg.configured) return jsonResponse({ error:"Admin password has not been created yet" },409,origin);
       if (!cfg.enabled) return jsonResponse({ error:"Admin login is disabled" },403,origin);
-      if (!(await verifyAdminPassword(env,password))) return jsonResponse({ error: "Invalid password" }, 401, origin);
-      const session = await createAdminSession(env);
-      return jsonResponse({ ok:true, session, expiresIn:43200 }, 200, origin);
+
+      let actor = null;
+      if (!username || username === "owner") {
+        if (!(await verifyAdminPassword(env,password))) return jsonResponse({ error: "Invalid username or password" }, 401, origin);
+        actor = { id:"owner", username:"owner", name:"Portfolio Owner", role:"owner", active:true };
+      } else {
+        const id = await env.UNANSWERED_KV.get("admin-user-name:" + username);
+        if (!id) return jsonResponse({ error:"Invalid username or password" },401,origin);
+        const raw = await env.UNANSWERED_KV.get("admin-user:" + id);
+        if (!raw) return jsonResponse({ error:"Invalid username or password" },401,origin);
+        let user; try { user=JSON.parse(raw); } catch { return jsonResponse({ error:"Invalid username or password" },401,origin); }
+        if (user.active === false) return jsonResponse({ error:"This admin user is disabled" },403,origin);
+        const hash = await hashAdminPassword(password,user.salt || "");
+        if (!password || hash !== user.passwordHash) return jsonResponse({ error:"Invalid username or password" },401,origin);
+        actor = { id:user.id, username:user.username, name:user.name || user.username, role:user.role || "viewer", active:true };
+        user.lastLoginAt = new Date().toISOString();
+        await env.UNANSWERED_KV.put("admin-user:" + user.id, JSON.stringify(user));
+      }
+      const session = await createAdminSession(env,actor);
+      return jsonResponse({ ok:true, session, expiresIn:43200, user:actor }, 200, origin);
+    }
+
+    if (url.pathname === "/admin/me") {
+      if (request.method !== "GET") return jsonResponse({ error:"GET required" },405,origin);
+      const actor = await getAdminActor(env,request);
+      if (!actor) return jsonResponse({ error:"Unauthorized" },401,origin);
+      return jsonResponse({ ok:true, user:actor },200,origin);
+    }
+
+    if (url.pathname === "/admin/users") {
+      if (!(await isOwnerAuthorized(env,request))) return jsonResponse({ error:"Owner access required" },403,origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({ error:"Admin storage unavailable" },503,origin);
+
+      if (request.method === "GET") {
+        const listed = await env.UNANSWERED_KV.list({ prefix:"admin-user:", limit:100 });
+        const users=[];
+        for (const key of listed.keys) {
+          if (key.name.startsWith("admin-user-name:")) continue;
+          const raw=await env.UNANSWERED_KV.get(key.name);
+          if(!raw) continue;
+          try {
+            const u=JSON.parse(raw);
+            users.push({ id:u.id, username:u.username, name:u.name, role:u.role, active:u.active!==false, createdAt:u.createdAt, lastLoginAt:u.lastLoginAt||null });
+          } catch {}
+        }
+        users.sort((a,b)=>String(a.username).localeCompare(String(b.username)));
+        return jsonResponse({ok:true,users},200,origin);
+      }
+
+      if (request.method === "DELETE") {
+        const id=(url.searchParams.get("id")||"").replace(/[^a-zA-Z0-9_-]/g,"");
+        if(!id) return jsonResponse({error:"Invalid user id"},400,origin);
+        const raw=await env.UNANSWERED_KV.get("admin-user:"+id);
+        if(raw){try{const u=JSON.parse(raw);if(u.username)await env.UNANSWERED_KV.delete("admin-user-name:"+u.username);}catch{}}
+        await env.UNANSWERED_KV.delete("admin-user:"+id);
+        return jsonResponse({ok:true,deleted:id},200,origin);
+      }
+
+      if (request.method !== "POST") return jsonResponse({error:"GET, POST or DELETE required"},405,origin);
+      let body; try{body=await request.json();}catch{return jsonResponse({error:"Invalid JSON"},400,origin);}
+      const action=cleanText(body?.action||"create",30);
+      const id=cleanText(body?.id,80).replace(/[^a-zA-Z0-9_-]/g,"");
+      if(action==="create"){
+        const username=cleanText(body?.username,80).toLowerCase().replace(/[^a-z0-9._-]/g,"");
+        const name=cleanText(body?.name,120);
+        const role=["admin","editor","viewer"].includes(body?.role)?body.role:"viewer";
+        const password=typeof body?.password==="string"?body.password:"";
+        if(username.length<3) return jsonResponse({error:"Username must be at least 3 characters"},400,origin);
+        if(password.length<10) return jsonResponse({error:"Password must be at least 10 characters"},400,origin);
+        if(await env.UNANSWERED_KV.get("admin-user-name:"+username)) return jsonResponse({error:"Username already exists"},409,origin);
+        const userId=crypto.randomUUID().replace(/-/g,"");
+        const salt=crypto.randomUUID();
+        const user={id:userId,username,name:name||username,role,active:true,salt,passwordHash:await hashAdminPassword(password,salt),createdAt:new Date().toISOString(),lastLoginAt:null};
+        await env.UNANSWERED_KV.put("admin-user:"+userId,JSON.stringify(user));
+        await env.UNANSWERED_KV.put("admin-user-name:"+username,userId);
+        return jsonResponse({ok:true,user:{id:userId,username,name:user.name,role,active:true,createdAt:user.createdAt}},200,origin);
+      }
+      if(!id) return jsonResponse({error:"User id required"},400,origin);
+      const raw=await env.UNANSWERED_KV.get("admin-user:"+id);
+      if(!raw) return jsonResponse({error:"User not found"},404,origin);
+      const user=JSON.parse(raw);
+      if(action==="update"){
+        if(typeof body?.name==="string") user.name=cleanText(body.name,120)||user.username;
+        if(["admin","editor","viewer"].includes(body?.role)) user.role=body.role;
+        if(typeof body?.active==="boolean") user.active=body.active;
+      } else if(action==="reset-password"){
+        const password=typeof body?.password==="string"?body.password:"";
+        if(password.length<10) return jsonResponse({error:"Password must be at least 10 characters"},400,origin);
+        user.salt=crypto.randomUUID();
+        user.passwordHash=await hashAdminPassword(password,user.salt);
+      } else {
+        return jsonResponse({error:"Unsupported action"},400,origin);
+      }
+      user.updatedAt=new Date().toISOString();
+      await env.UNANSWERED_KV.put("admin-user:"+id,JSON.stringify(user));
+      return jsonResponse({ok:true,user:{id:user.id,username:user.username,name:user.name,role:user.role,active:user.active!==false,createdAt:user.createdAt,lastLoginAt:user.lastLoginAt||null}},200,origin);
     }
 
     if (url.pathname === "/admin/revisions") {
