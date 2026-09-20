@@ -221,12 +221,16 @@ function createMetrics() {
     const chips = document.querySelectorAll("[data-v3-question]");
     const body = panel?.querySelector(".v3-ask-body");
     const head = panel?.querySelector(".v3-ask-head");
+    const modeButtons = panel?.querySelectorAll("[data-v3-mode]") || [];
+    const recruiterPanel = document.getElementById("v3RecruiterPanel");
+    const roleBrief = document.getElementById("v3RoleBrief");
+    const analyzeRole = document.getElementById("v3AnalyzeRole");
     if (!trigger || !panel || !body || !input || !submit) return;
 
     if (head && !head.querySelector(".v3-ask-status")) {
       const status = document.createElement("div");
       status.className = "v3-ask-status";
-      status.textContent = "Portfolio knowledge online";
+      status.textContent = "Evidence-grounded portfolio AI · Live";
       head.appendChild(status);
     }
 
@@ -343,13 +347,20 @@ function createMetrics() {
     const API_URL = "https://mehmetcam-portfolio-ai.aydin254.workers.dev/chat";
     const chatHistory = [];
 
-    const appendAIText = (text, model, sources = []) => {
+    const appendAIText = (text, model, sources = [], metaData = {}) => {
       const msg = document.createElement("div");
       msg.className = "v3-msg assistant";
 
       const content = document.createElement("div");
       content.textContent = text;
       msg.appendChild(content);
+
+      if (metaData.grounded) {
+        const proof = document.createElement("div");
+        proof.className = "v3-proof-badge";
+        proof.textContent = metaData.route === "not-found" ? "✓ Safe no-answer" : "✓ Grounded in portfolio evidence";
+        msg.appendChild(proof);
+      }
 
       const sourceMarkup = renderPortfolioSources(sources);
       if (sourceMarkup) {
@@ -394,7 +405,7 @@ function createMetrics() {
         if (!response.ok || !data.answer) throw new Error(data.error || "AI request failed");
 
         typing.remove();
-        appendAIText(data.answer, "Live", data.sources || []);
+        appendAIText(data.answer, "Live", data.sources || [], data);
         chatHistory.push(
           { role: "user", content: clean },
           { role: "assistant", content: data.answer }
@@ -415,9 +426,10 @@ function createMetrics() {
       trigger.setAttribute("aria-expanded", "true");
       if (!conversation.children.length) {
         appendAssistant({
-          html: "Hi — I'm a lightweight guide to Mehmet's portfolio. Ask me about <strong>TourPilot, AI engineering, the tech stack, research, products or collaboration</strong>.",
+          html: "<strong>I’m Mehmet’s evidence-grounded portfolio AI.</strong><br><br>I can connect projects, engineering decisions, professional experience, research and publications — and show the sources behind the answer.",
           actions: [
-            { label: "Start with TourPilot", type: "section", target: "#featured-project" }
+            { label: "Inspect TourPilot", type: "section", target: "#featured-project" },
+            { label: "See AI workflow", type: "section", target: "#ai-workflow" }
           ]
         });
       }
@@ -437,6 +449,28 @@ function createMetrics() {
 
     chips.forEach((chip) => {
       chip.addEventListener("click", () => ask(chip.getAttribute("data-v3-question")));
+    });
+
+    modeButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const mode = button.getAttribute("data-v3-mode");
+        modeButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+        if (recruiterPanel) recruiterPanel.hidden = mode !== "recruiter";
+        input.placeholder = mode === "recruiter"
+          ? "Ask a follow-up about experience or evidence…"
+          : "Ask for evidence, projects or engineering decisions…";
+        if (mode === "recruiter") window.setTimeout(() => roleBrief?.focus(), 60);
+      });
+    });
+
+    analyzeRole?.addEventListener("click", () => {
+      const brief = (roleBrief?.value || "").trim();
+      if (!brief) {
+        roleBrief?.focus();
+        return;
+      }
+      const prompt = "Act as an evidence navigator for a recruiter. Using only Mehmet's documented portfolio knowledge, analyze this role brief. Summarize the strongest relevant evidence, concrete projects/experience to inspect, and any important requirement that is not documented. Do not invent a fit score. Role brief: " + brief.slice(0, 800);
+      ask(prompt);
     });
 
     submit.addEventListener("click", () => ask(input.value));
