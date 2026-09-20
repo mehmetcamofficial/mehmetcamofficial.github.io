@@ -177,7 +177,7 @@ const KNOWLEDGE = [
     keywords: ["bir köy nasıl akıllı olur","bir koy nasil akilli olur","akıllı köy projesinin hikayesi","akilli koy projesinin hikayesi","smart village story"],
     tr: "Mehmet'in 5 Mart 2023 tarihli “Bir Köy Nasıl Akıllı Olur? Akıllı Köy Projesinin Hikayesi” yazısı, kırsal bir yerleşimde tarımsal teknoloji ve inovasyonun çiftçi ihtiyaçlarıyla nasıl ilişkilendirilebileceğini hikâyeleştiriyor. Yazı, akıllı köy yaklaşımını yalnızca teknoloji kurulumu olarak değil, insan, saha ihtiyacı ve yerel dönüşüm odağında ele alıyor.",
     en: "Mehmet's March 5, 2023 article “Bir Köy Nasıl Akıllı Olur? Akıllı Köy Projesinin Hikayesi” tells the Smart Village story through the relationship between agricultural technology, farmer needs and local transformation, framing a smart village as more than simply installing technology.",
-    source: "https://medium.com/@aydin254"
+    source: "https://medium.com/@aydin254/tabit-ak%C4%B1ll%C4%B1-k%C3%B6y%C3%BCn-hikayesi-9847a480250"
   },
   {
     id: "medium-digital-twin-agriculture",
@@ -212,12 +212,28 @@ const KNOWLEDGE = [
     source: "https://medium.com/@aydin254/exploring-data-science-1f5dba57f1cc"
   },
   {
-    id: "medium-writing",
-    title: "Medium writing",
+    id: "medium-forward-deployed-engineer",
+    title: "Medium: Forward Deployed Engineer",
     keywords: ["medium","yazı","yazilar","makale","article","articles","blog","writing","forward deployed engineer","fde","society 5.0","data science"],
     tr: "Mehmet Medium'da uygulamalı AI, teknoloji, mühendislik ve kariyer kesişiminde yazıyor. 13 Haziran 2026 tarihli “Forward Deployed Engineer: The Fastest-Growing — and Most Misunderstood — Role in Tech” yazısında FDE rolünü; üretim ortamına geçiş, müşteri bağlamında entegrasyon, teknik ve iş etkisinin birleşimi üzerinden ele alıyor ve bunu Scale AI ile AZMUD deneyimleriyle ilişkilendiriyor.",
     en: "Mehmet writes on Medium about applied AI, technology, engineering and career development. In his June 13, 2026 article “Forward Deployed Engineer: The Fastest-Growing — and Most Misunderstood — Role in Tech,” he discusses the FDE role through production deployment, customer-context integration and the intersection of technical and business impact, relating it to his Scale AI and AZMUD experience.",
     source: "https://medium.com/@aydin254/forward-deployed-engineer-the-fastest-growing-and-most-misunderstood-role-in-tech-22120e30ff24"
+  },
+  {
+    id: "medium-eu-turkey-migration-russia",
+    title: "Medium: Avrupa ve Türkiye İlişkilerinde Göç Krizi ve Rusya Savaşının Etkileri",
+    keywords: ["avrupa türkiye ilişkileri","avrupa turkiye iliskileri","göç krizi","goc krizi","rusya savaşı","rusya savasi","eu turkey relations","migration crisis","russia war"],
+    tr: "Mehmet'in “Avrupa ve Türkiye İlişkilerinde Göç Krizi ve Rusya Savaşının Etkileri” başlıklı Medium yazısı, Avrupa–Türkiye ilişkilerini göç krizi ve Rusya savaşı bağlamında ele alan bir analiz yazısıdır. Portfolio AI bu yazıyı, Mehmet'in uluslararası ilişkiler ve güncel jeopolitik gelişmeler üzerine yazdığı çalışmalar arasında kaynak olarak kullanır.",
+    en: "Mehmet's Medium article “Avrupa ve Türkiye İlişkilerinde Göç Krizi ve Rusya Savaşının Etkileri” analyzes Europe–Türkiye relations in the context of the migration crisis and the Russia war. Portfolio AI treats it as one of Mehmet's writings on international relations and contemporary geopolitical developments.",
+    source: "https://medium.com/@aydin254/avrupa-ve-t%C3%BCrkiye-i%CC%87li%C5%9Fkilerinde-g%C3%B6%C3%A7-krizi-ve-rusya-sava%C5%9F%C4%B1n%C4%B1n-etkileri-d44b80ab2842"
+  },
+  {
+    id: "medium-blockchain-energy",
+    title: "Medium: Gelecek Enerji Sistemlerinde Blockchain",
+    keywords: ["gelecek enerji sistemleri","blockchain enerji","enerji sistemleri blockchain","future energy systems","energy blockchain","blockchain"],
+    tr: "Mehmet'in “Gelecek Enerji Sistemlerinde Blockchain” başlıklı Medium yazısı, blockchain teknolojisinin geleceğin enerji sistemlerindeki olası rolünü ele alıyor. Portfolio AI bu yazıyı Mehmet'in teknoloji, enerji sistemleri ve dijital dönüşüm eksenindeki çalışmalarından biri olarak kullanır.",
+    en: "Mehmet's Medium article “Gelecek Enerji Sistemlerinde Blockchain” explores the potential role of blockchain technology in future energy systems. Portfolio AI uses it as one of Mehmet's writings at the intersection of technology, energy systems and digital transformation.",
+    source: "https://medium.com/@aydin254/gelecek-enerji-sistemlerinde-blockchain-f8e471ab22db"
   },
   {
     id: "medium-profile",
@@ -355,7 +371,7 @@ export default {
     }
 
     if (url.pathname === "/" || url.pathname === "/health") {
-      return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-")).length }, 200, origin);
+      return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-") && x.id !== "medium-profile").length }, 200, origin);
     }
 
     if (url.pathname !== "/chat") return jsonResponse({ error: "Not found" }, 404, origin);
