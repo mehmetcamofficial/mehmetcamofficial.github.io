@@ -1559,3 +1559,70 @@ document.addEventListener("DOMContentLoaded", () => {
 
   setFooterYear();
 });
+
+
+/* =========================================================
+   Portfolio V2 — premium interaction layer
+   ========================================================= */
+
+function initPortfolioV2Interactions() {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  document.querySelectorAll(".interactive-card").forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const rect = card.getBoundingClientRect();
+      const x = event.clientX - rect.left;
+      const y = event.clientY - rect.top;
+      card.style.setProperty("--mx", `${x}px`);
+      card.style.setProperty("--my", `${y}px`);
+    });
+  });
+
+  if (reducedMotion) return;
+
+  const hero = document.querySelector(".hero-v2");
+  const visual = document.querySelector(".hero-visual-v2");
+  const statusCard = document.querySelector(".hero-status-card");
+
+  if (hero && visual) {
+    hero.addEventListener("pointermove", (event) => {
+      const rect = hero.getBoundingClientRect();
+      const nx = (event.clientX - rect.left) / rect.width - 0.5;
+      const ny = (event.clientY - rect.top) / rect.height - 0.5;
+
+      visual.style.transform = `translate3d(${nx * 8}px, ${ny * 6}px, 0)`;
+
+      if (statusCard) {
+        statusCard.style.translate = `${nx * -10}px ${ny * -8}px`;
+      }
+    });
+
+    hero.addEventListener("pointerleave", () => {
+      visual.style.transform = "translate3d(0, 0, 0)";
+      if (statusCard) statusCard.style.translate = "0 0";
+    });
+  }
+
+  const productWindow = document.querySelector(".product-window");
+  const caseVisual = document.querySelector(".case-visual");
+
+  if (productWindow && caseVisual) {
+    caseVisual.addEventListener("pointermove", (event) => {
+      const rect = caseVisual.getBoundingClientRect();
+      const nx = (event.clientX - rect.left) / rect.width - 0.5;
+      const ny = (event.clientY - rect.top) / rect.height - 0.5;
+
+      productWindow.style.setProperty(
+        "transform",
+        `perspective(1100px) rotateY(${-4 + nx * 4}deg) rotateX(${2 - ny * 3}deg) translateY(-5px)`,
+        "important"
+      );
+    });
+
+    caseVisual.addEventListener("pointerleave", () => {
+      productWindow.style.removeProperty("transform");
+    });
+  }
+}
+
+document.addEventListener("DOMContentLoaded", initPortfolioV2Interactions);
