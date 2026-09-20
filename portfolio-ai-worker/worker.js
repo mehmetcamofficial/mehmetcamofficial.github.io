@@ -682,9 +682,9 @@ function cleanAnswer(text) {
   return answer;
 }
 
-async function callOpenRouter(env, model, messages) {
+async function callOpenRouter(env, messages) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 6500);
+  const timer = setTimeout(() => controller.abort(), 12000);
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
@@ -696,17 +696,19 @@ async function callOpenRouter(env, model, messages) {
         "X-Title": "Mehmet Cam Portfolio AI"
       },
       body: JSON.stringify({
-        model,
+        models: MODELS,
         messages,
         temperature: 0.15,
-        max_tokens: 220,
-        reasoning: { effort: "none", exclude: true }
+        max_tokens: 220
       })
     });
     const data = await response.json().catch(() => null);
-    if (!response.ok) return null;
+    if (!response.ok) {
+      console.error("Portfolio AI OpenRouter error:", response.status, data?.error?.message || "unknown");
+      return null;
+    }
     const answer = cleanAnswer(data?.choices?.[0]?.message?.content || "");
-    return answer ? { answer, model: data.model || model } : null;
+    return answer ? { answer, model: data.model || "openrouter-fallback-router" } : null;
   } finally {
     clearTimeout(timer);
   }
@@ -1086,30 +1088,28 @@ export default {
       { role: "user", content: message }
     ];
 
-    for (const model of MODELS) {
-      try {
-        const result = await callOpenRouter(env, model, messages);
-        if (result) {
-          return jsonResponse({
-            ok: true,
-            answer: result.answer,
-            model: result.model,
-            sources: hits.map(x => ({ title: x.item.title, url: x.item.source || null })),
-            evidence: evidencePayload(hits.map(x => x.item)),
-            recruiter: recruiterMode ? {
-              mode: "evidence-review",
-              verifiedAreas: hits.slice(0, 3).map(x => x.item.title),
-              evidenceCount: hits.filter(x => x.item.evidence).length,
-              note: "Only documented portfolio evidence is shown."
-            } : null,
-            route: recruiterMode ? "recruiter-rag" : "rag-lite",
-            grounded: true,
-            fallbackUsed: model !== MODELS[0]
-          }, 200, origin);
-        }
-      } catch (error) {
-        console.error("Portfolio AI model error:", model, error);
+    try {
+      const result = await callOpenRouter(env, messages);
+      if (result) {
+        return jsonResponse({
+          ok: true,
+          answer: result.answer,
+          model: result.model,
+          sources: hits.map(x => ({ title: x.item.title, url: x.item.source || null })),
+          evidence: evidencePayload(hits.map(x => x.item)),
+          recruiter: recruiterMode ? {
+            mode: "evidence-review",
+            verifiedAreas: hits.slice(0, 3).map(x => x.item.title),
+            evidenceCount: hits.filter(x => x.item.evidence).length,
+            note: "Only documented portfolio evidence is shown."
+          } : null,
+          route: recruiterMode ? "recruiter-rag" : "rag-lite",
+          grounded: true,
+          fallbackUsed: result.model !== MODELS[0]
+        }, 200, origin);
       }
+    } catch (error) {
+      console.error("Portfolio AI model routing error:", error);
     }
 
     const top = hits[0].item;
