@@ -132,9 +132,25 @@ const KNOWLEDGE = [
     source: "https://linkedin.com/in/mehmet-cam09"
   },
   {
+    id: "medium-society5-agriculture",
+    title: "Medium: Society 5.0 and Agriculture",
+    keywords: ["toplum 5.0","society 5.0","farming for the future","human centered agriculture","insan merkezli tarım","precision agriculture","hassas tarım"],
+    tr: "Mehmet'in 2 Nisan 2023 tarihli “Farming for the Future: How Toplum 5.0 is Putting Humanity Back at the Center of Agriculture” yazısı, teknolojiyi amaç değil insanı ve çiftçiyi güçlendiren bir araç olarak ele alıyor. Yazı; hassas tarım, sensörler, dronlar, gerçek zamanlı saha verisi, sürdürülebilir üretim ve küçük/orta ölçekli çiftçiler için daha adil pazar yapıları üzerinde duruyor.",
+    en: "Mehmet's April 2, 2023 article “Farming for the Future: How Toplum 5.0 is Putting Humanity Back at the Center of Agriculture” frames technology as a tool for empowering people and farmers rather than an end in itself. It discusses precision agriculture, sensors, drones, real-time field data, sustainable production and fairer market structures for small and medium-sized farmers.",
+    source: "https://medium.com/@aydin254/farming-for-the-future-how-toplum-5-0-is-putting-humanity-back-at-the-center-of-agriculture-62768d9064f2"
+  },
+  {
+    id: "medium-data-science",
+    title: "Medium: Exploring Data Science",
+    keywords: ["exploring data science","data science life cycle","veri bilimi","data cleaning","veri temizleme","data visualization","veri görselleştirme","classification","sınıflandırma"],
+    tr: "Mehmet'in 3 Ekim 2021 tarihli “Exploring data science” yazısı veri bilimi yaşam döngüsünü problem tanımlama, veri edinme ve temizleme, keşifsel veri analizi, görselleştirme, tahmin/çıkarım ve sınıflandırma üzerinden açıklıyor. Yazının ana yaklaşımı, veri biliminin analitik mühendislik ile keşfi birleştiren yinelemeli bir problem çözme süreci olduğudur.",
+    en: "Mehmet's October 3, 2021 article “Exploring data science” explains the data-science lifecycle through problem formulation, data acquisition and cleaning, exploratory analysis, visualization, prediction/inference and classification. Its central view is that data science combines analytical engineering with iterative exploration and problem solving.",
+    source: "https://medium.com/@aydin254/exploring-data-science-1f5dba57f1cc"
+  },
+  {
     id: "medium-writing",
     title: "Medium writing",
-    keywords: ["medium","yazı","yazilar","makale","article","articles","blog","writing","forward deployed engineer","fde"],
+    keywords: ["medium","yazı","yazilar","makale","article","articles","blog","writing","forward deployed engineer","fde","society 5.0","data science"],
     tr: "Mehmet Medium'da uygulamalı AI, teknoloji, mühendislik ve kariyer kesişiminde yazıyor. 13 Haziran 2026 tarihli “Forward Deployed Engineer: The Fastest-Growing — and Most Misunderstood — Role in Tech” yazısında FDE rolünü; üretim ortamına geçiş, müşteri bağlamında entegrasyon, teknik ve iş etkisinin birleşimi üzerinden ele alıyor ve bunu Scale AI ile AZMUD deneyimleriyle ilişkilendiriyor.",
     en: "Mehmet writes on Medium about applied AI, technology, engineering and career development. In his June 13, 2026 article “Forward Deployed Engineer: The Fastest-Growing — and Most Misunderstood — Role in Tech,” he discusses the FDE role through production deployment, customer-context integration and the intersection of technical and business impact, relating it to his Scale AI and AZMUD experience.",
     source: "https://medium.com/@aydin254/forward-deployed-engineer-the-fastest-growing-and-most-misunderstood-role-in-tech-22120e30ff24"
