@@ -531,6 +531,52 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
+    if (url.pathname === "/visit") {
+      if (request.method !== "POST") return jsonResponse({ error: "POST required" }, 405, origin);
+      if (origin && !ALLOWED_ORIGINS.includes(origin)) return jsonResponse({ error: "Origin not allowed" }, 403, origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({ error: "Analytics storage unavailable" }, 503, origin);
+
+      let visitBody;
+      try { visitBody = await request.json(); }
+      catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
+
+      const visitorId = typeof visitBody.visitorId === "string" ? visitBody.visitorId.slice(0, 120) : "";
+      if (!visitorId) return jsonResponse({ error: "visitorId required" }, 400, origin);
+
+      const bytes = new TextEncoder().encode(visitorId);
+      const digest = await crypto.subtle.digest("SHA-256", bytes);
+      const visitorHash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
+      const uniqueKey = "analytics:visitor:" + visitorHash;
+      const statsKey = "analytics:stats";
+
+      const [seen, statsRaw] = await Promise.all([
+        env.UNANSWERED_KV.get(uniqueKey),
+        env.UNANSWERED_KV.get(statsKey)
+      ]);
+      let stats = { totalVisitors: 0, pageViews: 0, firstSeenAt: new Date().toISOString(), updatedAt: null };
+      try { if (statsRaw) stats = { ...stats, ...JSON.parse(statsRaw) }; } catch {}
+
+      stats.pageViews = Math.max(0, Number(stats.pageViews) || 0) + 1;
+      if (!seen) {
+        stats.totalVisitors = Math.max(0, Number(stats.totalVisitors) || 0) + 1;
+        await env.UNANSWERED_KV.put(uniqueKey, JSON.stringify({ firstSeenAt: new Date().toISOString() }), { expirationTtl: 31536000 });
+      }
+      stats.updatedAt = new Date().toISOString();
+      await env.UNANSWERED_KV.put(statsKey, JSON.stringify(stats));
+
+      return jsonResponse({ ok: true, totalVisitors: stats.totalVisitors, pageViews: stats.pageViews }, 200, origin);
+    }
+
+    if (url.pathname === "/admin/analytics") {
+      const auth = request.headers.get("Authorization") || "";
+      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({ error: "Analytics storage unavailable" }, 503, origin);
+      const statsRaw = await env.UNANSWERED_KV.get("analytics:stats");
+      let stats = { totalVisitors: 0, pageViews: 0, firstSeenAt: null, updatedAt: null };
+      try { if (statsRaw) stats = { ...stats, ...JSON.parse(statsRaw) }; } catch {}
+      return jsonResponse({ ok: true, ...stats }, 200, origin);
+    }
+
     if (url.pathname === "/" || url.pathname === "/health") {
       return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-") && x.id !== "medium-profile").length, cvExperienceItems: KNOWLEDGE.filter(x => x.id.startsWith("experience-") || x.id.startsWith("education-") || x.id.startsWith("training-")).length, unansweredPersistence: Boolean(env.UNANSWERED_KV) }, 200, origin);
     }
