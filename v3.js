@@ -15,28 +15,65 @@
 
   const answers = [
     {
-      keys: ["tourpilot", "tour", "reservation", "operations"],
-      html: "<strong>TourPilot</strong> is Mehmet's featured AI-assisted tour operations product. It brings reservation ingestion, operational planning, RBAC, auditability, data quality and automation into one production-minded workflow."
+      id: "tourpilot",
+      keys: ["tourpilot", "tour", "reservation", "operations", "rbac", "audit"],
+      title: "TourPilot",
+      html: "<strong>TourPilot</strong> is Mehmet's featured AI-assisted tour operations product. It brings reservation ingestion, operational planning, RBAC, auditability, data quality and automation into one production-minded workflow.",
+      actions: [
+        { label: "Launch TourPilot ↗", type: "url", target: "https://tourpilot.com.tr/" },
+        { label: "See build workflow", type: "section", target: "#ai-workflow" }
+      ]
     },
     {
-      keys: ["ai", "claude", "codex", "workflow", "build", "engineering"],
-      html: "Mehmet uses <strong>Claude Code and Codex as engineering agents</strong> inside a disciplined loop: frame → architect → build → test → verify → ship & learn."
+      id: "workflow",
+      keys: ["ai", "claude", "codex", "workflow", "build", "engineering", "agent"],
+      title: "AI-native engineering workflow",
+      html: "Mehmet uses <strong>Claude Code and Codex as engineering agents</strong> inside a disciplined loop: frame → architect → build → test → verify → ship & learn. The emphasis is on constraints, reviewability, staging and human judgment rather than blind code generation.",
+      actions: [
+        { label: "View workflow", type: "section", target: "#ai-workflow" },
+        { label: "Featured case study", type: "section", target: "#featured-project" }
+      ]
     },
     {
-      keys: ["stack", "technology", "tools", "tech"],
-      html: "The portfolio highlights <strong>TypeScript, Python, PostgreSQL, Neon, Render, n8n, Streamlit, Expo, GitHub, Claude Code and Codex</strong>, alongside research methods and data-driven decision systems."
+      id: "stack",
+      keys: ["stack", "technology", "tools", "tech", "typescript", "python", "postgresql", "neon", "render"],
+      title: "Tech stack",
+      html: "The portfolio highlights <strong>TypeScript, Python, PostgreSQL, Neon, Render, n8n, Streamlit, Expo, GitHub, Claude Code and Codex</strong>, alongside research methods and data-driven decision systems.",
+      actions: [
+        { label: "Live AI apps", type: "section", target: "#live-apps" },
+        { label: "Digital products", type: "section", target: "#digital-products" }
+      ]
     },
     {
-      keys: ["research", "agriculture", "agritech", "horizon", "springer"],
-      html: "Mehmet combines <strong>applied AI, sustainable agriculture and research</strong>. The portfolio includes Horizon 2020 experience, smart-agriculture work and a Springer publication."
+      id: "research",
+      keys: ["research", "agriculture", "agritech", "horizon", "springer", "publication", "sustainable"],
+      title: "Research & AgriTech",
+      html: "Mehmet combines <strong>applied AI, sustainable agriculture and research</strong>. The portfolio includes Horizon 2020 experience, smart-agriculture work and a peer-reviewed Springer publication.",
+      actions: [
+        { label: "Research profile", type: "section", target: "#profile" },
+        { label: "Publication", type: "section", target: "#publication" }
+      ]
     },
     {
-      keys: ["product", "evalora", "oncoconnect", "automation", "n8n"],
-      html: "Beyond TourPilot, the portfolio includes <strong>Evalora, OncoConnect, n8n automation workflows</strong> and several live AI applications."
+      id: "products",
+      keys: ["product", "evalora", "oncoconnect", "automation", "n8n", "apps"],
+      title: "Products & automation",
+      html: "Beyond TourPilot, the portfolio includes <strong>Evalora, OncoConnect, n8n automation workflows</strong> and several live AI applications spanning search intelligence, health and decision-support use cases.",
+      actions: [
+        { label: "Evalora ↗", type: "url", target: "https://www.evalora.com.tr/" },
+        { label: "OncoConnect ↗", type: "url", target: "https://oncoconnectai.com.tr/" },
+        { label: "Live apps", type: "section", target: "#live-apps" }
+      ]
     },
     {
-      keys: ["contact", "work", "collaborate", "hire"],
-      html: "You can reach Mehmet through the <strong>Contact</strong> section. He is open to AI product, automation, data, AgriTech, research and product-building collaborations."
+      id: "collaboration",
+      keys: ["contact", "work", "collaborate", "hire", "together", "project", "help"],
+      title: "Collaboration",
+      html: "Mehmet is open to <strong>AI product development, automation, data systems, AgriTech, research and product-building collaborations</strong>. The fastest path is the contact section or email.",
+      actions: [
+        { label: "Contact Mehmet", type: "section", target: "#contact" },
+        { label: "Email ↗", type: "url", target: "mailto:aydin254@gmail.com" }
+      ]
     }
   ];
 
@@ -158,21 +195,158 @@
     const closeButton = document.getElementById("v3AskClose");
     const input = document.getElementById("v3AskInput");
     const submit = document.getElementById("v3AskSubmit");
-    const answer = document.getElementById("v3AskAnswer");
+    const legacyAnswer = document.getElementById("v3AskAnswer");
     const chips = document.querySelectorAll("[data-v3-question]");
-    if (!trigger || !panel || !answer) return;
+    const body = panel?.querySelector(".v3-ask-body");
+    const head = panel?.querySelector(".v3-ask-head");
+    if (!trigger || !panel || !body || !input || !submit) return;
 
-    const setAnswer = (question) => {
-      const q = (question || "").trim().toLowerCase();
-      const match = answers.find((item) => item.keys.some((key) => q.includes(key)));
-      answer.innerHTML = match
-        ? match.html
-        : "Try asking about <strong>TourPilot, AI workflow, tech stack, research, products or collaboration</strong>.";
+    if (head && !head.querySelector(".v3-ask-status")) {
+      const status = document.createElement("div");
+      status.className = "v3-ask-status";
+      status.textContent = "Portfolio knowledge online";
+      head.appendChild(status);
+    }
+
+    let conversation = body.querySelector(".v3-ask-conversation");
+    if (!conversation) {
+      conversation = document.createElement("div");
+      conversation.className = "v3-ask-conversation";
+      if (legacyAnswer) {
+        legacyAnswer.insertAdjacentElement("beforebegin", conversation);
+      } else {
+        body.prepend(conversation);
+      }
+    }
+
+    if (legacyAnswer) legacyAnswer.style.display = "none";
+
+    if (!body.querySelector(".v3-ask-helper")) {
+      const helper = document.createElement("div");
+      helper.className = "v3-ask-helper";
+      helper.innerHTML = "Try a topic above or type naturally · <kbd>Enter</kbd> to ask";
+      body.appendChild(helper);
+    }
+
+    const normalize = (value) =>
+      (value || "")
+        .toLocaleLowerCase("en-US")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "");
+
+    const findAnswer = (question) => {
+      const q = normalize(question);
+      let best = null;
+      let score = 0;
+
+      answers.forEach((item) => {
+        const itemScore = item.keys.reduce((total, key) => {
+          return total + (q.includes(normalize(key)) ? 1 : 0);
+        }, 0);
+        if (itemScore > score) {
+          score = itemScore;
+          best = item;
+        }
+      });
+
+      return best;
+    };
+
+    const scrollConversation = () => {
+      conversation.scrollTop = conversation.scrollHeight;
+    };
+
+    const appendUser = (text) => {
+      const msg = document.createElement("div");
+      msg.className = "v3-msg user";
+      msg.textContent = text;
+      conversation.appendChild(msg);
+      scrollConversation();
+    };
+
+    const appendAssistant = (item) => {
+      const msg = document.createElement("div");
+      msg.className = "v3-msg assistant";
+      msg.innerHTML = item
+        ? item.html
+        : "I can help with <strong>TourPilot, AI workflow, tech stack, research, products or collaboration</strong>.";
+
+      if (item?.actions?.length) {
+        const actions = document.createElement("div");
+        actions.className = "v3-ask-actions";
+
+        item.actions.forEach((action) => {
+          const button = document.createElement("button");
+          button.type = "button";
+          button.className = "v3-ask-action";
+          button.textContent = action.label;
+          button.addEventListener("click", () => {
+            if (action.type === "url") {
+              if (action.target.startsWith("mailto:")) {
+                window.location.href = action.target;
+              } else {
+                window.open(action.target, "_blank", "noopener");
+              }
+            } else {
+              document.querySelector(action.target)?.scrollIntoView({ behavior: "smooth" });
+              panel.classList.remove("is-open");
+              trigger.setAttribute("aria-expanded", "false");
+            }
+          });
+          actions.appendChild(button);
+        });
+
+        msg.appendChild(actions);
+      }
+
+      const meta = document.createElement("span");
+      meta.className = "v3-msg-meta";
+      meta.textContent = "Based on this portfolio";
+      msg.appendChild(meta);
+
+      conversation.appendChild(msg);
+      scrollConversation();
+    };
+
+    const showTyping = () => {
+      const typing = document.createElement("div");
+      typing.className = "v3-typing";
+      typing.innerHTML = "<i></i><i></i><i></i>";
+      conversation.appendChild(typing);
+      scrollConversation();
+      return typing;
+    };
+
+    let responseTimer = null;
+
+    const ask = (question) => {
+      const clean = (question || "").trim();
+      if (!clean) return;
+
+      if (responseTimer) window.clearTimeout(responseTimer);
+
+      appendUser(clean);
+      input.value = "";
+      const typing = showTyping();
+
+      responseTimer = window.setTimeout(() => {
+        typing.remove();
+        appendAssistant(findAnswer(clean));
+      }, 480);
     };
 
     const open = () => {
       panel.classList.add("is-open");
       trigger.setAttribute("aria-expanded", "true");
+      if (!conversation.children.length) {
+        appendAssistant({
+          html: "Hi — I'm a lightweight guide to Mehmet's portfolio. Ask me about <strong>TourPilot, AI engineering, the tech stack, research, products or collaboration</strong>.",
+          actions: [
+            { label: "Start with TourPilot", type: "section", target: "#featured-project" }
+          ]
+        });
+      }
+      window.setTimeout(() => input.focus(), 80);
     };
 
     const close = () => {
@@ -183,23 +357,24 @@
     trigger.addEventListener("click", () => {
       panel.classList.contains("is-open") ? close() : open();
     });
+
     closeButton?.addEventListener("click", close);
 
     chips.forEach((chip) => {
-      chip.addEventListener("click", () => {
-        setAnswer(chip.getAttribute("data-v3-question"));
-      });
+      chip.addEventListener("click", () => ask(chip.getAttribute("data-v3-question")));
     });
 
-    const submitQuestion = () => {
-      if (!input) return;
-      setAnswer(input.value);
-      input.value = "";
-    };
+    submit.addEventListener("click", () => ask(input.value));
 
-    submit?.addEventListener("click", submitQuestion);
-    input?.addEventListener("keydown", (event) => {
-      if (event.key === "Enter") submitQuestion();
+    input.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        ask(input.value);
+      }
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && panel.classList.contains("is-open")) close();
     });
   }
 
