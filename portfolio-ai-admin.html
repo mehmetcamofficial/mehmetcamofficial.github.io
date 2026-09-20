@@ -19,18 +19,19 @@ input{background:#0c1018;color:var(--text);min-width:300px;flex:1}button{cursor:
 </style>
 </head>
 <body><main>
-<div class="top"><div><div class="muted">PORTFOLIO AI / ADMIN</div><h1>Knowledge Inbox</h1><div class="muted">Botun cevaplayamadığı gerçek sorular.</div></div></div>
+<div class="top"><div><div class="muted">PORTFOLIO AI / ADMIN</div><h1>Knowledge Inbox</h1><div class="muted">Botun cevaplayamadığı gerçek sorular. Bir kaydı açıp <strong>Knowledge'a ekle</strong> ile canlı bilgi tabanına yayınlayabilirsin.</div></div></div>
 <section class="card">
 <div class="auth"><input id="token" type="password" placeholder="ADMIN_TOKEN" autocomplete="off"><button class="primary" id="load">Soruları getir</button></div>
 <div class="note">Token yalnızca bu tarayıcı sekmesinde tutulur; localStorage'a kaydedilmez.</div>
 </section>
-<div class="stats"><div class="stat"><span class="muted">Kayıt</span><strong id="count">—</strong></div><div class="stat"><span class="muted">Son yenileme</span><strong id="updated" style="font-size:14px">—</strong></div></div>
+<div class="stats"><div class="stat"><span class="muted">Kayıt</span><strong id="count">—</strong></div><div class="stat"><span class="muted">Ziyaretçi</span><strong id="visitors">—</strong></div><div class="stat"><span class="muted">Sayfa görüntüleme</span><strong id="pageviews">—</strong></div><div class="stat"><span class="muted">Son yenileme</span><strong id="updated" style="font-size:14px">—</strong></div></div>
 <section class="card" id="list"><div class="empty">ADMIN_TOKEN girip “Soruları getir”e bas.</div></section>
 </main>
 <script>
 const API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/unanswered";
 const KNOWLEDGE_API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/knowledge";
-const token=document.querySelector("#token"),list=document.querySelector("#list"),count=document.querySelector("#count"),updated=document.querySelector("#updated");
+const ANALYTICS_API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/analytics";
+const token=document.querySelector("#token"),list=document.querySelector("#list"),count=document.querySelector("#count"),updated=document.querySelector("#updated"),visitors=document.querySelector("#visitors"),pageviews=document.querySelector("#pageviews");
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 async function load(){
  const t=token.value.trim(); if(!t){token.focus();return}
@@ -39,6 +40,8 @@ async function load(){
   const r=await fetch(API+"?limit=100",{headers:{Authorization:"Bearer "+t}});
   const d=await r.json(); if(!r.ok)throw new Error(d.error||"İstek başarısız");
   count.textContent=d.count; updated.textContent=new Date().toLocaleTimeString("tr-TR");
+  const ar=await fetch(ANALYTICS_API,{headers:{Authorization:"Bearer "+t}});
+  if(ar.ok){const ad=await ar.json();visitors.textContent=Number(ad.totalVisitors||0).toLocaleString("tr-TR");pageviews.textContent=Number(ad.pageViews||0).toLocaleString("tr-TR")}
   list.innerHTML=d.items.length?d.items.map(x=>'<div class="item" data-item="'+esc(x.key)+'"><div><div class="q">'+esc(x.question||x.raw)+'<span class="badge">'+esc(x.count||1)+'× soruldu</span></div><div class="meta">İlk: '+esc(x.firstAt?new Date(x.firstAt).toLocaleString("tr-TR"):"—")+' · Son: '+esc((x.lastAt||x.at)?new Date(x.lastAt||x.at).toLocaleString("tr-TR"):"—")+'</div></div><div class="item-actions"><button class="primary" data-curate="'+esc(x.key)+'">Knowledge\'a ekle</button><button class="danger" data-key="'+esc(x.key)+'">Çözüldü / sil</button></div><div class="curate" data-curate-box="'+esc(x.key)+'"><textarea placeholder="Bu soruya Portfolio AI nasıl cevap vermeli?"></textarea><div class="item-actions"><button class="primary" data-save="'+esc(x.key)+'">Kaydet ve yayınla</button><button data-cancel="'+esc(x.key)+'">Vazgeç</button></div></div></div>').join(""):'<div class="empty">Cevaplanamayan soru yok.</div>';
  }catch(e){list.innerHTML='<div class="empty danger">'+esc(e.message)+'</div>'}
 }
