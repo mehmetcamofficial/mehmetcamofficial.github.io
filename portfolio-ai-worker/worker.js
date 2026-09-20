@@ -459,6 +459,83 @@ function dynamicKeywords(question, extra = []) {
   return [...new Set([question.trim().slice(0, 120), ...base, ...extra.filter(Boolean).map(String)])].slice(0, 16);
 }
 
+const DEFAULT_SITE_CONFIG = {
+  hero: {
+    badge: "Building with AI · From idea to production",
+    eyebrow: "// AI ENGINEERING · AGENTIC DEVELOPMENT · AUTOMATION · RESEARCH",
+    lead: "I build",
+    accent: "AI-powered products",
+    tail: "that solve real problems.",
+    description: "I'm Mehmet Cam — an AI practitioner, product builder and researcher. I combine Claude Code, Codex, automation, data systems and research methods to turn ambitious ideas into working products."
+  },
+  navigation: [
+    { label: "Work", href: "#featured-project" },
+    { label: "AI Workflow", href: "#ai-workflow" },
+    { label: "Products", href: "#digital-products" },
+    { label: "Research", href: "#profile" },
+    { label: "Writing", href: "#blog" },
+    { label: "Contact", href: "#contact" }
+  ],
+  sections: [],
+  seo: {
+    title: "Mehmet Cam | AI Engineer, Product Builder & Applied AI Researcher",
+    description: "Mehmet Cam is an AI engineer, product builder and applied AI researcher working across AI engineering, automation, data systems, AgriTech and production-minded digital products."
+  },
+  updatedAt: null
+};
+
+function cleanText(value, max = 300) {
+  return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+function safeHref(value) {
+  const href = cleanText(value, 500);
+  return /^(#|https:\/\/|mailto:)/i.test(href) ? href : "#";
+}
+
+function sanitizeSiteConfig(input = {}) {
+  const hero = input.hero || {};
+  const nav = Array.isArray(input.navigation) ? input.navigation.slice(0, 12) : DEFAULT_SITE_CONFIG.navigation;
+  const sections = Array.isArray(input.sections) ? input.sections.slice(0, 12) : [];
+  const seo = input.seo || {};
+  return {
+    hero: {
+      badge: cleanText(hero.badge, 120) || DEFAULT_SITE_CONFIG.hero.badge,
+      eyebrow: cleanText(hero.eyebrow, 180) || DEFAULT_SITE_CONFIG.hero.eyebrow,
+      lead: cleanText(hero.lead, 80) || DEFAULT_SITE_CONFIG.hero.lead,
+      accent: cleanText(hero.accent, 100) || DEFAULT_SITE_CONFIG.hero.accent,
+      tail: cleanText(hero.tail, 120) || DEFAULT_SITE_CONFIG.hero.tail,
+      description: cleanText(hero.description, 700) || DEFAULT_SITE_CONFIG.hero.description
+    },
+    navigation: nav.map(item => ({
+      label: cleanText(item?.label, 40),
+      href: safeHref(item?.href)
+    })).filter(item => item.label),
+    sections: sections.map(section => ({
+      id: cleanText(section?.id, 50).replace(/[^a-z0-9-_]/gi, "-").toLowerCase(),
+      eyebrow: cleanText(section?.eyebrow, 80),
+      title: cleanText(section?.title, 140),
+      body: cleanText(section?.body, 1200),
+      linkLabel: cleanText(section?.linkLabel, 50),
+      linkUrl: safeHref(section?.linkUrl),
+      enabled: section?.enabled !== false
+    })).filter(section => section.title),
+    seo: {
+      title: cleanText(seo.title, 180) || DEFAULT_SITE_CONFIG.seo.title,
+      description: cleanText(seo.description, 320) || DEFAULT_SITE_CONFIG.seo.description
+    },
+    updatedAt: new Date().toISOString()
+  };
+}
+
+async function readSiteConfig(env) {
+  if (!env.UNANSWERED_KV) return DEFAULT_SITE_CONFIG;
+  const raw = await env.UNANSWERED_KV.get("cms:site-config");
+  if (!raw) return DEFAULT_SITE_CONFIG;
+  try { return { ...DEFAULT_SITE_CONFIG, ...JSON.parse(raw) }; }
+  catch { return DEFAULT_SITE_CONFIG; }
+}
+
 function corsHeaders(origin) {
   const allowed = ALLOWED_ORIGINS.includes(origin);
   return {
@@ -529,6 +606,31 @@ export default {
     if (request.method === "OPTIONS") {
       if (origin && !ALLOWED_ORIGINS.includes(origin)) return jsonResponse({ error: "Origin not allowed" }, 403, origin);
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
+    }
+
+    if (url.pathname === "/site-config") {
+      if (request.method !== "GET") return jsonResponse({ error: "GET required" }, 405, origin);
+      const config = await readSiteConfig(env);
+      return jsonResponse({ ok: true, config }, 200, origin);
+    }
+
+    if (url.pathname === "/admin/site-config") {
+      const auth = request.headers.get("Authorization") || "";
+      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({ error: "CMS storage unavailable" }, 503, origin);
+
+      if (request.method === "GET") {
+        return jsonResponse({ ok: true, config: await readSiteConfig(env) }, 200, origin);
+      }
+      if (request.method !== "POST") return jsonResponse({ error: "GET or POST required" }, 405, origin);
+
+      let body;
+      try { body = await request.json(); }
+      catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
+
+      const config = sanitizeSiteConfig(body?.config || {});
+      await env.UNANSWERED_KV.put("cms:site-config", JSON.stringify(config));
+      return jsonResponse({ ok: true, config }, 200, origin);
     }
 
     if (url.pathname === "/visit") {
