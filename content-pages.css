@@ -16,3 +16,20 @@ a{color:inherit}.shell{max-width:1180px;margin:auto;padding:22px}.nav{position:s
   .links::-webkit-scrollbar{display:none}
   .links a{white-space:nowrap}
 }
+
+/* Nav hotfix v2 — keep full header visible on all standalone pages */
+.content-nav{
+  position:sticky!important;
+  top:12px!important;
+  z-index:9999!important;
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+  margin:0 auto 12px!important;
+}
+.content-nav .brand,.content-nav .links,.content-nav .links a{
+  display:flex!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.content-nav .links{align-items:center!important}
