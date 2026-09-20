@@ -294,14 +294,35 @@ document.addEventListener("click",async e=>{
   const ux=e.target.closest("[data-user-delete]");if(ux&&confirm("Bu kullanıcı tamamen silinsin mi?")){await req("/admin/users?id="+encodeURIComponent(ux.dataset.userDelete),{method:"DELETE"});return loadUsers()}
 });
 
-$("#setupBtn").onclick=setup;$("#loginBtn").onclick=login;$("#logoutBtn").onclick=logout;
-$("#saveDraftBtn").onclick=()=>save("draft");$("#publishBtn").onclick=()=>save("publish");
-$("#pageSaveDraftBtn").onclick=()=>save("draft");$("#pagePublishBtn").onclick=()=>save("publish");
-$("#saveAccessBtn").onclick=saveAccess;$("#changePasswordBtn").onclick=changePassword;
-$("#refreshKnowledge").onclick=loadKnowledge;$("#refreshChatbot").onclick=loadChatbot;$("#refreshAnalytics").onclick=loadAnalytics;$("#refreshSeo").onclick=()=>evaluateSeo(true);$("#seoSaveDraftBtn").onclick=()=>save("draft");$("#seoPublishBtn").onclick=()=>save("publish");$("#refreshApprovals").onclick=loadApprovals;$("#refreshActivity").onclick=loadActivity;$("#refreshRevisions").onclick=loadRevisions;
-$("#newUserBtn").onclick=()=>$("#newUserPanel").hidden=false;$("#cancelUserBtn").onclick=()=>$("#newUserPanel").hidden=true;$("#createUserBtn").onclick=createUser;
-$("#addNavigationBtn").onclick=()=>{collectPageEditor();config.navigation.push({label:"New",href:"#"});renderPageEditor()};
-$("#addSectionBtn").onclick=()=>{collectPageEditor();config.sections.push({id:slug("section"),eyebrow:"// NEW SECTION",title:"New section",body:"",linkLabel:"",linkUrl:"#",status:"draft",enabled:true});renderPageEditor()};
-$("#mediaInput").onchange=e=>uploadMedia(e.target.files[0]);
-$("#password").addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+function bind(id,event,handler){
+  const el=document.getElementById(id);
+  if(el)el.addEventListener(event,handler);
+}
+bind("setupBtn","click",setup);
+bind("loginBtn","click",login);
+bind("logoutBtn","click",logout);
+bind("saveDraftBtn","click",()=>save("draft"));
+bind("publishBtn","click",()=>save("publish"));
+bind("pageSaveDraftBtn","click",()=>save("draft"));
+bind("pagePublishBtn","click",()=>save("publish"));
+bind("saveAccessBtn","click",saveAccess);
+bind("changePasswordBtn","click",changePassword);
+bind("refreshKnowledge","click",loadKnowledge);
+bind("refreshChatbot","click",loadChatbot);
+bind("refreshAnalytics","click",loadAnalytics);
+bind("refreshSeo","click",()=>{try{evaluateSeo(true)}catch(e){console.error(e);toast("SEO değerlendirme hatası: "+e.message,"error");if($("#seoStatus"))$("#seoStatus").textContent=e.message}});
+bind("seoSaveDraftBtn","click",()=>save("draft"));
+bind("seoPublishBtn","click",()=>save("publish"));
+bind("refreshApprovals","click",loadApprovals);
+bind("refreshActivity","click",loadActivity);
+bind("refreshRevisions","click",loadRevisions);
+bind("newUserBtn","click",()=>{const p=$("#newUserPanel");if(p)p.hidden=false});
+bind("cancelUserBtn","click",()=>{const p=$("#newUserPanel");if(p)p.hidden=true});
+bind("createUserBtn","click",createUser);
+bind("addNavigationBtn","click",()=>{collectPageEditor();config.navigation.push({label:"New",href:"#"});renderPageEditor()});
+bind("addSectionBtn","click",()=>{collectPageEditor();config.sections.push({id:slug("section"),eyebrow:"// NEW SECTION",title:"New section",body:"",linkLabel:"",linkUrl:"#",status:"draft",enabled:true});renderPageEditor()});
+const mediaInput=$("#mediaInput");if(mediaInput)mediaInput.addEventListener("change",e=>uploadMedia(e.target.files[0]));
+const passwordInput=$("#password");if(passwordInput)passwordInput.addEventListener("keydown",e=>{if(e.key==="Enter")login()});
+window.addEventListener("error",e=>{console.error("CMS runtime error",e.error||e.message);toast("CMS hata verdi. Sayfayı yenileyip tekrar dene.","error")});
+window.addEventListener("unhandledrejection",e=>{console.error("CMS async error",e.reason);toast("İşlem tamamlanamadı.","error")});
 boot();
