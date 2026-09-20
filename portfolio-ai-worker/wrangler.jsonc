@@ -2,5 +2,12 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "mehmetcam-portfolio-ai",
   "main": "worker.js",
-  "compatibility_date": "2026-09-20"
+  "compatibility_date": "2026-09-20",
+  "keep_vars": true,
+  "secrets": {
+    "required": [
+      "OPENROUTER_API_KEY",
+      "ADMIN_TOKEN"
+    ]
+  }
 }
