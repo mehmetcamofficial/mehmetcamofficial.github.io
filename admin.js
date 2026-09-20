@@ -67,10 +67,12 @@ function fillCore(){
   $("#heroDescription").value=config.hero?.description||"";
   $("#seoTitle").value=config.seo?.title||"";
   $("#seoDescription").value=config.seo?.description||"";
+  syncSeoForm();
 }
 function collectCore(){
   config.hero={badge:$("#heroBadge").value,eyebrow:$("#heroEyebrow").value,lead:$("#heroLead").value,accent:$("#heroAccent").value,tail:$("#heroTail").value,description:$("#heroDescription").value};
-  config.seo={title:$("#seoTitle").value,description:$("#seoDescription").value};
+  config.seo={...(config.seo||{}),title:$("#seoTitle").value,description:$("#seoDescription").value};
+  collectSeoForm();
   collectPageEditor();
 }
 function renderAll(){
@@ -168,26 +170,67 @@ async function loadChatbot(){
   }catch(e){$("#chatStatus").textContent=e.message}
 }
 
-function evaluateSeo(){
+function syncSeoForm(){
   if(!config)return;
-  const title=(config.seo?.title||"").trim(),desc=(config.seo?.description||"").trim();
+  const seo=config.seo||{};
+  if($("#seoMetaTitle"))$("#seoMetaTitle").value=seo.title||"";
+  if($("#seoMetaDescription"))$("#seoMetaDescription").value=seo.description||"";
+  if($("#seoCanonical"))$("#seoCanonical").value=seo.canonical||"https://mehmetcamofficial.com.tr/";
+  if($("#seoOgTitle"))$("#seoOgTitle").value=seo.ogTitle||seo.title||"";
+  if($("#seoOgDescription"))$("#seoOgDescription").value=seo.ogDescription||seo.description||"";
+  if($("#seoOgImage"))$("#seoOgImage").value=seo.ogImage||"https://mehmetcamofficial.com.tr/profile.jpeg";
+  if($("#seoRobots"))$("#seoRobots").value=seo.robots||"index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1";
+}
+function collectSeoForm(){
+  if(!config)return;
+  config.seo=config.seo||{};
+  if($("#seoMetaTitle"))config.seo.title=$("#seoMetaTitle").value.trim();
+  if($("#seoMetaDescription"))config.seo.description=$("#seoMetaDescription").value.trim();
+  if($("#seoCanonical"))config.seo.canonical=$("#seoCanonical").value.trim();
+  if($("#seoOgTitle"))config.seo.ogTitle=$("#seoOgTitle").value.trim();
+  if($("#seoOgDescription"))config.seo.ogDescription=$("#seoOgDescription").value.trim();
+  if($("#seoOgImage"))config.seo.ogImage=$("#seoOgImage").value.trim();
+  if($("#seoRobots"))config.seo.robots=$("#seoRobots").value.trim();
+  if($("#seoTitle"))$("#seoTitle").value=config.seo.title||"";
+  if($("#seoDescription"))$("#seoDescription").value=config.seo.description||"";
+}
+function evaluateSeo(showFeedback=false){
+  if(!config)return;
+  collectSeoForm();
+  const seo=config.seo||{},title=(seo.title||"").trim(),desc=(seo.description||"").trim();
+  const canonical=(seo.canonical||"").trim(),ogTitle=(seo.ogTitle||"").trim(),ogDesc=(seo.ogDescription||"").trim(),ogImage=(seo.ogImage||"").trim(),robots=(seo.robots||"").trim();
   const publishedPosts=(config.posts||[]).filter(x=>x.enabled!==false&&x.status!=="draft").length;
   const publishedProjects=(config.projects||[]).filter(x=>x.enabled!==false&&x.status!=="draft").length;
+  const activeSections=Object.values(config.pageControls||{}).filter(x=>x.enabled!==false).length;
   const checks=[
-    {label:"Title 35–65 karakter",ok:title.length>=35&&title.length<=65,detail:title.length+" karakter"},
+    {label:"SEO title 35–65 karakter",ok:title.length>=35&&title.length<=65,detail:title.length+" karakter"},
     {label:"Meta description 120–170 karakter",ok:desc.length>=120&&desc.length<=170,detail:desc.length+" karakter"},
-    {label:"Hero açıklaması mevcut",ok:(config.hero?.description||"").length>=80,detail:(config.hero?.description||"").length+" karakter"},
+    {label:"Canonical HTTPS URL",ok:/^https:\/\//i.test(canonical),detail:canonical||"Eksik"},
+    {label:"Open Graph title mevcut",ok:ogTitle.length>=20,detail:ogTitle.length+" karakter"},
+    {label:"Open Graph description mevcut",ok:ogDesc.length>=70,detail:ogDesc.length+" karakter"},
+    {label:"Open Graph image HTTPS",ok:/^https:\/\//i.test(ogImage),detail:ogImage?"Görsel tanımlı":"Eksik"},
+    {label:"Robots index/follow",ok:/index/i.test(robots)&&/follow/i.test(robots),detail:robots||"Eksik"},
+    {label:"Hero açıklaması yeterli",ok:(config.hero?.description||"").length>=80,detail:(config.hero?.description||"").length+" karakter"},
     {label:"En az 5 yayınlanmış proje",ok:publishedProjects>=5,detail:publishedProjects+" proje"},
-    {label:"Writing içeriği mevcut",ok:publishedPosts>=5,detail:publishedPosts+" yazı"},
-    {label:"Navigation Writing/Contact içeriyor",ok:(config.navigation||[]).some(x=>/writing/i.test(x.label))&&(config.navigation||[]).some(x=>/contact/i.test(x.label)),detail:"Menü kontrolü"},
-    {label:"Ana sayfa bölümlerinin çoğu aktif",ok:Object.values(config.pageControls||{}).filter(x=>x.enabled!==false).length>=7,detail:Object.values(config.pageControls||{}).filter(x=>x.enabled!==false).length+" aktif"}
+    {label:"En az 5 yayınlanmış yazı",ok:publishedPosts>=5,detail:publishedPosts+" yazı"},
+    {label:"Navigation Writing + Contact",ok:(config.navigation||[]).some(x=>/writing/i.test(x.label))&&(config.navigation||[]).some(x=>/contact/i.test(x.label)),detail:"Menü kontrolü"},
+    {label:"Ana sayfa içerik kapsamı",ok:activeSections>=7,detail:activeSections+" aktif bölüm"}
   ];
   const score=Math.round(checks.filter(x=>x.ok).length/checks.length*100);
   $("#seoScore").textContent=score+"%";
   $("#seoTitleScore").textContent=(title.length>=35&&title.length<=65)?"OK":"Check";
   $("#seoDescScore").textContent=(desc.length>=120&&desc.length<=170)?"OK":"Check";
-  $("#seoContentScore").textContent=(publishedPosts>=5&&publishedProjects>=5)?"OK":"Check";
+  $("#seoContentScore").textContent=(publishedPosts>=5&&publishedProjects>=5&&activeSections>=7)?"OK":"Check";
   $("#seoChecklist").innerHTML=checks.map(x=>'<div class="check-item '+(x.ok?"ok":"warn")+'"><span>'+(x.ok?"✓":"!")+'</span><div><strong>'+esc(x.label)+'</strong><small>'+esc(x.detail)+'</small></div></div>').join("");
+  if($("#seoTitleCount"))$("#seoTitleCount").textContent=title.length+"/65";
+  if($("#seoDescCount"))$("#seoDescCount").textContent=desc.length+"/170";
+  if($("#serpUrl"))$("#serpUrl").textContent=(canonical||"https://mehmetcamofficial.com.tr/").replace(/^https?:\/\//,"");
+  if($("#serpTitle"))$("#serpTitle").textContent=title||"SEO title";
+  if($("#serpDescription"))$("#serpDescription").textContent=desc||"Meta description";
+  if($("#socialTitle"))$("#socialTitle").textContent=ogTitle||title||"Open Graph title";
+  if($("#socialDescription"))$("#socialDescription").textContent=ogDesc||desc||"Open Graph description";
+  if($("#socialImage"))$("#socialImage").style.backgroundImage=ogImage?'url("'+ogImage.replace(/"/g,"")+'")':"none";
+  if(showFeedback&&$("#seoStatus"))$("#seoStatus").textContent="SEO yeniden değerlendirildi · "+score+"%";
 }
 
 async function loadApprovals(){
@@ -217,7 +260,7 @@ async function loadRevisions(){try{const d=await req("/admin/revisions");$("#rev
 function openTab(name){
   $$(".nav-btn").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));
   $$(".tab").forEach(x=>x.classList.toggle("active",x.dataset.panel===name));
-  if(name==="page")renderPageEditor();if(name==="media")loadMedia();if(name==="knowledge")loadKnowledge();if(name==="chatbot")loadChatbot();if(name==="analytics")loadAnalytics();if(name==="seo")evaluateSeo();if(name==="approvals")loadApprovals();if(name==="activity")loadActivity();if(name==="users")loadUsers();if(name==="revisions")loadRevisions();
+  if(name==="page")renderPageEditor();if(name==="media")loadMedia();if(name==="knowledge")loadKnowledge();if(name==="chatbot")loadChatbot();if(name==="analytics")loadAnalytics();if(name==="seo"){syncSeoForm();evaluateSeo();}if(name==="approvals")loadApprovals();if(name==="activity")loadActivity();if(name==="users")loadUsers();if(name==="revisions")loadRevisions();
 }
 async function saveAccess(){try{await req("/admin/auth-config",{method:"POST",body:JSON.stringify({enabled:$("#loginEnabled").checked})});$("#settingsStatus").textContent="Login durumu kaydedildi."}catch(e){$("#settingsStatus").textContent=e.message}}
 async function changePassword(){try{await req("/admin/auth-config",{method:"POST",body:JSON.stringify({password:$("#changePassword").value})});$("#changePassword").value="";$("#settingsStatus").textContent="Şifre güncellendi."}catch(e){$("#settingsStatus").textContent=e.message}}
@@ -225,6 +268,7 @@ async function changePassword(){try{await req("/admin/auth-config",{method:"POST
 document.addEventListener("input",e=>{
   if(e.target.matches("[data-search],[data-status-filter]"))renderCollection(e.target.dataset.search||e.target.dataset.statusFilter);
   if(e.target.id==="activitySearch")renderActivity();
+  if(["seoMetaTitle","seoMetaDescription","seoCanonical","seoOgTitle","seoOgDescription","seoOgImage","seoRobots"].includes(e.target.id))evaluateSeo();
 });
 document.addEventListener("change",e=>{if(e.target.matches("[data-status-filter]"))renderCollection(e.target.dataset.statusFilter)});
 
@@ -254,7 +298,7 @@ $("#setupBtn").onclick=setup;$("#loginBtn").onclick=login;$("#logoutBtn").onclic
 $("#saveDraftBtn").onclick=()=>save("draft");$("#publishBtn").onclick=()=>save("publish");
 $("#pageSaveDraftBtn").onclick=()=>save("draft");$("#pagePublishBtn").onclick=()=>save("publish");
 $("#saveAccessBtn").onclick=saveAccess;$("#changePasswordBtn").onclick=changePassword;
-$("#refreshKnowledge").onclick=loadKnowledge;$("#refreshChatbot").onclick=loadChatbot;$("#refreshAnalytics").onclick=loadAnalytics;$("#refreshSeo").onclick=evaluateSeo;$("#refreshApprovals").onclick=loadApprovals;$("#refreshActivity").onclick=loadActivity;$("#refreshRevisions").onclick=loadRevisions;
+$("#refreshKnowledge").onclick=loadKnowledge;$("#refreshChatbot").onclick=loadChatbot;$("#refreshAnalytics").onclick=loadAnalytics;$("#refreshSeo").onclick=()=>evaluateSeo(true);$("#seoSaveDraftBtn").onclick=()=>save("draft");$("#seoPublishBtn").onclick=()=>save("publish");$("#refreshApprovals").onclick=loadApprovals;$("#refreshActivity").onclick=loadActivity;$("#refreshRevisions").onclick=loadRevisions;
 $("#newUserBtn").onclick=()=>$("#newUserPanel").hidden=false;$("#cancelUserBtn").onclick=()=>$("#newUserPanel").hidden=true;$("#createUserBtn").onclick=createUser;
 $("#addNavigationBtn").onclick=()=>{collectPageEditor();config.navigation.push({label:"New",href:"#"});renderPageEditor()};
 $("#addSectionBtn").onclick=()=>{collectPageEditor();config.sections.push({id:slug("section"),eyebrow:"// NEW SECTION",title:"New section",body:"",linkLabel:"",linkUrl:"#",status:"draft",enabled:true});renderPageEditor()};
