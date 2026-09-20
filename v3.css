@@ -1106,3 +1106,14 @@ html[data-theme="dark"] .v3-evidence-cta.primary {
   transform: translateY(-1px);
   border-color: var(--border-strong);
 }
+
+
+/* Portfolio AI — recruiter result summary */
+.v3-recruiter-result{
+  margin-bottom:10px;padding:10px 11px;border:1px solid var(--border-strong);border-radius:13px;
+  background:linear-gradient(135deg,var(--primary-soft),var(--panel));
+}
+.v3-recruiter-result small{display:block;color:var(--accent);font-size:.56rem;font-weight:950;letter-spacing:.1em}
+.v3-recruiter-result strong{display:block;margin-top:3px;color:var(--text-strong);font-size:.75rem}
+.v3-recruiter-result>div{margin-top:7px;display:flex;flex-wrap:wrap;gap:5px}
+.v3-recruiter-result span{padding:4px 6px;border:1px solid var(--border);border-radius:999px;color:var(--text-strong);font-size:.57rem;font-weight:800}
