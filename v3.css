@@ -1117,3 +1117,12 @@ html[data-theme="dark"] .v3-evidence-cta.primary {
 .v3-recruiter-result strong{display:block;margin-top:3px;color:var(--text-strong);font-size:.75rem}
 .v3-recruiter-result>div{margin-top:7px;display:flex;flex-wrap:wrap;gap:5px}
 .v3-recruiter-result span{padding:4px 6px;border:1px solid var(--border);border-radius:999px;color:var(--text-strong);font-size:.57rem;font-weight:800}
+
+
+/* Portfolio visitor counter */
+.v3-visit-counter{
+  display:inline-flex;align-items:center;gap:7px;margin:0;color:var(--muted);font-size:.72rem;font-weight:800;
+}
+.v3-visit-counter::before{
+  content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);
+}
