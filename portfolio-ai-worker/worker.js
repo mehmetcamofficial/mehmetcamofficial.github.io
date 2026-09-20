@@ -6,7 +6,8 @@ const ALLOWED_ORIGINS = [
 
 const MODELS = [
   "qwen/qwen3.8-27b:free",
-  "nvidia/nemotron-3.5-lightning:free"
+  "nvidia/nemotron-3.5-lightning:free",
+  "openrouter/free"
 ];
 
 const KNOWLEDGE = [
