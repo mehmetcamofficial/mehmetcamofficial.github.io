@@ -132,6 +132,70 @@ const KNOWLEDGE = [
     source: "https://linkedin.com/in/mehmet-cam09"
   },
   {
+    id: "medium-search-intelligence",
+    title: "Medium: Search Intelligence System",
+    keywords: ["search intelligence","information retrieval","retrieval","ranking","copilot","repository search","evidence","ndcg","mrr","cross encoder","hybrid rrf"],
+    tr: "Mehmet'in 16 Ağustos 2026 tarihli “From a Machine Learning Portfolio to a Search Intelligence System: Engineering a Reproducible AI Platform from the Ground Up” yazısı; klasik makine öğrenmesinden bilgi erişimi, hibrit retrieval, cross-encoder reranking, evaluation, repository intelligence ve kanıta dayalı AI Project Copilot mimarisine uzanan mühendislik sürecini anlatıyor. Yazı özellikle ölçülebilir değerlendirme, regression koruması, kanıt otoritesi, traceability, shadow evaluation ve kontrollü enforcement yaklaşımını öne çıkarıyor.",
+    en: "Mehmet's August 16, 2026 article “From a Machine Learning Portfolio to a Search Intelligence System: Engineering a Reproducible AI Platform from the Ground Up” traces the evolution from classical ML to information retrieval, hybrid retrieval, cross-encoder reranking, evaluation, repository intelligence and an evidence-aware AI Project Copilot. It emphasizes measurable evaluation, regression protection, evidence authority, traceability, shadow evaluation and controlled enforcement.",
+    source: "https://medium.com/@aydin254/from-a-machine-learning-portfolio-to-a-search-intelligence-system-engineering-a-reproducible-ai-574309c683be"
+  },
+  {
+    id: "medium-opspilot",
+    title: "Medium: OpsPilot AI",
+    keywords: ["opspilot","incident command center","incident response","multi-agent","qwen","alibaba cloud","fastapi","observability","runbook","postmortem"],
+    tr: "Mehmet'in 4 Temmuz 2026 tarihli OpsPilot AI yazısı, üretim olaylarını yöneten çok ajanlı bir incident command center mimarisini anlatıyor. Sistem triage, observability analizi, hipotez üretimi, runbook önerisi, risk değerlendirmesi, human approval ve postmortem aşamalarını ayrı ajanlara bölüyor. Backend FastAPI, canlı olay akışı SSE, model tarafı Qwen/DashScope; dağıtım tarafı Alibaba Cloud ECS, Docker, Nginx ve HTTPS kullanıyor. Temel prensip, önemli operasyonel kararların insan kontrolünde kalması.",
+    en: "Mehmet's July 4, 2026 OpsPilot AI article describes a multi-agent incident command center for production incidents. Separate agents handle triage, observability analysis, hypothesis generation, runbook recommendations, risk assessment, human approval and postmortems. The stack includes FastAPI, SSE, Qwen via DashScope, Alibaba Cloud ECS, Docker, Nginx and HTTPS. The core principle is keeping important operational decisions under human control.",
+    source: "https://medium.com/@aydin254/building-opspilot-ai-developing-a-multi-agent-incident-command-center-with-qwen-and-alibaba-cloud-120623f0c635"
+  },
+  {
+    id: "medium-food-access",
+    title: "Medium: Sustainable and Affordable Food",
+    keywords: ["livable world","safe food","sustainable food","affordable food","gıda erişimi","gida erisimi","sürdürülebilir gıda","surdurulebilir gida","food security"],
+    tr: "Mehmet'in 11 Nisan 2024 tarihli “A Vision for a More Livable World: Ensuring Access to Safe, Sustainable, and Affordable Food...” yazısı; güvenli, sürdürülebilir ve erişilebilir gıdayı daha yaşanabilir bir dünya vizyonunun parçası olarak ele alıyor. Yazı, tarım ve gıda sistemlerinde yalnızca üretim miktarına değil; erişim, sürdürülebilirlik ve toplumsal faydaya birlikte bakılması gerektiğini savunuyor.",
+    en: "Mehmet's April 11, 2024 article “A Vision for a More Livable World: Ensuring Access to Safe, Sustainable, and Affordable Food...” frames safe, sustainable and affordable food as part of a broader vision for a more livable world, emphasizing access, sustainability and social benefit alongside production.",
+    source: "https://medium.com/@aydin254/a-vision-for-a-more-livable-world-ensuring-access-to-safe-sustainable-and-affordable-food-for-355a7e8e3252"
+  },
+  {
+    id: "medium-future-agriculture",
+    title: "Medium: Future of Agriculture",
+    keywords: ["geleneksel tarım","geleneksel tarim","geleceğin tarımı","gelecegin tarimi","new technologies agriculture","agriculture transformation","tarım teknolojileri","tarim teknolojileri"],
+    tr: "Mehmet'in 5 Mart 2023 tarihli “Geleneksel Tarımdan Yeni Teknolojilere: Geleceğin Tarımı Hangi Yöne Gidiyor?” yazısı, tarımın geleneksel yöntemlerden veri, otomasyon ve yeni teknolojilerle desteklenen modellere geçişini ele alıyor. Ana tema, teknolojinin çiftçinin karar kalitesini, verimliliği ve sürdürülebilirliği artıracak şekilde uygulanması.",
+    en: "Mehmet's March 5, 2023 article “Geleneksel Tarımdan Yeni Teknolojilere: Geleceğin Tarımı Hangi Yöne Gidiyor?” explores agriculture's transition from traditional practices toward models supported by data, automation and new technologies, with a focus on decision quality, efficiency and sustainability.",
+    source: "https://medium.com/@aydin254/geleneksel-tar%C4%B1mdan-yeni-teknolojilere-gelece%C4%9Fin-tar%C4%B1m%C4%B1-hangi-y%C3%B6ne-gidiyor-7913d32c76be"
+  },
+  {
+    id: "medium-smart-village-ai",
+    title: "Medium: Smart Village and AI",
+    keywords: ["smart village","akıllı köy","akilli koy","artificial intelligence agriculture village","yapay zeka tarım köy","rural innovation"],
+    tr: "Mehmet'in 5 Mart 2023 tarihli “Unlock the Power of Artificial Intelligence in Agriculture: Step into Smart Village” yazısı, geleneksel tarım yapan bir köyün AI ve akıllı tarım teknolojileriyle dönüşümünü anlatan Smart Village yaklaşımını ele alıyor. Odak; saha verisi, karar desteği, verimlilik ve kırsal yaşamda teknoloji kullanımının pratik etkisi.",
+    en: "Mehmet's March 5, 2023 article “Unlock the Power of Artificial Intelligence in Agriculture: Step into Smart Village” presents a Smart Village perspective on transforming traditional farming through AI and smart-agriculture technologies, focusing on field data, decision support, efficiency and practical rural impact.",
+    source: "https://medium.com/@aydin254/smart-village-story-f4c139076e68"
+  },
+  {
+    id: "medium-smart-village-story-tr",
+    title: "Medium: Akıllı Köy Projesinin Hikayesi",
+    keywords: ["bir köy nasıl akıllı olur","bir koy nasil akilli olur","akıllı köy projesinin hikayesi","akilli koy projesinin hikayesi","smart village story"],
+    tr: "Mehmet'in 5 Mart 2023 tarihli “Bir Köy Nasıl Akıllı Olur? Akıllı Köy Projesinin Hikayesi” yazısı, kırsal bir yerleşimde tarımsal teknoloji ve inovasyonun çiftçi ihtiyaçlarıyla nasıl ilişkilendirilebileceğini hikâyeleştiriyor. Yazı, akıllı köy yaklaşımını yalnızca teknoloji kurulumu olarak değil, insan, saha ihtiyacı ve yerel dönüşüm odağında ele alıyor.",
+    en: "Mehmet's March 5, 2023 article “Bir Köy Nasıl Akıllı Olur? Akıllı Köy Projesinin Hikayesi” tells the Smart Village story through the relationship between agricultural technology, farmer needs and local transformation, framing a smart village as more than simply installing technology.",
+    source: "https://medium.com/@aydin254"
+  },
+  {
+    id: "medium-digital-twin-agriculture",
+    title: "Medium: Tarımda Dijital İkiz",
+    keywords: ["tarımda dijital ikiz","tarimda dijital ikiz","digital twin agriculture","digital twin","dijital ikiz"],
+    tr: "Mehmet'in 5 Mart 2023 tarihli “Tarımda Dijital İkiz” yazısı, dijital ikiz teknolojisinin tarımsal üretimde verimlilik ve sürdürülebilirliği artırmak için kullanılmasını ele alıyor. Fiziksel üretim ortamının dijital temsili üzerinden izleme, senaryo analizi ve daha iyi karar desteği fikrine odaklanıyor.",
+    en: "Mehmet's March 5, 2023 article “Tarımda Dijital İkiz” discusses digital twins as a tool for improving agricultural efficiency and sustainability through digital representations of physical production environments, monitoring, scenario analysis and decision support.",
+    source: "https://medium.com/@aydin254/tar%C4%B1mda-dijital-i%CC%87kiz-5246147859e1"
+  },
+  {
+    id: "medium-ai-in-agriculture",
+    title: "Medium: AI in Agriculture",
+    keywords: ["ai in agriculture","artificial intelligence agriculture","tarımda yapay zeka","tarimda yapay zeka","agricultural ai"],
+    tr: "Mehmet'in 5 Mart 2023 tarihli “AI in Agriculture” yazısı, yapay zekânın tarımda veri analizi, karar desteği, kaynak kullanımı ve üretim süreçlerini iyileştirme potansiyelini ele alıyor. Yaklaşım, AI'ı çiftçinin yerini alan bir teknoloji olarak değil, daha bilinçli ve verimli kararları destekleyen bir araç olarak konumlandırıyor.",
+    en: "Mehmet's March 5, 2023 article “AI in Agriculture” examines AI's potential in agricultural data analysis, decision support, resource use and production processes, positioning AI as a tool that supports better farmer decisions rather than replacing the farmer.",
+    source: "https://medium.com/@aydin254/ai-in-agriculture-5cbfaa0bba23"
+  },
+  {
     id: "medium-society5-agriculture",
     title: "Medium: Society 5.0 and Agriculture",
     keywords: ["toplum 5.0","society 5.0","farming for the future","human centered agriculture","insan merkezli tarım","precision agriculture","hassas tarım"],
@@ -291,7 +355,7 @@ export default {
     }
 
     if (url.pathname === "/" || url.pathname === "/health") {
-      return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-lite", knowledgeItems: KNOWLEDGE.length }, 200, origin);
+      return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-")).length }, 200, origin);
     }
 
     if (url.pathname !== "/chat") return jsonResponse({ error: "Not found" }, 404, origin);
