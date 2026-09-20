@@ -668,6 +668,47 @@ async function canWriteContent(env, request) {
   return Boolean(actor && ["owner","admin","editor"].includes(actor.role));
 }
 
+async function canApproveContent(env, request) {
+  const actor = await getAdminActor(env, request);
+  return Boolean(actor && ["owner","admin"].includes(actor.role));
+}
+
+async function appendAuditLog(env, request, action, entity, details = {}) {
+  if (!env.UNANSWERED_KV) return;
+  try {
+    const actor = await getAdminActor(env, request) || { id:"system", username:"system", name:"System", role:"system" };
+    const now = new Date().toISOString();
+    const key = "audit:" + Date.now() + ":" + crypto.randomUUID();
+    await env.UNANSWERED_KV.put(key, JSON.stringify({
+      id:key, at:now, action, entity,
+      actor:{ id:actor.id, username:actor.username, name:actor.name, role:actor.role },
+      details
+    }), { expirationTtl:15552000 });
+  } catch (error) {
+    console.error("AUDIT_LOG_FAILED", error);
+  }
+}
+
+async function recordChatAnalytics(env, route, mode, question) {
+  if (!env.UNANSWERED_KV) return;
+  try {
+    const key="chat:analytics";
+    const raw=await env.UNANSWERED_KV.get(key);
+    let stats={ total:0, routes:{}, modes:{}, recent:[], updatedAt:null };
+    try { if(raw) stats={...stats,...JSON.parse(raw)}; } catch {}
+    stats.total=(Number(stats.total)||0)+1;
+    stats.routes={...(stats.routes||{})};
+    stats.modes={...(stats.modes||{})};
+    stats.routes[route]=(Number(stats.routes[route])||0)+1;
+    stats.modes[mode]=(Number(stats.modes[mode])||0)+1;
+    stats.recent=[{at:new Date().toISOString(),route,mode,question:cleanText(question,180)},...(Array.isArray(stats.recent)?stats.recent:[])].slice(0,40);
+    stats.updatedAt=new Date().toISOString();
+    await env.UNANSWERED_KV.put(key,JSON.stringify(stats));
+  } catch (error) {
+    console.error("CHAT_ANALYTICS_FAILED", error);
+  }
+}
+
 async function createAdminSession(env, actor = { id:"owner", username:"owner", name:"Portfolio Owner", role:"owner", active:true }) {
   const token = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "");
   await env.UNANSWERED_KV.put("admin-session:" + token, JSON.stringify({ createdAt: new Date().toISOString(), actor }), { expirationTtl: 43200 });
@@ -879,6 +920,7 @@ export default {
         const raw=await env.UNANSWERED_KV.get("admin-user:"+id);
         if(raw){try{const u=JSON.parse(raw);if(u.username)await env.UNANSWERED_KV.delete("admin-user-name:"+u.username);}catch{}}
         await env.UNANSWERED_KV.delete("admin-user:"+id);
+        await appendAuditLog(env,request,"user.delete","admin-user",{userId:id});
         return jsonResponse({ok:true,deleted:id},200,origin);
       }
 
@@ -899,6 +941,7 @@ export default {
         const user={id:userId,username,name:name||username,role,active:true,salt,passwordHash:await hashAdminPassword(password,salt),createdAt:new Date().toISOString(),lastLoginAt:null};
         await env.UNANSWERED_KV.put("admin-user:"+userId,JSON.stringify(user));
         await env.UNANSWERED_KV.put("admin-user-name:"+username,userId);
+        await appendAuditLog(env,request,"user.create","admin-user",{userId,username,role});
         return jsonResponse({ok:true,user:{id:userId,username,name:user.name,role,active:true,createdAt:user.createdAt}},200,origin);
       }
       if(!id) return jsonResponse({error:"User id required"},400,origin);
@@ -919,6 +962,7 @@ export default {
       }
       user.updatedAt=new Date().toISOString();
       await env.UNANSWERED_KV.put("admin-user:"+id,JSON.stringify(user));
+      await appendAuditLog(env,request,action==="reset-password"?"user.reset-password":"user.update","admin-user",{userId:id,role:user.role,active:user.active!==false});
       return jsonResponse({ok:true,user:{id:user.id,username:user.username,name:user.name,role:user.role,active:user.active!==false,createdAt:user.createdAt,lastLoginAt:user.lastLoginAt||null}},200,origin);
     }
 
@@ -957,6 +1001,60 @@ export default {
       return jsonResponse({error:"GET or POST required"},405,origin);
     }
 
+    if (url.pathname === "/admin/audit") {
+      if (!(await isAdminAuthorized(env,request))) return jsonResponse({error:"Unauthorized"},401,origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({error:"Audit storage unavailable"},503,origin);
+      const limit=Math.min(Math.max(Number(url.searchParams.get("limit"))||80,1),150);
+      const listed=await env.UNANSWERED_KV.list({prefix:"audit:",limit});
+      const items=[];
+      for(const key of listed.keys){const raw=await env.UNANSWERED_KV.get(key.name);if(!raw)continue;try{items.push(JSON.parse(raw));}catch{}}
+      items.sort((a,b)=>String(b.at||"").localeCompare(String(a.at||"")));
+      return jsonResponse({ok:true,items},200,origin);
+    }
+
+    if (url.pathname === "/admin/chat-analytics") {
+      if (!(await isAdminAuthorized(env,request))) return jsonResponse({error:"Unauthorized"},401,origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({error:"Analytics storage unavailable"},503,origin);
+      const raw=await env.UNANSWERED_KV.get("chat:analytics");
+      let stats={total:0,routes:{},modes:{},recent:[],updatedAt:null};
+      try{if(raw)stats={...stats,...JSON.parse(raw)}}catch{}
+      return jsonResponse({ok:true,...stats},200,origin);
+    }
+
+    if (url.pathname === "/admin/publish-requests") {
+      if (!(await isAdminAuthorized(env,request))) return jsonResponse({error:"Unauthorized"},401,origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({error:"Approval storage unavailable"},503,origin);
+      if (request.method === "GET") {
+        const listed=await env.UNANSWERED_KV.list({prefix:"publish-request:",limit:50});
+        const items=[];
+        for(const key of listed.keys){const raw=await env.UNANSWERED_KV.get(key.name);if(!raw)continue;try{items.push(JSON.parse(raw));}catch{}}
+        items.sort((a,b)=>String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
+        return jsonResponse({ok:true,items},200,origin);
+      }
+      if (request.method !== "POST") return jsonResponse({error:"GET or POST required"},405,origin);
+      if (!(await canApproveContent(env,request))) return jsonResponse({error:"Approval access required"},403,origin);
+      let body;try{body=await request.json()}catch{return jsonResponse({error:"Invalid JSON"},400,origin)}
+      const key=cleanText(body?.key,180);
+      if(!key.startsWith("publish-request:")) return jsonResponse({error:"Invalid request key"},400,origin);
+      const raw=await env.UNANSWERED_KV.get(key);
+      if(!raw) return jsonResponse({error:"Publish request not found"},404,origin);
+      const item=JSON.parse(raw);
+      const action=body?.action==="reject"?"reject":"approve";
+      if(action==="reject"){
+        await env.UNANSWERED_KV.delete(key);
+        await appendAuditLog(env,request,"publish.reject","site-config",{requestKey:key});
+        return jsonResponse({ok:true,status:"rejected"},200,origin);
+      }
+      const current=await readSiteConfig(env);
+      const revisionKey="revision:"+Date.now()+":"+crypto.randomUUID();
+      await env.UNANSWERED_KV.put(revisionKey,JSON.stringify({createdAt:new Date().toISOString(),note:"Before approved publish",config:current}),{expirationTtl:7776000});
+      await env.UNANSWERED_KV.put("cms:site-config",JSON.stringify(item.config));
+      await env.UNANSWERED_KV.put("cms:site-draft",JSON.stringify(item.config));
+      await env.UNANSWERED_KV.delete(key);
+      await appendAuditLog(env,request,"publish.approve","site-config",{requestKey:key,submittedBy:item.submittedBy});
+      return jsonResponse({ok:true,status:"approved",config:item.config,revisionKey},200,origin);
+    }
+
     if (url.pathname === "/site-config") {
       if (request.method !== "GET") return jsonResponse({ error: "GET required" }, 405, origin);
       const config = await readSiteConfig(env);
@@ -989,11 +1087,22 @@ export default {
       catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
 
       const config = sanitizeSiteConfig(body?.config || {});
-      const mode = body?.mode === "draft" ? "draft" : "publish";
-      if (mode === "draft") {
+      const requestedMode = ["draft","submit","publish"].includes(body?.mode) ? body.mode : "publish";
+      const actor = await getAdminActor(env,request);
+      if (requestedMode === "draft") {
         await env.UNANSWERED_KV.put("cms:site-draft", JSON.stringify(config));
+        await appendAuditLog(env,request,"content.save-draft","site-config",{});
         return jsonResponse({ ok:true, mode:"draft", config },200,origin);
       }
+      if (requestedMode === "submit" || actor?.role === "editor") {
+        const key="publish-request:"+Date.now()+":"+crypto.randomUUID();
+        const item={key,createdAt:new Date().toISOString(),status:"pending",note:cleanText(body?.note,120)||"Content publish request",submittedBy:{id:actor?.id,username:actor?.username,name:actor?.name,role:actor?.role},config};
+        await env.UNANSWERED_KV.put(key,JSON.stringify(item),{expirationTtl:2592000});
+        await env.UNANSWERED_KV.put("cms:site-draft",JSON.stringify(config));
+        await appendAuditLog(env,request,"publish.submit","site-config",{requestKey:key});
+        return jsonResponse({ok:true,mode:"submitted",status:"pending",requestKey:key,config},200,origin);
+      }
+      if (!(await canApproveContent(env,request))) return jsonResponse({error:"Publish approval required"},403,origin);
 
       const current = await readSiteConfig(env);
       const revisionKey = "revision:" + Date.now() + ":" + crypto.randomUUID();
@@ -1005,6 +1114,7 @@ export default {
 
       await env.UNANSWERED_KV.put("cms:site-config", JSON.stringify(config));
       await env.UNANSWERED_KV.put("cms:site-draft", JSON.stringify(config));
+      await appendAuditLog(env,request,"content.publish","site-config",{revisionKey});
       return jsonResponse({ ok:true, mode:"publish", config, revisionKey },200,origin);
     }
 
@@ -1054,6 +1164,7 @@ export default {
         const id = (url.searchParams.get("id") || "").replace(/[^a-zA-Z0-9_-]/g, "");
         if (!id) return jsonResponse({ error:"Invalid media id" }, 400, origin);
         await env.UNANSWERED_KV.delete("media:" + id);
+        await appendAuditLog(env,request,"media.delete","media",{id});
         return jsonResponse({ ok:true, deleted:id }, 200, origin);
       }
 
@@ -1068,6 +1179,7 @@ export default {
       const id = crypto.randomUUID().replace(/-/g,"");
       const item = { id, name, type, size: Number(body?.size)||0, data, createdAt:new Date().toISOString() };
       await env.UNANSWERED_KV.put("media:" + id, JSON.stringify(item));
+      await appendAuditLog(env,request,"media.upload","media",{id,name,type,size:item.size});
       return jsonResponse({ ok:true, item:{ id,name,type,size:item.size,createdAt:item.createdAt,url:"/media/"+id } }, 200, origin);
     }
 
@@ -1215,6 +1327,7 @@ export default {
       };
 
       await env.UNANSWERED_KV.put(knowledgeKey, JSON.stringify(item));
+      await appendAuditLog(env,request,"knowledge.create","ai-knowledge",{knowledgeKey,question:question.slice(0,120)});
       if (adminBody.unansweredKey && String(adminBody.unansweredKey).startsWith("unanswered:")) {
         await env.UNANSWERED_KV.delete(String(adminBody.unansweredKey));
       }
@@ -1269,7 +1382,7 @@ export default {
     const recruiterMode = body.mode === "recruiter";
 
     const fast = recruiterMode ? null : directAnswer(message, allKnowledge);
-    if (fast) return jsonResponse({ ok: true, ...fast, grounded: true }, 200, origin);
+    if (fast) { await recordChatAnalytics(env,fast.route || "knowledge",recruiterMode?"recruiter":"explore",message); return jsonResponse({ ok: true, ...fast, grounded: true }, 200, origin); }
 
     const hits = retrieve(message, allKnowledge);
     if (!hits.length) {
@@ -1295,6 +1408,7 @@ export default {
           console.error("UNANSWERED_KV write failed", error);
         }
       }
+      await recordChatAnalytics(env,"not-found",recruiterMode?"recruiter":"explore",message);
       return jsonResponse({
         ok: true,
         answer: isTurkish(message) ? "Bu bilgi portföyde belgelenmemiş." : "This information is not documented in the portfolio.",
@@ -1306,6 +1420,7 @@ export default {
 
     if (!env.OPENROUTER_API_KEY) {
       const top = hits[0].item;
+      await recordChatAnalytics(env,"knowledge-fallback",recruiterMode?"recruiter":"explore",message);
       return jsonResponse({
         ok: true,
         answer: isTurkish(message) ? top.tr : top.en,
@@ -1333,6 +1448,7 @@ export default {
     try {
       const result = await callOpenRouter(env, messages);
       if (result) {
+        await recordChatAnalytics(env,recruiterMode ? "recruiter-rag" : "rag-lite",recruiterMode?"recruiter":"explore",message);
         return jsonResponse({
           ok: true,
           answer: result.answer,
@@ -1355,6 +1471,7 @@ export default {
     }
 
     const top = hits[0].item;
+    await recordChatAnalytics(env,"graceful-fallback",recruiterMode?"recruiter":"explore",message);
     return jsonResponse({
       ok: true,
       answer: isTurkish(message) ? top.tr : top.en,
