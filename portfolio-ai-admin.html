@@ -14,7 +14,7 @@ h1{margin:0;font-size:30px}.muted{color:var(--muted)}.card{background:var(--pane
 input{background:#0c1018;color:var(--text);min-width:300px;flex:1}button{cursor:pointer;background:#1b2330;color:var(--text)}button.primary{background:var(--text);color:#0b0d12}
 .stats{display:flex;gap:12px;margin:18px 0}.stat{min-width:130px;padding:14px;border:1px solid var(--line);border-radius:14px}.stat strong{font-size:24px;display:block}
 .item{display:grid;grid-template-columns:1fr;gap:12px;padding:16px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}.q{font-size:16px;font-weight:650}.meta{font-size:12px;color:var(--muted);margin-top:6px}.badge{display:inline-block;margin-left:8px;padding:3px 7px;border:1px solid var(--line);border-radius:999px;color:var(--accent);font-size:11px}.item-actions{display:flex;gap:8px;flex-wrap:wrap}.curate{display:none;gap:8px}.curate.is-open{display:grid}.curate textarea{width:100%;min-height:96px;padding:11px;border:1px solid var(--line);border-radius:10px;background:#0c1018;color:var(--text);font:inherit}.success{color:#9fffc4}
-.empty{padding:28px 0;text-align:center;color:var(--muted)}.danger{color:#ffb6b6}.note{font-size:13px;color:var(--muted);margin-top:8px}
+.empty{padding:28px 0;text-align:center;color:var(--muted)}.danger{color:#ffb6b6}.note{font-size:13px;color:var(--muted);margin-top:8px}.remember-row{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.remember-row label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}.remember-row input{min-width:auto;flex:0}.remember-row button{padding:7px 10px;font-size:12px}
 @media(max-width:640px){.item{grid-template-columns:1fr}.item button{justify-self:start}input{min-width:100%}}
 </style>
 </head>
@@ -22,7 +22,8 @@ input{background:#0c1018;color:var(--text);min-width:300px;flex:1}button{cursor:
 <div class="top"><div><div class="muted">PORTFOLIO AI / ADMIN</div><h1>Knowledge Inbox</h1><div class="muted">Botun cevaplayamadığı gerçek sorular. Bir kaydı açıp <strong>Knowledge'a ekle</strong> ile canlı bilgi tabanına yayınlayabilirsin.</div></div></div>
 <section class="card">
 <div class="auth"><input id="token" type="password" placeholder="ADMIN_TOKEN" autocomplete="off"><button class="primary" id="load">Soruları getir</button></div>
-<div class="note">Token yalnızca bu tarayıcı sekmesinde tutulur; localStorage'a kaydedilmez.</div>
+<div class="remember-row"><label><input id="remember" type="checkbox"> Bu cihazda hatırla</label><button id="forget" type="button">Token'ı unut</button></div>
+<div class="note">“Bu cihazda hatırla” seçersen token yalnızca bu tarayıcıda localStorage'a kaydedilir. Ortak bilgisayarda kullanma.</div>
 </section>
 <div class="stats"><div class="stat"><span class="muted">Kayıt</span><strong id="count">—</strong></div><div class="stat"><span class="muted">Ziyaretçi</span><strong id="visitors">—</strong></div><div class="stat"><span class="muted">Sayfa görüntüleme</span><strong id="pageviews">—</strong></div><div class="stat"><span class="muted">Son yenileme</span><strong id="updated" style="font-size:14px">—</strong></div></div>
 <section class="card" id="list"><div class="empty">ADMIN_TOKEN girip “Soruları getir”e bas.</div></section>
@@ -31,10 +32,12 @@ input{background:#0c1018;color:var(--text);min-width:300px;flex:1}button{cursor:
 const API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/unanswered";
 const KNOWLEDGE_API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/knowledge";
 const ANALYTICS_API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/analytics";
-const token=document.querySelector("#token"),list=document.querySelector("#list"),count=document.querySelector("#count"),updated=document.querySelector("#updated"),visitors=document.querySelector("#visitors"),pageviews=document.querySelector("#pageviews");
+const token=document.querySelector("#token"),list=document.querySelector("#list"),count=document.querySelector("#count"),updated=document.querySelector("#updated"),visitors=document.querySelector("#visitors"),pageviews=document.querySelector("#pageviews"),remember=document.querySelector("#remember"),forget=document.querySelector("#forget");
+const TOKEN_STORAGE_KEY="portfolio_ai_admin_token";
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 async function load(){
  const t=token.value.trim(); if(!t){token.focus();return}
+ if(remember.checked)localStorage.setItem(TOKEN_STORAGE_KEY,t); else localStorage.removeItem(TOKEN_STORAGE_KEY);
  list.innerHTML='<div class="empty">Yükleniyor…</div>';
  try{
   const r=await fetch(API+"?limit=100",{headers:{Authorization:"Bearer "+t}});
@@ -52,6 +55,9 @@ async function del(key){
 }
 document.querySelector("#load").addEventListener("click",load);
 token.addEventListener("keydown",e=>{if(e.key==="Enter")load()});
+forget.addEventListener("click",()=>{localStorage.removeItem(TOKEN_STORAGE_KEY);token.value="";remember.checked=false;token.focus()});
+const savedToken=localStorage.getItem(TOKEN_STORAGE_KEY);
+if(savedToken){token.value=savedToken;remember.checked=true;load()}
 async function saveKnowledge(key){
  const item=list.querySelector('[data-item="'+CSS.escape(key)+'"]');
  const answer=item?.querySelector("textarea")?.value.trim();
