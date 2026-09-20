@@ -24,7 +24,7 @@
 
   <link rel="stylesheet" href="style.css?v=20260920-v3" />
   <link rel="stylesheet" href="v2-fixes.css?v=20260920-2" />
-  <link rel="stylesheet" href="v3.css?v=20260920-2" />
+  <link rel="stylesheet" href="v3.css?v=20260921-ai" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -878,31 +878,47 @@
 
   <!-- V3 ASK PORTFOLIO -->
   <button class="v3-ask-trigger" id="v3AskTrigger" type="button" aria-controls="v3AskPanel" aria-expanded="false">
-    ✦ Ask my portfolio
+    ✦ Ask Mehmet's AI
   </button>
 
-  <aside class="v3-ask-panel" id="v3AskPanel" aria-label="Ask my portfolio">
+  <aside class="v3-ask-panel" id="v3AskPanel" aria-label="Ask Mehmet's AI portfolio">
     <div class="v3-ask-head">
       <div class="v3-ask-head-row">
-        <strong>Ask my portfolio</strong>
+        <strong>Ask Mehmet's AI Portfolio</strong>
         <button class="v3-ask-close" id="v3AskClose" type="button" aria-label="Close">×</button>
       </div>
-      <p>Quick answers based on the projects and experience shown on this site.</p>
+      <p>Explore projects, engineering decisions, research and professional experience — grounded in portfolio evidence.</p>
     </div>
     <div class="v3-ask-body">
+      <div class="v3-ai-modebar" role="tablist" aria-label="Portfolio AI mode">
+        <button class="is-active" type="button" data-v3-mode="explore">Explore</button>
+        <button type="button" data-v3-mode="recruiter">I'm hiring</button>
+      </div>
+
+      <div class="v3-recruiter-panel" id="v3RecruiterPanel" hidden>
+        <div>
+          <span class="v3-recruiter-kicker">RECRUITER MODE</span>
+          <strong>Turn a role into evidence.</strong>
+          <p>Paste a short role brief. The AI will surface documented experience, relevant projects and what is not evidenced — without inventing a fit score.</p>
+        </div>
+        <textarea id="v3RoleBrief" maxlength="800" rows="4" placeholder="Example: AI Product Engineer — Python/TypeScript, LLM workflows, APIs, PostgreSQL, production deployment…"></textarea>
+        <button id="v3AnalyzeRole" type="button">Analyze documented evidence →</button>
+      </div>
+
       <div class="v3-ask-answer" id="v3AskAnswer">
-        Ask about <strong>TourPilot, how I build with AI, my tech stack, research or collaboration.</strong>
+        Ask about <strong>TourPilot, AI engineering, tech stack, research, products or professional experience.</strong>
       </div>
+
       <div class="v3-ask-chips">
-        <button class="v3-ask-chip" type="button" data-v3-question="Tell me about TourPilot">TourPilot</button>
-        <button class="v3-ask-chip" type="button" data-v3-question="How do you build with AI">AI workflow</button>
-        <button class="v3-ask-chip" type="button" data-v3-question="What is your tech stack">Tech stack</button>
-        <button class="v3-ask-chip" type="button" data-v3-question="Tell me about your research">Research</button>
-        <button class="v3-ask-chip" type="button" data-v3-question="Show me your products and automation">Products</button>
-        <button class="v3-ask-chip" type="button" data-v3-question="How can we collaborate">Collaborate</button>
+        <button class="v3-ask-chip" type="button" data-v3-question="Show me the strongest engineering evidence from TourPilot">TourPilot evidence</button>
+        <button class="v3-ask-chip" type="button" data-v3-question="How does Mehmet use AI in software engineering, with concrete evidence?">AI engineering</button>
+        <button class="v3-ask-chip" type="button" data-v3-question="Which live AI projects can I inspect and what does each demonstrate?">Live AI work</button>
+        <button class="v3-ask-chip" type="button" data-v3-question="Summarize Mehmet's research and publication background with sources">Research</button>
+        <button class="v3-ask-chip" type="button" data-v3-question="What documented professional experience is most relevant to AI product development?">Experience</button>
       </div>
+
       <div class="v3-ask-input-row">
-        <input class="v3-ask-input" id="v3AskInput" type="text" placeholder="Ask a question…" autocomplete="off" />
+        <input class="v3-ask-input" id="v3AskInput" type="text" placeholder="Ask for evidence, projects or engineering decisions…" autocomplete="off" />
         <button class="v3-ask-submit" id="v3AskSubmit" type="button">Ask</button>
       </div>
     </div>
@@ -916,6 +932,6 @@
 
   <script src="script.js"></script>
   <script src="agritech-projects-extension.js"></script>
-  <script src="v3.js?v=20260920-3"></script>
+  <script src="v3.js?v=20260921-ai"></script>
 </body>
 </html>
