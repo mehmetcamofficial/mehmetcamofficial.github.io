@@ -924,6 +924,7 @@ export default {
 
     if (url.pathname === "/admin/revisions") {
       if (!(await isAdminAuthorized(env, request))) return jsonResponse({ error:"Unauthorized" }, 401, origin);
+      if (request.method === "POST" && !(await canWriteContent(env, request))) return jsonResponse({ error:"Write access required" },403,origin);
       if (!env.UNANSWERED_KV) return jsonResponse({ error:"Revision storage unavailable" }, 503, origin);
       if (request.method === "GET") {
         const listed = await env.UNANSWERED_KV.list({ prefix:"revision:", limit:30 });
@@ -971,6 +972,7 @@ export default {
 
     if (url.pathname === "/admin/site-config") {
       if (!(await isAdminAuthorized(env, request))) return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      if (request.method === "POST" && !(await canWriteContent(env, request))) return jsonResponse({ error:"Write access required" },403,origin);
       if (!env.UNANSWERED_KV) return jsonResponse({ error: "CMS storage unavailable" }, 503, origin);
 
       if (request.method === "GET") {
@@ -1030,6 +1032,7 @@ export default {
 
     if (url.pathname === "/admin/media") {
       if (!(await isAdminAuthorized(env, request))) return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      if (["POST","DELETE"].includes(request.method) && !(await canWriteContent(env, request))) return jsonResponse({ error:"Write access required" },403,origin);
       if (!env.UNANSWERED_KV) return jsonResponse({ error: "Media storage unavailable" }, 503, origin);
 
       if (request.method === "GET") {
@@ -1171,6 +1174,7 @@ export default {
       if (!(await isAdminAuthorized(env, request))) {
         return jsonResponse({ error: "Unauthorized" }, 401, origin);
       }
+      if (!(await canWriteContent(env, request))) return jsonResponse({ error:"Write access required" },403,origin);
       if (!env.UNANSWERED_KV) {
         return jsonResponse({ error: "UNANSWERED_KV is not configured" }, 503, origin);
       }
@@ -1221,6 +1225,7 @@ export default {
       if (!(await isAdminAuthorized(env, request))) {
         return jsonResponse({ error: "Unauthorized" }, 401, origin);
       }
+      if (request.method === "DELETE" && !(await canWriteContent(env, request))) return jsonResponse({ error:"Write access required" },403,origin);
       if (!env.UNANSWERED_KV) {
         return jsonResponse({ error: "UNANSWERED_KV is not configured" }, 503, origin);
       }
