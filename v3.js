@@ -572,6 +572,97 @@ function createMetrics() {
     });
   }
 
+  async function initCmsContent() {
+    try {
+      const response = await fetch("https://mehmetcam-portfolio-ai.aydin254.workers.dev/site-config");
+      const data = await response.json();
+      if (!response.ok || !data?.config) return;
+      const config = data.config;
+
+      const hero = config.hero || {};
+      const badge = document.querySelector(".mission-badge");
+      const eyebrow = document.querySelector(".hero-content > .eyebrow");
+      const title = document.querySelector(".hero-title-v2");
+      const description = document.querySelector(".hero-description");
+      if (badge && hero.badge) {
+        const dot = badge.querySelector(".mission-dot");
+        badge.textContent = hero.badge;
+        if (dot) badge.prepend(dot);
+      }
+      if (eyebrow && hero.eyebrow) eyebrow.textContent = hero.eyebrow;
+      if (title && hero.lead && hero.accent && hero.tail) {
+        title.replaceChildren();
+        title.append(document.createTextNode(hero.lead + " "));
+        const accent = document.createElement("span");
+        accent.textContent = hero.accent;
+        title.append(accent, document.createElement("br"), document.createTextNode(hero.tail));
+      }
+      if (description && hero.description) description.textContent = hero.description;
+
+      if (Array.isArray(config.navigation)) {
+        const nav = document.querySelector(".nav-links");
+        if (nav) {
+          nav.replaceChildren();
+          config.navigation.forEach(item => {
+            if (!item?.label || !item?.href) return;
+            const a = document.createElement("a");
+            a.textContent = item.label;
+            a.href = item.href;
+            if (/^https:\/\//i.test(item.href)) {
+              a.target = "_blank";
+              a.rel = "noopener";
+            }
+            nav.appendChild(a);
+          });
+        }
+      }
+
+      document.querySelectorAll(".cms-dynamic-section").forEach(el => el.remove());
+      if (Array.isArray(config.sections) && config.sections.length) {
+        const contact = document.querySelector("#contact");
+        config.sections.filter(s => s?.enabled && s?.title).forEach(section => {
+          const el = document.createElement("section");
+          el.className = "section cms-dynamic-section";
+          if (section.id) el.id = section.id;
+          const heading = document.createElement("div");
+          heading.className = "section-heading";
+          if (section.eyebrow) {
+            const eye = document.createElement("p");
+            eye.className = "eyebrow";
+            eye.textContent = section.eyebrow;
+            heading.appendChild(eye);
+          }
+          const h2 = document.createElement("h2");
+          h2.textContent = section.title;
+          heading.appendChild(h2);
+          const panel = document.createElement("div");
+          panel.className = "glass-panel profile-text";
+          const p = document.createElement("p");
+          p.textContent = section.body || "";
+          panel.appendChild(p);
+          if (section.linkLabel && section.linkUrl && section.linkUrl !== "#") {
+            const a = document.createElement("a");
+            a.className = "btn secondary";
+            a.textContent = section.linkLabel;
+            a.href = section.linkUrl;
+            if (/^https:\/\//i.test(section.linkUrl)) { a.target="_blank"; a.rel="noopener"; }
+            panel.appendChild(a);
+          }
+          el.append(heading, panel);
+          contact?.before(el);
+        });
+      }
+
+      if (config.seo?.title) document.title = config.seo.title;
+      if (config.seo?.description) {
+        let meta = document.querySelector('meta[name="description"]');
+        if (meta) meta.setAttribute("content", config.seo.description);
+      }
+    } catch (error) {
+      console.warn("CMS config unavailable:", error);
+    }
+  }
+
   async function initVisitorCounter() {
     const counter = document.getElementById("v3VisitCounter");
     if (!counter) return;
@@ -603,6 +694,7 @@ function createMetrics() {
     initAskPortfolio();
     initVisitorCounter();
     initAdminShortcut();
+    initCmsContent();
   }
 
   document.addEventListener("DOMContentLoaded", init);
