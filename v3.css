@@ -1126,3 +1126,15 @@ html[data-theme="dark"] .v3-evidence-cta.primary {
 .v3-visit-counter::before{
   content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent);
 }
+
+
+/* Discreet owner admin shortcut */
+.v3-secret-admin{
+  width:24px;height:24px;margin-left:6px;padding:0;display:inline-grid;place-items:center;
+  border:0;border-radius:50%;color:var(--muted);background:transparent;
+  opacity:.16;font:700 13px/1 Inter,system-ui,sans-serif;cursor:pointer;
+  transition:opacity .18s ease,transform .18s ease,background .18s ease;
+}
+.v3-secret-admin:hover,.v3-secret-admin:focus-visible{
+  opacity:.78;transform:rotate(45deg);background:var(--primary-soft);outline:none;
+}
