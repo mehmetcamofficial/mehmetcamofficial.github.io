@@ -25,11 +25,14 @@ const KNOWLEDGE = [
     en: "TourPilot is an operations platform built around real tour-operator workflows. It covers reservation processing, operational planning, customers, suppliers, tours, quotations, accounting workflows, RBAC, auditability, data quality and automation. AI supports selected workflows and the engineering process; not every feature is directly AI-powered.",
     source: "https://tourpilot.com.tr/",
     evidence: {
+      kind: "case-study",
       label: "Production-minded product",
       tools: ["TypeScript", "PostgreSQL", "AI-assisted engineering"],
       useCases: ["Reservation ingestion", "Operational planning", "RBAC", "Auditability"],
       approach: "Staging + idempotency + human review",
-      why: "Demonstrates product engineering around real operational complexity."
+      why: "Demonstrates product engineering around real operational complexity.",
+      cta: { label: "Open live product", url: "https://tourpilot.com.tr/" },
+      secondary: { label: "See AI workflow", target: "#ai-workflow" }
     }
   },
   {
@@ -150,7 +153,11 @@ const KNOWLEDGE = [
     en: "Since 2023, Mehmet has worked remotely as an AI Trainer & Data Scientist at Scale AI, contributing to training and evaluating large-scale AI models in multilingual environments, improving annotation quality and model performance through structured evaluation, and collaborating with international research and engineering teams.",
     source: "CV / Portfolio",
     evidence: {
+      kind: "timeline",
       label: "Professional AI experience",
+      period: "2023–Present",
+      role: "AI Trainer & Data Scientist",
+      organization: "Scale AI",
       tools: ["Model evaluation", "Structured evaluation"],
       useCases: ["Multilingual AI", "Annotation quality", "Model performance"],
       approach: "Research + engineering collaboration",
@@ -165,7 +172,11 @@ const KNOWLEDGE = [
     en: "From 2021 to 2023, Mehmet worked as Research and Development Manager at Tabit Smart Agriculture Technologies, designing and coordinating applied research projects in smart agriculture and decision-support systems. His work included literature reviews, research design, qualitative and quantitative analysis, technical reporting, project proposals and stakeholder documentation, including contributions to the Horizon 2020 AZMUD project on AI-supported farmer decision systems.",
     source: "CV / Portfolio",
     evidence: {
+      kind: "timeline",
       label: "R&D leadership",
+      period: "2021–2023",
+      role: "Research and Development Manager",
+      organization: "Tabit Smart Agriculture Technologies",
       tools: ["Research design", "Data analysis", "Technical reporting"],
       useCases: ["Smart agriculture", "Decision support", "Horizon 2020 AZMUD"],
       approach: "Applied research + stakeholder delivery",
