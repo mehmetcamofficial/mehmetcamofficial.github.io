@@ -77,7 +77,29 @@
     }
   ];
 
-  function createMetrics() {
+  
+function renderPortfolioSources(sources) {
+  if (!Array.isArray(sources) || !sources.length) return "";
+  const safe = sources
+    .filter(source => source && typeof source === "object" && source.title)
+    .slice(0, 4)
+    .map(source => {
+      const title = String(source.title);
+      if (!source.url || !/^https:\/\//i.test(source.url)) {
+        return '<span class="v3-ask-source">' + escapeHtml(title) + '</span>';
+      }
+      return '<a class="v3-ask-source" href="' + escapeHtml(source.url) + '" target="_blank" rel="noopener">' + escapeHtml(title) + ' ↗</a>';
+    });
+  return safe.length ? '<div class="v3-ask-sources"><small>Sources</small>' + safe.join("") + '</div>' : "";
+}
+
+function escapeHtml(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;"
+  })[char]);
+}
+
+function createMetrics() {
     const liveApps = document.querySelectorAll("#live-apps .focus-card").length;
     const products = document.querySelectorAll("#digital-products .focus-card").length;
     const publications = document.querySelectorAll(".publication-card").length;
