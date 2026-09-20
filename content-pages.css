@@ -33,3 +33,26 @@ a{color:inherit}.shell{max-width:1180px;margin:auto;padding:22px}.nav{position:s
   opacity:1!important;
 }
 .content-nav .links{align-items:center!important}
+
+/* Medium article fallback covers */
+.article-cover{
+  width:100%;
+  aspect-ratio:16/9;
+  margin-bottom:14px;
+  padding:18px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+  color:#071425;
+}
+.article-cover span{font-size:.64rem;font-weight:950;letter-spacing:.13em;opacity:.7}
+.article-cover strong{max-width:90%;font-size:clamp(1rem,2vw,1.45rem);line-height:1.05;letter-spacing:-.035em}
+.cover-0{background:linear-gradient(135deg,#cfe5ff,#e9ddff)}
+.cover-1{background:linear-gradient(135deg,#d8f5ec,#d8e8ff)}
+.cover-2{background:linear-gradient(135deg,#f0e0ff,#d8f2ff)}
+.cover-3{background:linear-gradient(135deg,#e7f7d7,#dbeaff)}
+.cover-4{background:linear-gradient(135deg,#ffe6d9,#e8e0ff)}
+.cover-5{background:linear-gradient(135deg,#d7f2ff,#e7f7ed)}
