@@ -99,6 +99,27 @@ function escapeHtml(value) {
   })[char]);
 }
 
+function renderEvidenceCards(evidence) {
+  if (!Array.isArray(evidence) || !evidence.length) return "";
+  return '<div class="v3-evidence-grid">' + evidence.slice(0, 3).map(item => {
+    const tools = Array.isArray(item.tools) ? item.tools : [];
+    const useCases = Array.isArray(item.useCases) ? item.useCases : [];
+    const tags = [...tools, ...useCases].slice(0, 6)
+      .map(tag => '<span>' + escapeHtml(tag) + '</span>').join("");
+    const source = item.url && /^https:\/\//i.test(item.url)
+      ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">Inspect evidence ↗</a>'
+      : "";
+    return '<article class="v3-evidence-card">' +
+      '<small>' + escapeHtml(item.label || "Evidence") + '</small>' +
+      '<strong>' + escapeHtml(item.title || "") + '</strong>' +
+      '<div class="v3-evidence-tags">' + tags + '</div>' +
+      (item.approach ? '<p><b>Approach</b> · ' + escapeHtml(item.approach) + '</p>' : '') +
+      (item.why ? '<p class="v3-evidence-why">' + escapeHtml(item.why) + '</p>' : '') +
+      source +
+    '</article>';
+  }).join("") + '</div>';
+}
+
 function createMetrics() {
     const liveApps = document.querySelectorAll("#live-apps .focus-card").length;
     const products = document.querySelectorAll("#digital-products .focus-card").length;
@@ -360,6 +381,13 @@ function createMetrics() {
         proof.className = "v3-proof-badge";
         proof.textContent = metaData.route === "not-found" ? "✓ Safe no-answer" : "✓ Grounded in portfolio evidence";
         msg.appendChild(proof);
+      }
+
+      const evidenceMarkup = renderEvidenceCards(metaData.evidence || []);
+      if (evidenceMarkup) {
+        const evidenceWrap = document.createElement("div");
+        evidenceWrap.innerHTML = evidenceMarkup;
+        msg.appendChild(evidenceWrap);
       }
 
       const sourceMarkup = renderPortfolioSources(sources);
