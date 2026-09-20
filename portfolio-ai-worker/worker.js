@@ -528,7 +528,12 @@ const DEFAULT_SITE_CONFIG = {
   sections: [],
   seo: {
     title: "Mehmet Cam | AI Engineer, Product Builder & Applied AI Researcher",
-    description: "Mehmet Cam is an AI engineer, product builder and applied AI researcher working across AI engineering, automation, data systems, AgriTech and production-minded digital products."
+    description: "Mehmet Cam is an AI engineer, product builder and applied AI researcher working across AI engineering, automation, data systems, AgriTech and production-minded digital products.",
+    canonical: "https://mehmetcamofficial.com.tr/",
+    ogTitle: "Mehmet Cam | AI Engineer, Product Builder & Applied AI Researcher",
+    ogDescription: "Applied AI, product engineering, automation, data systems, AgriTech and research portfolio.",
+    ogImage: "https://mehmetcamofficial.com.tr/profile.jpeg",
+    robots: "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
   },
   pageControls: {
     profile:{ enabled:true, eyebrow:"// RESEARCH PROFILE", title:"Turning research, field experience and data into practical impact." },
@@ -620,7 +625,12 @@ function sanitizeSiteConfig(input = {}) {
     })).filter(section => section.title),
     seo: {
       title: cleanText(seo.title, 180) || DEFAULT_SITE_CONFIG.seo.title,
-      description: cleanText(seo.description, 320) || DEFAULT_SITE_CONFIG.seo.description
+      description: cleanText(seo.description, 320) || DEFAULT_SITE_CONFIG.seo.description,
+      canonical: cleanText(seo.canonical, 500) ? safeHref(seo.canonical) : DEFAULT_SITE_CONFIG.seo.canonical,
+      ogTitle: cleanText(seo.ogTitle, 180) || cleanText(seo.title,180) || DEFAULT_SITE_CONFIG.seo.ogTitle,
+      ogDescription: cleanText(seo.ogDescription, 320) || cleanText(seo.description,320) || DEFAULT_SITE_CONFIG.seo.ogDescription,
+      ogImage: cleanText(seo.ogImage, 500) ? safeHref(seo.ogImage) : DEFAULT_SITE_CONFIG.seo.ogImage,
+      robots: cleanText(seo.robots, 180) || DEFAULT_SITE_CONFIG.seo.robots
     },
     pageControls: Object.fromEntries(Object.entries(DEFAULT_SITE_CONFIG.pageControls).map(([id,defaults]) => {
       const item = input?.pageControls?.[id] || {};
