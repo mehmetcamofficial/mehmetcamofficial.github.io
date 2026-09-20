@@ -1348,3 +1348,13 @@ html[data-theme="dark"] .v3-evidence-cta.primary {
     text-align:left;
   }
 }
+
+/* Portfolio AI proof card polish — explicit visual separation */
+.v3-evidence-card{display:block!important;overflow:hidden}
+.v3-evidence-card>small{margin-bottom:6px!important}
+.v3-evidence-card>strong{margin-bottom:10px!important;font-size:.82rem!important;line-height:1.35!important}
+.v3-evidence-tags{display:flex!important;flex-wrap:wrap!important;gap:6px!important;margin:10px 0!important}
+.v3-evidence-tags span{display:inline-flex!important;align-items:center!important;line-height:1.2!important;padding:5px 8px!important}
+.v3-evidence-card p{display:block!important;margin:9px 0 0!important}
+.v3-evidence-actions{display:flex!important;gap:7px!important;margin-top:12px!important}
+.v3-evidence-cta{display:inline-flex!important;align-items:center!important;justify-content:center!important}
