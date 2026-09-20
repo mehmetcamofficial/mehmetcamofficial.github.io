@@ -607,7 +607,7 @@ function createMetrics() {
             if (!item?.label || !item?.href) return;
             const a = document.createElement("a");
             a.textContent = item.label;
-            a.href = (item.href === "#blog" || String(item.label).toLowerCase() === "writing") ? "/blog.html" : item.href;
+            a.href = (item.href === "#blog" || String(item.label).toLowerCase() === "writing") ? "/blog.html?v=20260921-public3" : item.href;
             if (/^https:\/\//i.test(item.href)) {
               a.target = "_blank";
               a.rel = "noopener";
