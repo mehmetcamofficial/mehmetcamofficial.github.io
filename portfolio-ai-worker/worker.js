@@ -685,7 +685,7 @@ function cleanAnswer(text) {
 
 async function callOpenRouter(env, messages) {
   const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), 12000);
+  const timer = setTimeout(() => controller.abort(), 30000);
   try {
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
       method: "POST",
