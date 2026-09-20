@@ -1138,3 +1138,28 @@ html[data-theme="dark"] .v3-evidence-cta.primary {
 .v3-secret-admin:hover,.v3-secret-admin:focus-visible{
   opacity:.78;transform:rotate(45deg);background:var(--primary-soft);outline:none;
 }
+
+
+/* Owner CMS shortcut — visible but unobtrusive */
+.v3-secret-admin{
+  width:auto!important;
+  min-width:34px;
+  height:24px!important;
+  padding:0 8px!important;
+  margin-left:8px;
+  opacity:.58!important;
+  border:1px solid var(--border)!important;
+  border-radius:999px!important;
+  background:var(--panel)!important;
+  color:var(--muted)!important;
+  font-size:.62rem!important;
+  font-weight:900!important;
+  letter-spacing:.06em;
+}
+.v3-secret-admin:hover,.v3-secret-admin:focus-visible{
+  opacity:1!important;
+  transform:none!important;
+  color:var(--text-strong)!important;
+  border-color:var(--border-strong)!important;
+  background:var(--primary-soft)!important;
+}
