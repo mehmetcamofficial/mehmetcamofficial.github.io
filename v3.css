@@ -750,3 +750,29 @@ html[data-theme="dark"] .v3-msg.user {
     padding-bottom: max(10px, env(safe-area-inset-bottom));
   }
 }
+
+
+/* Portfolio AI: neutralize browser translation/selection artifacts and improve live answers */
+.v3-msg.assistant,
+.v3-msg.assistant * {
+  background-image: none;
+  text-decoration: none;
+  -webkit-text-fill-color: currentColor;
+}
+
+.v3-msg.assistant > div {
+  color: var(--text-strong);
+  background: transparent !important;
+  line-height: 1.58;
+  user-select: text;
+}
+
+.v3-msg.assistant > div::selection {
+  background: rgba(0, 119, 255, .16);
+  color: inherit;
+}
+
+.v3-msg.assistant .v3-msg-meta {
+  color: var(--muted);
+  background: transparent !important;
+}
