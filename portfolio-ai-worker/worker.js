@@ -651,6 +651,28 @@ async function createAdminSession(env) {
   return token;
 }
 
+async function hashAdminPassword(password, salt) {
+  const data = new TextEncoder().encode(salt + ":" + password);
+  const digest = await crypto.subtle.digest("SHA-256", data);
+  return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("");
+}
+
+async function readAdminAuthConfig(env) {
+  if (!env.UNANSWERED_KV) return { configured:false, enabled:false };
+  const raw = await env.UNANSWERED_KV.get("admin:auth-config");
+  if (!raw) return { configured:false, enabled:false };
+  try {
+    const item = JSON.parse(raw);
+    return { configured:Boolean(item.passwordHash && item.salt), enabled:item.enabled !== false, ...item };
+  } catch { return { configured:false, enabled:false }; }
+}
+
+async function verifyAdminPassword(env, password) {
+  const cfg = await readAdminAuthConfig(env);
+  if (!cfg.configured || !cfg.enabled || !password) return false;
+  return (await hashAdminPassword(password, cfg.salt)) === cfg.passwordHash;
+}
+
 function corsHeaders(origin) {
   const allowed = ALLOWED_ORIGINS.includes(origin);
   return {
@@ -741,13 +763,44 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
+    if (url.pathname === "/admin/auth-config") {
+      if (!env.UNANSWERED_KV) return jsonResponse({ error:"Admin storage unavailable" },503,origin);
+      if (request.method === "GET") {
+        const cfg = await readAdminAuthConfig(env);
+        return jsonResponse({ ok:true, configured:cfg.configured, enabled:cfg.enabled },200,origin);
+      }
+      if (request.method !== "POST") return jsonResponse({ error:"GET or POST required" },405,origin);
+      let body; try { body=await request.json(); } catch { return jsonResponse({error:"Invalid JSON"},400,origin); }
+      const current = await readAdminAuthConfig(env);
+      const authorized = await isAdminAuthorized(env, request);
+      const setupCode = typeof body?.setupCode === "string" ? body.setupCode : "";
+      if (!authorized && (current.configured || !env.ADMIN_TOKEN || setupCode !== env.ADMIN_TOKEN)) {
+        return jsonResponse({ error:"Unauthorized" },401,origin);
+      }
+      const next = { ...current, updatedAt:new Date().toISOString() };
+      if (typeof body?.enabled === "boolean") next.enabled=body.enabled;
+      if (typeof body?.password === "string" && body.password) {
+        if (body.password.length < 10) return jsonResponse({error:"Password must be at least 10 characters"},400,origin);
+        next.salt=crypto.randomUUID();
+        next.passwordHash=await hashAdminPassword(body.password,next.salt);
+        next.configured=true;
+        if (typeof body?.enabled !== "boolean") next.enabled=true;
+      }
+      if (!next.configured) return jsonResponse({error:"Create a password first"},400,origin);
+      await env.UNANSWERED_KV.put("admin:auth-config",JSON.stringify(next));
+      return jsonResponse({ok:true,configured:true,enabled:next.enabled},200,origin);
+    }
+
     if (url.pathname === "/admin/login") {
       if (request.method !== "POST") return jsonResponse({ error: "POST required" }, 405, origin);
-      if (!env.ADMIN_TOKEN || !env.UNANSWERED_KV) return jsonResponse({ error: "Admin login is not configured" }, 503, origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({ error: "Admin login is not configured" }, 503, origin);
       let body;
       try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
       const password = typeof body?.password === "string" ? body.password : "";
-      if (!password || password !== env.ADMIN_TOKEN) return jsonResponse({ error: "Invalid password" }, 401, origin);
+      const cfg = await readAdminAuthConfig(env);
+      if (!cfg.configured) return jsonResponse({ error:"Admin password has not been created yet" },409,origin);
+      if (!cfg.enabled) return jsonResponse({ error:"Admin login is disabled" },403,origin);
+      if (!(await verifyAdminPassword(env,password))) return jsonResponse({ error: "Invalid password" }, 401, origin);
       const session = await createAdminSession(env);
       return jsonResponse({ ok:true, session, expiresIn:43200 }, 200, origin);
     }
