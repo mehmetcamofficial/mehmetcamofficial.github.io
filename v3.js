@@ -385,10 +385,22 @@ function createMetrics() {
     let responseTimer = null;
     const API_URL = "https://mehmetcam-portfolio-ai.aydin254.workers.dev/chat";
     const chatHistory = [];
+    let currentMode = "explore";
 
     const appendAIText = (text, model, sources = [], metaData = {}) => {
       const msg = document.createElement("div");
       msg.className = "v3-msg assistant";
+
+      if (metaData.recruiter) {
+        const recruiter = document.createElement("div");
+        recruiter.className = "v3-recruiter-result";
+        const areas = Array.isArray(metaData.recruiter.verifiedAreas) ? metaData.recruiter.verifiedAreas : [];
+        recruiter.innerHTML = '<small>RECRUITER EVIDENCE REVIEW</small><strong>' +
+          escapeHtml(String(metaData.recruiter.evidenceCount || 0)) + ' evidence-backed signal' +
+          (Number(metaData.recruiter.evidenceCount) === 1 ? '' : 's') +
+          '</strong><div>' + areas.map(area => '<span>' + escapeHtml(area) + '</span>').join('') + '</div>';
+        msg.appendChild(recruiter);
+      }
 
       const content = document.createElement("div");
       content.textContent = text;
@@ -443,6 +455,7 @@ function createMetrics() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             message: clean,
+            mode: currentMode,
             history: chatHistory.slice(-6)
           })
         });
@@ -500,6 +513,7 @@ function createMetrics() {
     modeButtons.forEach((button) => {
       button.addEventListener("click", () => {
         const mode = button.getAttribute("data-v3-mode");
+        currentMode = mode || "explore";
         modeButtons.forEach((item) => item.classList.toggle("is-active", item === button));
         if (recruiterPanel) recruiterPanel.hidden = mode !== "recruiter";
         input.placeholder = mode === "recruiter"
