@@ -409,7 +409,15 @@ function createMetrics() {
       if (metaData.grounded) {
         const proof = document.createElement("div");
         proof.className = "v3-proof-badge";
-        proof.textContent = metaData.route === "not-found" ? "✓ Safe no-answer" : "✓ Grounded in portfolio evidence";
+        const routeLabels = {
+          "rag-lite": "✦ AI synthesis · grounded",
+          "recruiter-rag": "✦ AI synthesis · recruiter evidence",
+          "knowledge": "✓ Knowledge answer · grounded",
+          "knowledge-fallback": "✓ Knowledge fallback · grounded",
+          "graceful-fallback": "✓ Safe fallback · grounded",
+          "not-found": "✓ Safe no-answer"
+        };
+        proof.textContent = routeLabels[metaData.route] || "✓ Grounded in portfolio evidence";
         msg.appendChild(proof);
       }
 
