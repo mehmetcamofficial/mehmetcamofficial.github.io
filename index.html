@@ -24,6 +24,7 @@
 
   <link rel="stylesheet" href="style.css?v=20260920-v3" />
   <link rel="stylesheet" href="v2-fixes.css?v=20260920-2" />
+  <link rel="stylesheet" href="v3.css?v=20260920-1" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -150,6 +151,28 @@
         <strong>Research Mindset</strong>
         <small>Evidence, experimentation and measurable impact</small>
       </div>
+    </section>
+
+    <!-- CURRENTLY -->
+    <section class="v3-currently" aria-label="Currently">
+      <span class="v3-currently-label">Currently</span>
+      <div class="v3-currently-items">
+        <span class="v3-currently-item">Building TourPilot</span>
+        <span class="v3-currently-item">Experimenting with AI agents</span>
+        <span class="v3-currently-item">Designing automation workflows</span>
+        <span class="v3-currently-item">Writing about applied AI</span>
+      </div>
+      <button class="v3-command-hint" id="v3CommandHint" type="button" aria-label="Open command palette">
+        <kbd>⌘</kbd><kbd>K</kbd> Quick navigate
+      </button>
+    </section>
+
+    <!-- IMPACT SIGNALS -->
+    <section class="v3-impact" aria-label="Portfolio signals">
+      <div class="v3-impact-item"><strong id="liveAppsMetric">04</strong><span>Live applications available to explore</span></div>
+      <div class="v3-impact-item"><strong id="productsMetric">03</strong><span>Digital products & automation showcases</span></div>
+      <div class="v3-impact-item"><strong id="workflowMetric">06</strong><span>Step AI-native engineering workflow</span></div>
+      <div class="v3-impact-item"><strong id="publicationMetric">01</strong><span>Peer-reviewed Springer publication</span></div>
     </section>
 
     <!-- RESEARCH PROFILE -->
@@ -843,6 +866,46 @@
     </div>
   </div>
 
+  <!-- V3 COMMAND PALETTE -->
+  <div class="v3-overlay" id="v3CommandOverlay" aria-hidden="true">
+    <div class="v3-command" role="dialog" aria-modal="true" aria-label="Quick navigation">
+      <div class="v3-command-head">
+        <input id="v3CommandInput" class="v3-command-input" type="text" placeholder="Search projects, sections or actions…" autocomplete="off" />
+      </div>
+      <div class="v3-command-list" id="v3CommandList"></div>
+    </div>
+  </div>
+
+  <!-- V3 ASK PORTFOLIO -->
+  <button class="v3-ask-trigger" id="v3AskTrigger" type="button" aria-controls="v3AskPanel" aria-expanded="false">
+    ✦ Ask my portfolio
+  </button>
+
+  <aside class="v3-ask-panel" id="v3AskPanel" aria-label="Ask my portfolio">
+    <div class="v3-ask-head">
+      <div class="v3-ask-head-row">
+        <strong>Ask my portfolio</strong>
+        <button class="v3-ask-close" id="v3AskClose" type="button" aria-label="Close">×</button>
+      </div>
+      <p>Quick answers based on the projects and experience shown on this site.</p>
+    </div>
+    <div class="v3-ask-body">
+      <div class="v3-ask-answer" id="v3AskAnswer">
+        Ask about <strong>TourPilot, how I build with AI, my tech stack, research or collaboration.</strong>
+      </div>
+      <div class="v3-ask-chips">
+        <button class="v3-ask-chip" type="button" data-v3-question="Tell me about TourPilot">TourPilot</button>
+        <button class="v3-ask-chip" type="button" data-v3-question="How do you build with AI">AI workflow</button>
+        <button class="v3-ask-chip" type="button" data-v3-question="What is your tech stack">Tech stack</button>
+        <button class="v3-ask-chip" type="button" data-v3-question="Tell me about your research">Research</button>
+      </div>
+      <div class="v3-ask-input-row">
+        <input class="v3-ask-input" id="v3AskInput" type="text" placeholder="Ask a question…" autocomplete="off" />
+        <button class="v3-ask-submit" id="v3AskSubmit" type="button">Ask</button>
+      </div>
+    </div>
+  </aside>
+
   <footer class="footer">
     <p>© <span id="year"></span> Mehmet Cam. Built with GitHub Pages.</p>
     <p>Applied AI · Research · AgriTech · EU Projects</p>
@@ -851,5 +914,6 @@
 
   <script src="script.js"></script>
   <script src="agritech-projects-extension.js"></script>
+  <script src="v3.js?v=20260920-1"></script>
 </body>
 </html>
