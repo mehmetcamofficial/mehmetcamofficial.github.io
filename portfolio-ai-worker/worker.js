@@ -205,8 +205,8 @@ const KNOWLEDGE = [
     id: "linkedin-profile",
     title: "LinkedIn",
     keywords: ["linkedin","linked in","profil","profile","bağlantı","connect"],
-    tr: "Mehmet'in LinkedIn profili profesyonel deneyim, AI ve veri analitiği, Ar-Ge, inovasyon ve proje çalışmalarını tamamlayan profesyonel kaynaktır. Profil adresi linkedin.com/in/mehmet-cam09.",
-    en: "Mehmet's LinkedIn profile complements the portfolio with his professional experience across AI and data analytics, R&D, innovation and project work. His profile is linkedin.com/in/mehmet-cam09.",
+    tr: "Mehmet'in LinkedIn profili profesyonel deneyim, AI ve veri analitiği, Ar-Ge, inovasyon, akıllı tarım ve ürün geliştirme geçmişini tamamlayan profesyonel kaynaktır. Portfolio AI, LinkedIn'e ilişkin cevaplarda yalnızca portföy/CV ile doğrulanmış bilgileri kullanır; profil dışındaki ayrıntıları uydurmaz. Profil adresi linkedin.com/in/mehmet-cam09.",
+    en: "Mehmet's LinkedIn profile is a professional source complementing his background in AI and data analytics, R&D, innovation, smart agriculture and product engineering. Portfolio AI uses only details corroborated by the portfolio/CV for LinkedIn-related answers and does not invent profile details. His profile is linkedin.com/in/mehmet-cam09.",
     source: "https://linkedin.com/in/mehmet-cam09"
   },
   {
@@ -449,7 +449,29 @@ export default {
     }
 
     if (url.pathname === "/" || url.pathname === "/health") {
-      return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-") && x.id !== "medium-profile").length, cvExperienceItems: KNOWLEDGE.filter(x => x.id.startsWith("experience-") || x.id.startsWith("education-") || x.id.startsWith("training-")).length }, 200, origin);
+      return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-") && x.id !== "medium-profile").length, cvExperienceItems: KNOWLEDGE.filter(x => x.id.startsWith("experience-") || x.id.startsWith("education-") || x.id.startsWith("training-")).length, unansweredPersistence: Boolean(env.UNANSWERED_KV) }, 200, origin);
+    }
+
+    if (url.pathname === "/admin/unanswered") {
+      const auth = request.headers.get("Authorization") || "";
+      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) {
+        return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      }
+      if (!env.UNANSWERED_KV) {
+        return jsonResponse({ error: "UNANSWERED_KV is not configured" }, 503, origin);
+      }
+
+      const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 50, 1), 100);
+      const listed = await env.UNANSWERED_KV.list({ prefix: "unanswered:", limit });
+      const items = [];
+      for (const key of listed.keys) {
+        const raw = await env.UNANSWERED_KV.get(key.name);
+        if (!raw) continue;
+        try { items.push({ key: key.name, ...JSON.parse(raw) }); }
+        catch { items.push({ key: key.name, raw }); }
+      }
+      items.sort((a, b) => String(b.at || "").localeCompare(String(a.at || "")));
+      return jsonResponse({ ok: true, count: items.length, items }, 200, origin);
     }
 
     if (url.pathname !== "/chat") return jsonResponse({ error: "Not found" }, 404, origin);
