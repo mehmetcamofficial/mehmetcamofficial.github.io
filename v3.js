@@ -557,6 +557,21 @@ function createMetrics() {
     });
   }
 
+  function initAdminShortcut() {
+    const button = document.getElementById("v3SecretAdmin");
+    const openAdmin = () => {
+      window.location.href = "portfolio-ai-admin.html";
+    };
+    button?.addEventListener("click", openAdmin);
+    document.addEventListener("keydown", (event) => {
+      const shortcut = (event.metaKey || event.ctrlKey) && event.shiftKey && event.key.toLowerCase() === "a";
+      if (shortcut) {
+        event.preventDefault();
+        openAdmin();
+      }
+    });
+  }
+
   async function initVisitorCounter() {
     const counter = document.getElementById("v3VisitCounter");
     if (!counter) return;
@@ -587,6 +602,7 @@ function createMetrics() {
     initCommandPalette();
     initAskPortfolio();
     initVisitorCounter();
+    initAdminShortcut();
   }
 
   document.addEventListener("DOMContentLoaded", init);
