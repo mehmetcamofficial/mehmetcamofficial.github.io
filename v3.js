@@ -364,7 +364,7 @@
         if (!response.ok || !data.answer) throw new Error(data.error || "AI request failed");
 
         typing.remove();
-        appendAIText(data.answer, data.model);
+        appendAIText(data.answer, "Live");
         chatHistory.push(
           { role: "user", content: clean },
           { role: "assistant", content: data.answer }
