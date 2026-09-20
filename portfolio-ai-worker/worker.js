@@ -392,9 +392,9 @@ function isTurkish(text) {
   return /[çğıöşü]/i.test(text) || /\b(hangi|nedir|nasıl|nasil|çalış|calis|proje|teknoloji|araştır|arastir|ürün|urun|iş|yapay zeka|mehmet)\b/.test(q);
 }
 
-function retrieve(question) {
+function retrieve(question, knowledge = KNOWLEDGE) {
   const q = normalize(question);
-  return KNOWLEDGE.map(item => {
+  return knowledge.map(item => {
     let score = 0;
     for (const keyword of item.keywords) {
       const k = normalize(keyword);
@@ -419,8 +419,8 @@ function evidencePayload(items) {
     .map(item => ({ title: item.title, ...item.evidence, url: item.source || null }));
 }
 
-function directAnswer(question) {
-  const hits = retrieve(question);
+function directAnswer(question, knowledge = KNOWLEDGE) {
+  const hits = retrieve(question, knowledge);
   if (needsSynthesis(question) || !hits.length || hits[0].score < 3) return null;
   return {
     answer: isTurkish(question) ? hits[0].item.tr : hits[0].item.en,
@@ -428,6 +428,35 @@ function directAnswer(question) {
     evidence: evidencePayload([hits[0].item]),
     route: "knowledge"
   };
+}
+
+async function loadDynamicKnowledge(env) {
+  if (!env.UNANSWERED_KV) return [];
+  const listed = await env.UNANSWERED_KV.list({ prefix: "knowledge:", limit: 100 });
+  const items = [];
+  for (const key of listed.keys) {
+    const raw = await env.UNANSWERED_KV.get(key.name);
+    if (!raw) continue;
+    try {
+      const item = JSON.parse(raw);
+      if (item && item.title && Array.isArray(item.keywords) && item.tr && item.en) items.push(item);
+    } catch {}
+  }
+  return items;
+}
+
+async function questionKey(question) {
+  const normalized = normalize(question).replace(/[^a-z0-9çğıöşü\s]/gi, " ").replace(/\s+/g, " ").trim().slice(0, 300);
+  const bytes = new TextEncoder().encode(normalized);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  const hash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 24);
+  return { normalized, key: "unanswered:" + hash };
+}
+
+function dynamicKeywords(question, extra = []) {
+  const base = normalize(question).replace(/[^a-z0-9çğıöşü\s-]/gi, " ").split(/\s+/)
+    .filter(token => token.length >= 4).slice(0, 10);
+  return [...new Set([question.trim().slice(0, 120), ...base, ...extra.filter(Boolean).map(String)])].slice(0, 16);
 }
 
 function corsHeaders(origin) {
@@ -506,6 +535,57 @@ export default {
       return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-") && x.id !== "medium-profile").length, cvExperienceItems: KNOWLEDGE.filter(x => x.id.startsWith("experience-") || x.id.startsWith("education-") || x.id.startsWith("training-")).length, unansweredPersistence: Boolean(env.UNANSWERED_KV) }, 200, origin);
     }
 
+    if (url.pathname === "/admin/knowledge") {
+      const auth = request.headers.get("Authorization") || "";
+      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) {
+        return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      }
+      if (!env.UNANSWERED_KV) {
+        return jsonResponse({ error: "UNANSWERED_KV is not configured" }, 503, origin);
+      }
+      if (request.method !== "POST") {
+        return jsonResponse({ error: "POST required" }, 405, origin);
+      }
+
+      let adminBody;
+      try { adminBody = await request.json(); }
+      catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
+
+      const question = typeof adminBody.question === "string" ? adminBody.question.trim() : "";
+      const answer = typeof adminBody.answer === "string" ? adminBody.answer.trim() : "";
+      const title = typeof adminBody.title === "string" && adminBody.title.trim()
+        ? adminBody.title.trim().slice(0, 120)
+        : "Curated portfolio knowledge";
+      const extraKeywords = Array.isArray(adminBody.keywords) ? adminBody.keywords.slice(0, 8) : [];
+      if (!question || !answer) return jsonResponse({ error: "Question and answer are required" }, 400, origin);
+      if (answer.length > 1600) return jsonResponse({ error: "Answer is too long" }, 400, origin);
+
+      const qk = await questionKey(question);
+      const knowledgeKey = "knowledge:" + qk.key.replace("unanswered:", "");
+      const item = {
+        id: "dynamic-" + knowledgeKey.split(":")[1],
+        title,
+        keywords: dynamicKeywords(question, extraKeywords),
+        tr: answer,
+        en: answer,
+        source: "Admin Knowledge Inbox",
+        evidence: {
+          label: "Curated knowledge",
+          tools: [],
+          useCases: [],
+          approach: "Human-reviewed portfolio knowledge",
+          why: "Added from a real unanswered visitor question and reviewed by the portfolio owner."
+        },
+        createdAt: new Date().toISOString()
+      };
+
+      await env.UNANSWERED_KV.put(knowledgeKey, JSON.stringify(item));
+      if (adminBody.unansweredKey && String(adminBody.unansweredKey).startsWith("unanswered:")) {
+        await env.UNANSWERED_KV.delete(String(adminBody.unansweredKey));
+      }
+      return jsonResponse({ ok: true, item }, 200, origin);
+    }
+
     if (url.pathname === "/admin/unanswered") {
       const auth = request.headers.get("Authorization") || "";
       if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) {
@@ -533,7 +613,7 @@ export default {
         try { items.push({ key: key.name, ...JSON.parse(raw) }); }
         catch { items.push({ key: key.name, raw }); }
       }
-      items.sort((a, b) => String(b.at || "").localeCompare(String(a.at || "")));
+      items.sort((a, b) => (Number(b.count) || 1) - (Number(a.count) || 1) || String(b.lastAt || b.at || "").localeCompare(String(a.lastAt || a.at || "")));
       return jsonResponse({ ok: true, count: items.length, items }, 200, origin);
     }
 
@@ -549,17 +629,33 @@ export default {
     if (!message) return jsonResponse({ error: "Message is required" }, 400, origin);
     if (message.length > 1200) return jsonResponse({ error: "Message is too long" }, 400, origin);
 
-    const fast = directAnswer(message);
+    const dynamicKnowledge = await loadDynamicKnowledge(env);
+    const allKnowledge = [...dynamicKnowledge, ...KNOWLEDGE];
+    const recruiterMode = body.mode === "recruiter";
+
+    const fast = recruiterMode ? null : directAnswer(message, allKnowledge);
     if (fast) return jsonResponse({ ok: true, ...fast, grounded: true }, 200, origin);
 
-    const hits = retrieve(message);
+    const hits = retrieve(message, allKnowledge);
     if (!hits.length) {
-      const unanswered = { question: message.slice(0, 500), at: new Date().toISOString() };
+      const now = new Date().toISOString();
+      const unanswered = { question: message.slice(0, 500), at: now };
       console.log("UNANSWERED_QUERY", JSON.stringify(unanswered));
       if (env.UNANSWERED_KV) {
         try {
-          const key = `unanswered:${Date.now()}:${crypto.randomUUID()}`;
-          await env.UNANSWERED_KV.put(key, JSON.stringify(unanswered), { expirationTtl: 2592000 });
+          const qk = await questionKey(message);
+          const existingRaw = await env.UNANSWERED_KV.get(qk.key);
+          let existing = null;
+          try { existing = existingRaw ? JSON.parse(existingRaw) : null; } catch {}
+          const record = {
+            question: message.slice(0, 500),
+            normalized: qk.normalized,
+            count: Math.max(0, Number(existing?.count) || 0) + 1,
+            firstAt: existing?.firstAt || existing?.at || now,
+            lastAt: now,
+            at: now
+          };
+          await env.UNANSWERED_KV.put(qk.key, JSON.stringify(record), { expirationTtl: 2592000 });
         } catch (error) {
           console.error("UNANSWERED_KV write failed", error);
         }
@@ -589,8 +685,11 @@ export default {
       `[${item.title}]\nTR: ${item.tr}\nEN: ${item.en}`
     ).join("\n\n");
 
+    const recruiterInstruction = recruiterMode
+      ? "RECRUITER MODE: Organize the answer around documented evidence. State concrete relevant projects/experience first, then note material role requirements that are not supported by the supplied context. Never assign a fit score, ranking, or probability."
+      : "";
     const messages = [
-      { role: "system", content: SYSTEM_PROMPT },
+      { role: "system", content: SYSTEM_PROMPT + (recruiterInstruction ? "\n" + recruiterInstruction : "") },
       { role: "system", content: `PORTFOLIO CONTEXT:\n${context}` },
       ...sanitizeHistory(body.history),
       { role: "user", content: message }
@@ -606,7 +705,13 @@ export default {
             model: result.model,
             sources: hits.map(x => ({ title: x.item.title, url: x.item.source || null })),
             evidence: evidencePayload(hits.map(x => x.item)),
-            route: "rag-lite",
+            recruiter: recruiterMode ? {
+              mode: "evidence-review",
+              verifiedAreas: hits.slice(0, 3).map(x => x.item.title),
+              evidenceCount: hits.filter(x => x.item.evidence).length,
+              note: "Only documented portfolio evidence is shown."
+            } : null,
+            route: recruiterMode ? "recruiter-rag" : "rag-lite",
             grounded: true,
             fallbackUsed: model !== MODELS[0]
           }, 200, origin);
