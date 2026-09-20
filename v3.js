@@ -568,7 +568,7 @@ function createMetrics() {
   function initAdminShortcut() {
     const button = document.getElementById("v3SecretAdmin");
     const openAdmin = () => {
-      window.location.href = "portfolio-ai-admin.html";
+      window.location.href = "/admin.html";
     };
     button?.addEventListener("click", openAdmin);
     document.addEventListener("keydown", (event) => {
@@ -623,6 +623,18 @@ function createMetrics() {
             nav.appendChild(a);
           });
         }
+      }
+
+      if (config.pageControls && typeof config.pageControls === "object") {
+        Object.entries(config.pageControls).forEach(([id, control]) => {
+          const section = document.getElementById(id);
+          if (!section) return;
+          section.hidden = control?.enabled === false;
+          const eye = section.querySelector(".section-heading .eyebrow");
+          const title = section.querySelector(".section-heading h2");
+          if (eye && control?.eyebrow) eye.textContent = control.eyebrow;
+          if (title && control?.title) title.textContent = control.title;
+        });
       }
 
       if (Array.isArray(config.projects) && config.projects.length) {
