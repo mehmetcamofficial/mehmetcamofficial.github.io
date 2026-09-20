@@ -1,0 +1,493 @@
+/* Portfolio V2 stability + layout fixes
+   Loaded after style.css to isolate new showcase styling from legacy rules. */
+
+.hero-v2 {
+  min-height: auto !important;
+  grid-template-columns: minmax(0, 1.08fr) minmax(360px, .92fr) !important;
+  gap: 42px !important;
+  padding: 64px 0 82px !important;
+  align-items: center !important;
+}
+
+.hero-v2 .hero-content {
+  min-width: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-v2 .hero-title-v2 {
+  max-width: 790px !important;
+  margin-bottom: 28px !important;
+  font-size: clamp(3.35rem, 5.8vw, 6.15rem) !important;
+  line-height: .94 !important;
+  letter-spacing: -.075em !important;
+  overflow-wrap: normal !important;
+}
+
+.hero-v2 .hero-title-v2 span {
+  white-space: normal !important;
+}
+
+.hero-v2 .hero-description {
+  max-width: 710px !important;
+  font-size: clamp(1rem, 1.35vw, 1.16rem) !important;
+  line-height: 1.65 !important;
+}
+
+.hero-v2 .hero-proof-v2 {
+  max-width: 760px;
+}
+
+.hero-v2 .hero-visual-v2 {
+  min-height: 500px !important;
+  height: 520px !important;
+  overflow: visible !important;
+  transition: transform .2s ease-out;
+}
+
+.hero-v2 .orbit-system {
+  width: 285px !important;
+  height: 285px !important;
+}
+
+.hero-v2 .orbit-1 {
+  width: 285px !important;
+  height: 285px !important;
+}
+
+.hero-v2 .orbit-2 {
+  width: 350px !important;
+  height: 350px !important;
+}
+
+.hero-v2 .orbit-3 {
+  width: 415px !important;
+  height: 415px !important;
+}
+
+.hero-v2 .profile-planet {
+  inset: 40px !important;
+}
+
+.hero-v2 .hero-status-card {
+  right: 0 !important;
+  bottom: 28px !important;
+  width: min(290px, 72%) !important;
+  padding: 18px 20px !important;
+  border-radius: 22px !important;
+}
+
+.build-signal {
+  margin-top: -20px !important;
+}
+
+.featured-work-section {
+  padding-top: 104px !important;
+}
+
+.tourpilot-case {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.02fr) minmax(430px, .98fr) !important;
+  min-height: 620px !important;
+  padding: 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+}
+
+.tourpilot-case .case-copy {
+  min-width: 0 !important;
+  padding: 48px 46px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+
+.tourpilot-case .case-kicker {
+  display: flex !important;
+  align-items: center !important;
+  gap: 9px !important;
+  margin-bottom: 20px !important;
+  color: var(--accent) !important;
+  font-size: .72rem !important;
+  font-weight: 900 !important;
+  letter-spacing: .14em !important;
+}
+
+.tourpilot-case .case-copy h3 {
+  margin: 0 !important;
+  color: var(--text-strong) !important;
+  font-size: clamp(3.4rem, 5.3vw, 5.6rem) !important;
+  line-height: .92 !important;
+  letter-spacing: -.075em !important;
+}
+
+.tourpilot-case .case-lead {
+  max-width: 650px !important;
+  margin: 22px 0 0 !important;
+  color: var(--muted) !important;
+  font-size: 1.03rem !important;
+  line-height: 1.68 !important;
+}
+
+.tourpilot-case .case-pill-row {
+  margin: 24px 0 26px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.tourpilot-case .case-pill-row span {
+  display: inline-flex !important;
+  margin: 0 !important;
+  padding: 8px 11px !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 999px !important;
+  color: var(--primary) !important;
+  background: var(--primary-soft) !important;
+  font-size: .75rem !important;
+  font-weight: 850 !important;
+}
+
+.tourpilot-case .case-principles {
+  display: grid !important;
+  gap: 11px !important;
+}
+
+.tourpilot-case .case-principles > div {
+  padding: 14px 16px !important;
+  border-left: 2px solid var(--border-strong) !important;
+  background: linear-gradient(90deg, var(--primary-soft), transparent) !important;
+}
+
+.tourpilot-case .case-principles strong {
+  display: block !important;
+  color: var(--text-strong) !important;
+  font-size: .9rem !important;
+}
+
+.tourpilot-case .case-principles p {
+  margin: 4px 0 0 !important;
+  color: var(--muted) !important;
+  font-size: .83rem !important;
+  line-height: 1.5 !important;
+}
+
+.tourpilot-case .case-actions {
+  margin-top: 27px !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+}
+
+.tourpilot-case .case-visual {
+  min-width: 0 !important;
+  min-height: 620px !important;
+  position: relative !important;
+  display: grid !important;
+  place-items: center !important;
+  overflow: hidden !important;
+  border-left: 1px solid var(--border) !important;
+  background:
+    radial-gradient(circle at 78% 16%, var(--purple-soft), transparent 35%),
+    radial-gradient(circle at 18% 84%, var(--accent-soft), transparent 38%),
+    linear-gradient(145deg, var(--primary-soft), transparent 58%) !important;
+}
+
+.tourpilot-case .case-visual::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  opacity: .42 !important;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px) !important;
+  background-size: 38px 38px !important;
+  pointer-events: none !important;
+}
+
+.tourpilot-case .product-window {
+  width: min(500px, 84%) !important;
+  position: relative !important;
+  z-index: 4 !important;
+  overflow: hidden !important;
+  border: 1px solid rgba(0, 212, 255, .24) !important;
+  border-radius: 22px !important;
+  background: rgba(8, 16, 31, .96) !important;
+  box-shadow: 0 34px 90px rgba(0,0,0,.3), 0 0 60px rgba(0,111,214,.12) !important;
+  color: #dbeafe !important;
+}
+
+.tourpilot-case .window-bar {
+  height: 44px !important;
+  padding: 0 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 7px !important;
+  border-bottom: 1px solid rgba(255,255,255,.08) !important;
+  color: #8fa6c6 !important;
+}
+
+.tourpilot-case .window-bar > span {
+  width: 9px !important;
+  height: 9px !important;
+  display: block !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  background: rgba(255,255,255,.25) !important;
+}
+
+.tourpilot-case .window-bar small {
+  margin-left: 8px !important;
+  font-size: .64rem !important;
+}
+
+.tourpilot-case .window-body {
+  min-height: 360px !important;
+  display: grid !important;
+  grid-template-columns: 56px 1fr !important;
+}
+
+.tourpilot-case .mini-sidebar {
+  padding: 18px 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 18px !important;
+  border-right: 1px solid rgba(255,255,255,.07) !important;
+  background: rgba(255,255,255,.025) !important;
+}
+
+.tourpilot-case .mini-sidebar b {
+  width: 30px !important;
+  height: 30px !important;
+  display: grid !important;
+  place-items: center !important;
+  border-radius: 9px !important;
+  color: #03111f !important;
+  background: linear-gradient(135deg, #00d4ff, #00ff88) !important;
+  font-size: .7rem !important;
+}
+
+.tourpilot-case .mini-sidebar i {
+  width: 21px !important;
+  height: 5px !important;
+  display: block !important;
+  border-radius: 999px !important;
+  background: rgba(255,255,255,.12) !important;
+}
+
+.tourpilot-case .mini-dashboard {
+  min-width: 0 !important;
+  padding: 26px 22px !important;
+}
+
+.tourpilot-case .mini-head {
+  display: flex !important;
+  align-items: flex-start !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+}
+
+.tourpilot-case .mini-head small {
+  display: block !important;
+  margin-bottom: 4px !important;
+  color: #00d4ff !important;
+  font-size: .54rem !important;
+  letter-spacing: .12em !important;
+}
+
+.tourpilot-case .mini-head strong {
+  display: block !important;
+  color: #fff !important;
+  font-size: 1.3rem !important;
+}
+
+.tourpilot-case .mini-head em {
+  padding: 5px 8px !important;
+  border: 1px solid rgba(0,255,136,.24) !important;
+  border-radius: 999px !important;
+  color: #00ff88 !important;
+  background: rgba(0,255,136,.08) !important;
+  font-size: .54rem !important;
+  font-style: normal !important;
+  font-weight: 900 !important;
+}
+
+.tourpilot-case .mini-stats {
+  margin: 24px 0 !important;
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  gap: 8px !important;
+}
+
+.tourpilot-case .mini-stats div {
+  min-width: 0 !important;
+  padding: 13px 10px !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  border-radius: 12px !important;
+  background: rgba(255,255,255,.035) !important;
+}
+
+.tourpilot-case .mini-stats small {
+  display: block !important;
+  margin-bottom: 5px !important;
+  color: #7890b2 !important;
+  font-size: .53rem !important;
+}
+
+.tourpilot-case .mini-stats strong {
+  color: #dbeafe !important;
+  font-size: .7rem !important;
+}
+
+.tourpilot-case .mini-table {
+  display: grid !important;
+  gap: 8px !important;
+}
+
+.tourpilot-case .mini-table span {
+  height: 27px !important;
+  display: block !important;
+  margin: 0 !important;
+  border: 1px solid rgba(255,255,255,.055) !important;
+  border-radius: 7px !important;
+  background:
+    linear-gradient(90deg, rgba(0,212,255,.12) 0 17%, transparent 17% 22%, rgba(255,255,255,.06) 22% 52%, transparent 52% 57%, rgba(123,97,255,.11) 57% 78%, transparent 78%) !important;
+}
+
+.tourpilot-case .mini-console {
+  margin-top: 18px !important;
+  padding: 11px !important;
+  border: 1px solid rgba(0,255,136,.12) !important;
+  border-radius: 10px !important;
+  background: rgba(0,0,0,.24) !important;
+  overflow: hidden !important;
+}
+
+.tourpilot-case .mini-console code {
+  color: #00ff88 !important;
+  font-size: .61rem !important;
+  white-space: nowrap !important;
+}
+
+.tourpilot-case .floating-tech {
+  position: absolute !important;
+  z-index: 7 !important;
+  padding: 9px 13px !important;
+  border: 1px solid var(--border-strong) !important;
+  border-radius: 999px !important;
+  color: var(--text-strong) !important;
+  background: var(--panel-strong) !important;
+  box-shadow: var(--shadow-soft) !important;
+  font-size: .71rem !important;
+  font-weight: 900 !important;
+}
+
+.tourpilot-case .tech-a { top: 17% !important; left: 7% !important; }
+.tourpilot-case .tech-b { right: 6% !important; bottom: 20% !important; }
+.tourpilot-case .tech-c { left: 10% !important; bottom: 11% !important; }
+
+.workflow-track {
+  display: grid !important;
+  grid-template-columns: repeat(3, minmax(0,1fr)) !important;
+  gap: 14px !important;
+}
+
+.workflow-step {
+  min-height: 190px !important;
+}
+
+.workflow-track::before {
+  display: none !important;
+}
+
+@media (min-width: 1280px) {
+  .workflow-track {
+    grid-template-columns: repeat(6, minmax(0,1fr)) !important;
+  }
+}
+
+@media (max-width: 1160px) {
+  .hero-v2 {
+    grid-template-columns: 1fr !important;
+  }
+
+  .hero-v2 .hero-title-v2 {
+    max-width: 900px !important;
+    font-size: clamp(3.4rem, 8vw, 5.5rem) !important;
+  }
+
+  .hero-v2 .hero-visual-v2 {
+    min-height: 470px !important;
+    height: 490px !important;
+  }
+
+  .tourpilot-case {
+    grid-template-columns: 1fr !important;
+  }
+
+  .tourpilot-case .case-visual {
+    min-height: 520px !important;
+    border-left: 0 !important;
+    border-top: 1px solid var(--border) !important;
+  }
+}
+
+@media (max-width: 760px) {
+  .hero-v2 {
+    padding-top: 38px !important;
+  }
+
+  .hero-v2 .hero-title-v2 {
+    font-size: clamp(2.8rem, 13vw, 4.4rem) !important;
+    line-height: .97 !important;
+  }
+
+  .hero-v2 .hero-visual-v2 {
+    min-height: 430px !important;
+    height: 450px !important;
+  }
+
+  .hero-v2 .orbit-system {
+    transform: scale(.84);
+  }
+
+  .hero-v2 .hero-status-card {
+    width: min(280px, 86%) !important;
+    right: 2% !important;
+    bottom: 12px !important;
+  }
+
+  .tourpilot-case .case-copy {
+    padding: 32px 22px !important;
+  }
+
+  .tourpilot-case .case-copy h3 {
+    font-size: 3.5rem !important;
+  }
+
+  .tourpilot-case .case-visual {
+    min-height: 410px !important;
+  }
+
+  .tourpilot-case .product-window {
+    width: 92% !important;
+  }
+
+  .tourpilot-case .window-body {
+    grid-template-columns: 42px 1fr !important;
+  }
+
+  .tourpilot-case .mini-dashboard {
+    padding: 18px 13px !important;
+  }
+
+  .tourpilot-case .floating-tech {
+    display: none !important;
+  }
+
+  .workflow-track {
+    grid-template-columns: 1fr !important;
+  }
+}
