@@ -617,6 +617,80 @@ function createMetrics() {
         }
       }
 
+      if (Array.isArray(config.projects) && config.projects.length) {
+        const live = document.querySelector("#live-apps");
+        const grid = live?.querySelector(".focus-grid");
+        const heading = live?.querySelector(".section-heading h2");
+        if (heading) heading.textContent = "Selected projects & live work.";
+        if (grid) {
+          grid.replaceChildren();
+          config.projects.filter(x => x?.enabled && x?.title).forEach(project => {
+            const card = document.createElement("article");
+            card.className = "focus-card cms-project-card";
+            if (project.image && /^https:\/\//i.test(project.image)) {
+              const img = document.createElement("img");
+              img.className = "cms-card-image";
+              img.src = project.image;
+              img.alt = project.title;
+              img.loading = "lazy";
+              card.appendChild(img);
+            }
+            const meta = document.createElement("span");
+            meta.className = "cms-card-kicker";
+            meta.textContent = project.category || "Project";
+            const h3 = document.createElement("h3"); h3.textContent = project.title;
+            const p = document.createElement("p"); p.textContent = project.description || "";
+            card.append(meta,h3,p);
+            if (Array.isArray(project.tags) && project.tags.length) {
+              const tags = document.createElement("div"); tags.className = "cms-card-tags";
+              project.tags.forEach(tag => { const s=document.createElement("span"); s.textContent=tag; tags.appendChild(s); });
+              card.appendChild(tags);
+            }
+            if (project.url && project.url !== "#") {
+              const a=document.createElement("a");a.className="btn secondary";a.href=project.url;a.textContent="Open project ↗";
+              if (/^https:\/\//i.test(project.url)){a.target="_blank";a.rel="noopener";}
+              card.appendChild(a);
+            }
+            grid.appendChild(card);
+          });
+        }
+      }
+
+      if (Array.isArray(config.posts)) {
+        const blog = document.querySelector("#blog");
+        const old = blog?.querySelector(".profile-text");
+        if (blog && config.posts.some(x => x?.enabled)) {
+          old?.remove();
+          let grid = blog.querySelector(".cms-blog-grid");
+          if (!grid) { grid=document.createElement("div");grid.className="cms-blog-grid";blog.appendChild(grid); }
+          grid.replaceChildren();
+          config.posts.filter(x=>x?.enabled&&x?.title).forEach(post=>{
+            const article=document.createElement("article");article.className="glass-panel cms-blog-card";
+            if(post.image&&/^https:\/\//i.test(post.image)){const img=document.createElement("img");img.className="cms-card-image";img.src=post.image;img.alt=post.title;img.loading="lazy";article.appendChild(img);}
+            if(post.date){const d=document.createElement("small");d.textContent=post.date;article.appendChild(d);}
+            const h3=document.createElement("h3");h3.textContent=post.title;const p=document.createElement("p");p.textContent=post.excerpt||"";article.append(h3,p);
+            if(post.url&&post.url!=="#"){const a=document.createElement("a");a.className="btn secondary";a.href=post.url;a.textContent="Read article ↗";if(/^https:\/\//i.test(post.url)){a.target="_blank";a.rel="noopener";}article.appendChild(a);}
+            grid.appendChild(article);
+          });
+        }
+      }
+
+      if (Array.isArray(config.experience) && config.experience.length) {
+        const timeline=document.querySelector("#experience .timeline");
+        if(timeline){
+          timeline.replaceChildren();
+          config.experience.filter(x=>x?.enabled&&x?.role).forEach(item=>{
+            const article=document.createElement("article");article.className="timeline-item";
+            const date=document.createElement("div");date.className="timeline-date";date.textContent=item.period||"";
+            const panel=document.createElement("div");panel.className="timeline-content glass-panel";
+            const h3=document.createElement("h3");h3.textContent=item.role;
+            const org=document.createElement("p");org.className="timeline-place";org.textContent=item.organization||"";
+            const p=document.createElement("p");p.textContent=item.description||"";
+            panel.append(h3,org,p);article.append(date,panel);timeline.appendChild(article);
+          });
+        }
+      }
+
       document.querySelectorAll(".cms-dynamic-section").forEach(el => el.remove());
       if (Array.isArray(config.sections) && config.sections.length) {
         const contact = document.querySelector("#contact");
