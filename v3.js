@@ -343,12 +343,20 @@ function createMetrics() {
     const API_URL = "https://mehmetcam-portfolio-ai.aydin254.workers.dev/chat";
     const chatHistory = [];
 
-    const appendAIText = (text, model) => {
+    const appendAIText = (text, model, sources = []) => {
       const msg = document.createElement("div");
       msg.className = "v3-msg assistant";
+
       const content = document.createElement("div");
       content.textContent = text;
       msg.appendChild(content);
+
+      const sourceMarkup = renderPortfolioSources(sources);
+      if (sourceMarkup) {
+        const sourceWrap = document.createElement("div");
+        sourceWrap.innerHTML = sourceMarkup;
+        msg.appendChild(sourceWrap);
+      }
 
       const meta = document.createElement("span");
       meta.className = "v3-msg-meta";
@@ -386,7 +394,7 @@ function createMetrics() {
         if (!response.ok || !data.answer) throw new Error(data.error || "AI request failed");
 
         typing.remove();
-        appendAIText(data.answer, "Live");
+        appendAIText(data.answer, "Live", data.sources || []);
         chatHistory.push(
           { role: "user", content: clean },
           { role: "assistant", content: data.answer }
