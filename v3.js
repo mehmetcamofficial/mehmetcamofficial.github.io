@@ -318,8 +318,26 @@
     };
 
     let responseTimer = null;
+    const API_URL = "https://mehmetcam-portfolio-ai.aydin254.workers.dev/chat";
+    const chatHistory = [];
 
-    const ask = (question) => {
+    const appendAIText = (text, model) => {
+      const msg = document.createElement("div");
+      msg.className = "v3-msg assistant";
+      const content = document.createElement("div");
+      content.textContent = text;
+      msg.appendChild(content);
+
+      const meta = document.createElement("span");
+      meta.className = "v3-msg-meta";
+      meta.textContent = model ? "Portfolio AI · " + model : "Portfolio AI";
+      msg.appendChild(meta);
+
+      conversation.appendChild(msg);
+      scrollConversation();
+    };
+
+    const ask = async (question) => {
       const clean = (question || "").trim();
       if (!clean) return;
 
@@ -329,10 +347,37 @@
       input.value = "";
       const typing = showTyping();
 
-      responseTimer = window.setTimeout(() => {
+      submit.disabled = true;
+      input.disabled = true;
+
+      try {
+        const response = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: clean,
+            history: chatHistory.slice(-6)
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok || !data.answer) throw new Error(data.error || "AI request failed");
+
+        typing.remove();
+        appendAIText(data.answer, data.model);
+        chatHistory.push(
+          { role: "user", content: clean },
+          { role: "assistant", content: data.answer }
+        );
+      } catch (error) {
+        console.warn("Portfolio AI fallback:", error);
         typing.remove();
         appendAssistant(findAnswer(clean));
-      }, 480);
+      } finally {
+        submit.disabled = false;
+        input.disabled = false;
+        input.focus();
+      }
     };
 
     const open = () => {
