@@ -459,6 +459,22 @@ function dynamicKeywords(question, extra = []) {
   return [...new Set([question.trim().slice(0, 120), ...base, ...extra.filter(Boolean).map(String)])].slice(0, 16);
 }
 
+const BLOG_COVER_BY_ID = {
+  "search-intelligence-medium": "https://mehmetcamofficial.com.tr/assets/blog/search-intelligence.svg",
+  "opspilot-ai": "https://mehmetcamofficial.com.tr/assets/blog/opspilot-ai.svg",
+  "forward-deployed-engineer": "https://mehmetcamofficial.com.tr/assets/blog/forward-deployed-engineer.svg",
+  "livable-world-food": "https://mehmetcamofficial.com.tr/assets/blog/livable-world-food.svg",
+  "society-5-agriculture": "https://mehmetcamofficial.com.tr/assets/blog/society-5-agriculture.svg",
+  "gelecegin-tarimi": "https://mehmetcamofficial.com.tr/assets/blog/future-of-agriculture.svg",
+  "smart-village-story": "https://mehmetcamofficial.com.tr/assets/blog/smart-village-story.svg",
+  "tabit-akilli-koy": "https://mehmetcamofficial.com.tr/assets/blog/tabit-smart-village.svg",
+  "tarimda-dijital-ikiz": "https://mehmetcamofficial.com.tr/assets/blog/digital-twin-agriculture.svg",
+  "ai-in-agriculture": "https://mehmetcamofficial.com.tr/assets/blog/ai-in-agriculture.svg",
+  "eu-turkiye-migration-russia": "https://mehmetcamofficial.com.tr/assets/blog/europe-turkiye.svg",
+  "exploring-data-science": "https://mehmetcamofficial.com.tr/assets/blog/exploring-data-science.svg",
+  "blockchain-energy": "https://mehmetcamofficial.com.tr/assets/blog/blockchain-energy.svg"
+};
+
 const DEFAULT_SITE_CONFIG = {
   schemaVersion: 3,
   hero: {
@@ -603,7 +619,10 @@ async function readSiteConfig(env) {
     const parsed = JSON.parse(raw);
     const merged = { ...DEFAULT_SITE_CONFIG, ...parsed };
     merged.projects = (merged.projects || []).map(item => ({ ...item, image: item?.image === "#" ? "" : (item?.image || "") }));
-    merged.posts = (merged.posts || []).map(item => ({ ...item, image: item?.image === "#" ? "" : (item?.image || "") }));
+    merged.posts = (merged.posts || []).map(item => {
+      const currentImage = item?.image === "#" ? "" : (item?.image || "");
+      return { ...item, image: currentImage || BLOG_COVER_BY_ID[item?.id] || "" };
+    });
     if (!Number(parsed.schemaVersion) || Number(parsed.schemaVersion) < 3) {
       if (!Array.isArray(parsed.posts) || parsed.posts.length === 0) merged.posts = DEFAULT_SITE_CONFIG.posts;
       merged.navigation = (Array.isArray(merged.navigation) ? merged.navigation : DEFAULT_SITE_CONFIG.navigation).map(item =>
