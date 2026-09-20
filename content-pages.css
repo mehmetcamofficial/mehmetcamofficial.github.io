@@ -156,3 +156,31 @@ html[data-theme="dark"] .writing-item{background:rgba(10,24,39,.78)}
   .writing-thumb{padding:10px}
   .writing-thumb img{aspect-ratio:auto!important}
 }
+
+/* Writing editorial index v7 — image-free, recruiter-friendly */
+.writing-list{max-width:1100px;margin:0 auto;gap:0;border-top:1px solid var(--line)}
+.writing-item{
+  display:grid!important;
+  grid-template-columns:72px minmax(0,1fr)!important;
+  gap:26px!important;
+  min-height:0!important;
+  padding:30px 8px!important;
+  border:0!important;
+  border-bottom:1px solid var(--line)!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+.writing-item:hover{transform:none!important;box-shadow:none!important;border-color:var(--line)!important}
+.writing-index{padding-top:4px;color:var(--accent);font-size:.72rem;font-weight:900;letter-spacing:.12em}
+.writing-copy{padding:0!important;display:block!important}
+.writing-copy h2{max-width:850px;margin:7px 0 10px!important;font-size:clamp(1.5rem,2.8vw,2.35rem)!important;line-height:1.08}
+.writing-copy p{max-width:790px;margin:0!important}
+.writing-link{display:inline-flex;align-items:center;gap:6px;margin-top:16px!important}
+.writing-item:hover .writing-copy h2{color:var(--accent)}
+.writing-thumb{display:none!important}
+@media(max-width:700px){
+ .writing-item{grid-template-columns:38px minmax(0,1fr)!important;gap:12px!important;padding:24px 0!important}
+ .writing-copy h2{font-size:1.45rem!important}
+}
