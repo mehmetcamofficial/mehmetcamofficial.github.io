@@ -700,7 +700,7 @@ async function callOpenRouter(env, messages) {
         models: MODELS,
         messages,
         temperature: 0.15,
-        max_tokens: 220
+        max_tokens: 420
       })
     });
     const data = await response.json().catch(() => null);
@@ -708,8 +708,21 @@ async function callOpenRouter(env, messages) {
       console.error("Portfolio AI OpenRouter error:", response.status, data?.error?.message || "unknown");
       return null;
     }
-    const answer = cleanAnswer(data?.choices?.[0]?.message?.content || "");
-    return answer ? { answer, model: data.model || "openrouter-fallback-router" } : null;
+    const choice = data?.choices?.[0];
+    const raw = choice?.message?.content || "";
+    const answer = cleanAnswer(raw);
+    if (!answer) {
+      console.error("Portfolio AI empty/sanitized completion", {
+        finishReason: choice?.finish_reason || "unknown",
+        rawLength: typeof raw === "string" ? raw.length : 0
+      });
+      return null;
+    }
+    return {
+      answer,
+      model: data.model || "openrouter-fallback-router",
+      finishReason: choice?.finish_reason || "unknown"
+    };
   } finally {
     clearTimeout(timer);
   }
