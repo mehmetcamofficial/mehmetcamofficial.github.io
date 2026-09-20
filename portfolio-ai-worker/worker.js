@@ -530,6 +530,18 @@ const DEFAULT_SITE_CONFIG = {
     title: "Mehmet Cam | AI Engineer, Product Builder & Applied AI Researcher",
     description: "Mehmet Cam is an AI engineer, product builder and applied AI researcher working across AI engineering, automation, data systems, AgriTech and production-minded digital products."
   },
+  pageControls: {
+    profile:{ enabled:true, eyebrow:"// RESEARCH PROFILE", title:"Turning research, field experience and data into practical impact." },
+    experience:{ enabled:true, eyebrow:"// EXPERIENCE", title:"Experience across AI, R&D and international projects." },
+    "agricultural-projects":{ enabled:true, eyebrow:"// AGRITECH", title:"Agricultural AI & research projects." },
+    "featured-project":{ enabled:true, eyebrow:"// FEATURED WORK", title:"Production-minded product engineering." },
+    "ai-workflow":{ enabled:true, eyebrow:"// AI WORKFLOW", title:"How I build with AI." },
+    "digital-products":{ enabled:true, eyebrow:"// DIGITAL PRODUCTS", title:"Products, automation and experiments." },
+    apps:{ enabled:true, eyebrow:"// APPLICATIONS", title:"Interactive applications." },
+    "live-apps":{ enabled:true, eyebrow:"// LIVE WORK", title:"Selected projects & live work." },
+    publication:{ enabled:true, eyebrow:"// PUBLICATION", title:"Research & publication." },
+    contact:{ enabled:true, eyebrow:"// CONTACT", title:"Let's build something useful." }
+  },
   updatedAt: null
 };
 
@@ -610,6 +622,14 @@ function sanitizeSiteConfig(input = {}) {
       title: cleanText(seo.title, 180) || DEFAULT_SITE_CONFIG.seo.title,
       description: cleanText(seo.description, 320) || DEFAULT_SITE_CONFIG.seo.description
     },
+    pageControls: Object.fromEntries(Object.entries(DEFAULT_SITE_CONFIG.pageControls).map(([id,defaults]) => {
+      const item = input?.pageControls?.[id] || {};
+      return [id,{
+        enabled:item.enabled !== false,
+        eyebrow:cleanText(item.eyebrow,100) || defaults.eyebrow,
+        title:cleanText(item.title,220) || defaults.title
+      }];
+    })),
     updatedAt: new Date().toISOString()
   };
 }
