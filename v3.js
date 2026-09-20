@@ -731,10 +731,27 @@ function createMetrics() {
         });
       }
 
-      if (config.seo?.title) document.title = config.seo.title;
-      if (config.seo?.description) {
-        let meta = document.querySelector('meta[name="description"]');
-        if (meta) meta.setAttribute("content", config.seo.description);
+      if (config.seo) {
+        const seo=config.seo;
+        if (seo.title) document.title = seo.title;
+        const setMeta=(selector,attr,value)=>{
+          if(!value)return;
+          let el=document.querySelector(selector);
+          if(el)el.setAttribute(attr,value);
+        };
+        setMeta('meta[name="description"]',"content",seo.description);
+        setMeta('meta[name="robots"]',"content",seo.robots);
+        setMeta('meta[property="og:title"]',"content",seo.ogTitle||seo.title);
+        setMeta('meta[property="og:description"]',"content",seo.ogDescription||seo.description);
+        setMeta('meta[property="og:image"]',"content",seo.ogImage);
+        setMeta('meta[name="twitter:title"]',"content",seo.ogTitle||seo.title);
+        setMeta('meta[name="twitter:description"]',"content",seo.ogDescription||seo.description);
+        setMeta('meta[name="twitter:image"]',"content",seo.ogImage);
+        if(seo.canonical){
+          const link=document.querySelector('link[rel="canonical"]');
+          if(link)link.setAttribute("href",seo.canonical);
+          setMeta('meta[property="og:url"]',"content",seo.canonical);
+        }
       }
     } catch (error) {
       console.warn("CMS config unavailable:", error);
