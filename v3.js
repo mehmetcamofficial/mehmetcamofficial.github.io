@@ -127,11 +127,11 @@ function renderEvidenceCards(evidence) {
       : "";
 
     return '<article class="v3-evidence-card' + (item.kind ? ' is-' + escapeHtml(item.kind) : '') + '">' +
-      '<small>' + escapeHtml(item.label || "Evidence") + '</small>' +
-      '<strong>' + escapeHtml(item.title || "") + '</strong>' +
+      '<div class="v3-evidence-head"><small>' + escapeHtml(item.label || "Evidence") + '</small>' +
+      '<strong>' + escapeHtml(item.title || "") + '</strong></div>' +
       timeline +
-      '<div class="v3-evidence-tags">' + tags + '</div>' +
-      (item.approach ? '<p><b>Approach</b> · ' + escapeHtml(item.approach) + '</p>' : '') +
+      (tags ? '<div class="v3-evidence-tags">' + tags + '</div>' : '') +
+      (item.approach ? '<p class="v3-evidence-approach"><b>Approach</b><span>' + escapeHtml(item.approach) + '</span></p>' : '') +
       (item.why ? '<p class="v3-evidence-why">' + escapeHtml(item.why) + '</p>' : '') +
       ((primary || secondary || source) ? '<div class="v3-evidence-actions">' + primary + secondary + source + '</div>' : '') +
     '</article>';
