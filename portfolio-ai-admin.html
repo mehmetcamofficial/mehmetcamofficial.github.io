@@ -13,7 +13,7 @@ h1{margin:0;font-size:30px}.muted{color:var(--muted)}.card{background:var(--pane
 .auth{display:flex;gap:10px;flex-wrap:wrap}input,button{font:inherit;border-radius:10px;border:1px solid var(--line);padding:11px 13px}
 input{background:#0c1018;color:var(--text);min-width:300px;flex:1}button{cursor:pointer;background:#1b2330;color:var(--text)}button.primary{background:var(--text);color:#0b0d12}
 .stats{display:flex;gap:12px;margin:18px 0}.stat{min-width:130px;padding:14px;border:1px solid var(--line);border-radius:14px}.stat strong{font-size:24px;display:block}
-.item{display:grid;grid-template-columns:1fr auto;gap:16px;padding:16px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}.q{font-size:16px;font-weight:650}.meta{font-size:12px;color:var(--muted);margin-top:6px}
+.item{display:grid;grid-template-columns:1fr;gap:12px;padding:16px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}.q{font-size:16px;font-weight:650}.meta{font-size:12px;color:var(--muted);margin-top:6px}.badge{display:inline-block;margin-left:8px;padding:3px 7px;border:1px solid var(--line);border-radius:999px;color:var(--accent);font-size:11px}.item-actions{display:flex;gap:8px;flex-wrap:wrap}.curate{display:none;gap:8px}.curate.is-open{display:grid}.curate textarea{width:100%;min-height:96px;padding:11px;border:1px solid var(--line);border-radius:10px;background:#0c1018;color:var(--text);font:inherit}.success{color:#9fffc4}
 .empty{padding:28px 0;text-align:center;color:var(--muted)}.danger{color:#ffb6b6}.note{font-size:13px;color:var(--muted);margin-top:8px}
 @media(max-width:640px){.item{grid-template-columns:1fr}.item button{justify-self:start}input{min-width:100%}}
 </style>
@@ -29,6 +29,7 @@ input{background:#0c1018;color:var(--text);min-width:300px;flex:1}button{cursor:
 </main>
 <script>
 const API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/unanswered";
+const KNOWLEDGE_API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/knowledge";
 const token=document.querySelector("#token"),list=document.querySelector("#list"),count=document.querySelector("#count"),updated=document.querySelector("#updated");
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 async function load(){
@@ -38,7 +39,7 @@ async function load(){
   const r=await fetch(API+"?limit=100",{headers:{Authorization:"Bearer "+t}});
   const d=await r.json(); if(!r.ok)throw new Error(d.error||"İstek başarısız");
   count.textContent=d.count; updated.textContent=new Date().toLocaleTimeString("tr-TR");
-  list.innerHTML=d.items.length?d.items.map(x=>'<div class="item"><div><div class="q">'+esc(x.question||x.raw)+'</div><div class="meta">'+esc(x.at?new Date(x.at).toLocaleString("tr-TR"):"")+'</div></div><button class="danger" data-key="'+esc(x.key)+'">Çözüldü / sil</button></div>').join(""):'<div class="empty">Cevaplanamayan soru yok.</div>';
+  list.innerHTML=d.items.length?d.items.map(x=>'<div class="item" data-item="'+esc(x.key)+'"><div><div class="q">'+esc(x.question||x.raw)+'<span class="badge">'+esc(x.count||1)+'× soruldu</span></div><div class="meta">İlk: '+esc(x.firstAt?new Date(x.firstAt).toLocaleString("tr-TR"):"—")+' · Son: '+esc((x.lastAt||x.at)?new Date(x.lastAt||x.at).toLocaleString("tr-TR"):"—")+'</div></div><div class="item-actions"><button class="primary" data-curate="'+esc(x.key)+'">Knowledge\'a ekle</button><button class="danger" data-key="'+esc(x.key)+'">Çözüldü / sil</button></div><div class="curate" data-curate-box="'+esc(x.key)+'"><textarea placeholder="Bu soruya Portfolio AI nasıl cevap vermeli?"></textarea><div class="item-actions"><button class="primary" data-save="'+esc(x.key)+'">Kaydet ve yayınla</button><button data-cancel="'+esc(x.key)+'">Vazgeç</button></div></div></div>').join(""):'<div class="empty">Cevaplanamayan soru yok.</div>';
  }catch(e){list.innerHTML='<div class="empty danger">'+esc(e.message)+'</div>'}
 }
 async function del(key){
@@ -48,5 +49,20 @@ async function del(key){
 }
 document.querySelector("#load").addEventListener("click",load);
 token.addEventListener("keydown",e=>{if(e.key==="Enter")load()});
-list.addEventListener("click",e=>{const b=e.target.closest("[data-key]");if(b)del(b.dataset.key)});
+async function saveKnowledge(key){
+ const item=list.querySelector('[data-item="'+CSS.escape(key)+'"]');
+ const answer=item?.querySelector("textarea")?.value.trim();
+ const question=item?.querySelector(".q")?.childNodes?.[0]?.textContent?.trim();
+ if(!answer||!question)return;
+ const r=await fetch(KNOWLEDGE_API,{method:"POST",headers:{Authorization:"Bearer "+token.value.trim(),"Content-Type":"application/json"},body:JSON.stringify({question,answer,unansweredKey:key})});
+ const d=await r.json().catch(()=>({}));
+ if(!r.ok){alert(d.error||"Kaydedilemedi");return}
+ await load();
+}
+list.addEventListener("click",e=>{
+ const delBtn=e.target.closest("[data-key]"); if(delBtn){del(delBtn.dataset.key);return}
+ const curateBtn=e.target.closest("[data-curate]"); if(curateBtn){list.querySelector('[data-curate-box="'+CSS.escape(curateBtn.dataset.curate)+'"]')?.classList.add("is-open");return}
+ const cancel=e.target.closest("[data-cancel]"); if(cancel){list.querySelector('[data-curate-box="'+CSS.escape(cancel.dataset.cancel)+'"]')?.classList.remove("is-open");return}
+ const save=e.target.closest("[data-save]"); if(save)saveKnowledge(save.dataset.save);
+});
 </script></body></html>
