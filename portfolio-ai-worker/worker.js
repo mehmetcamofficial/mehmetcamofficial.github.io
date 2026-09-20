@@ -23,14 +23,28 @@ const KNOWLEDGE = [
     keywords: ["tourpilot","tur operasyon","tour operations","rezervasyon","reservation","operasyon platformu"],
     tr: "TourPilot, tur operatörlerinin gerçek operasyon akışlarına göre geliştirilen bir operasyon platformudur. Rezervasyon işleme, operasyon planlama, müşteri ve tedarikçi yönetimi, turlar, teklifler, muhasebe akışları, RBAC, denetlenebilirlik, veri kalitesi ve otomasyon gibi alanları kapsar. AI, belirli yardımcı akışlarda ve Claude Code/Codex ile mühendislik sürecinde kullanılır; her özellik doğrudan AI değildir.",
     en: "TourPilot is an operations platform built around real tour-operator workflows. It covers reservation processing, operational planning, customers, suppliers, tours, quotations, accounting workflows, RBAC, auditability, data quality and automation. AI supports selected workflows and the engineering process; not every feature is directly AI-powered.",
-    source: "https://tourpilot.com.tr/"
+    source: "https://tourpilot.com.tr/",
+    evidence: {
+      label: "Production-minded product",
+      tools: ["TypeScript", "PostgreSQL", "AI-assisted engineering"],
+      useCases: ["Reservation ingestion", "Operational planning", "RBAC", "Auditability"],
+      approach: "Staging + idempotency + human review",
+      why: "Demonstrates product engineering around real operational complexity."
+    }
   },
   {
     id: "ai-workflow",
     title: "AI engineering workflow",
     keywords: ["ai workflow","yapay zeka","claude code","codex","workflow","geliştirme süreci","ai engineering"],
     tr: "Mehmet AI'ı yalnızca kod üreten bir araç olarak değil, mühendislik sisteminin bir parçası olarak kullanıyor. Süreç; hedef ve riskleri tanımlama, mimari/repo analizi, Claude Code ve Codex ile kontrollü geliştirme, test, staging doğrulaması, veri uzlaştırma ve ölçerek iterasyon adımlarından oluşuyor. Kaizen, Clean Code ve human-in-the-loop yaklaşımı temel ilkeler arasında.",
-    en: "Mehmet uses AI as part of an engineering system rather than only as a code generator. His workflow covers framing goals and risks, repository and architecture analysis, controlled implementation with Claude Code and Codex, testing, staging verification, data reconciliation and iterative delivery."
+    en: "Mehmet uses AI as part of an engineering system rather than only as a code generator. His workflow covers framing goals and risks, repository and architecture analysis, controlled implementation with Claude Code and Codex, testing, staging verification, data reconciliation and iterative delivery.",
+    evidence: {
+      label: "Engineering workflow",
+      tools: ["Claude Code", "Codex", "GitHub"],
+      useCases: ["Architecture", "Implementation", "Testing", "Verification"],
+      approach: "Kaizen + Clean Code + human judgment",
+      why: "Shows disciplined AI-assisted delivery rather than blind code generation."
+    }
   },
   {
     id: "research",
@@ -91,7 +105,14 @@ const KNOWLEDGE = [
     title: "n8n Automation",
     keywords: ["n8n","otomasyon","automation","workflow automation","email automation","messaging automation"],
     tr: "Mehmet n8n ile operasyon süreçleri, mesajlaşma, e-posta akışları, müşteri yeniden aktivasyonu ve human-in-the-loop iş görevleri için AI destekli otomasyon iş akışları geliştiriyor.",
-    en: "Mehmet builds AI-assisted n8n workflows for operations, messaging, email flows, customer reactivation and human-in-the-loop business tasks."
+    en: "Mehmet builds AI-assisted n8n workflows for operations, messaging, email flows, customer reactivation and human-in-the-loop business tasks.",
+    evidence: {
+      label: "Automation",
+      tools: ["n8n", "AI-assisted workflows"],
+      useCases: ["Operations", "Messaging", "Email flows", "Customer reactivation"],
+      approach: "Human-in-the-loop",
+      why: "Shows workflow design that keeps human review in business-critical steps."
+    }
   },
   {
     id: "agrivision",
@@ -127,7 +148,14 @@ const KNOWLEDGE = [
     keywords: ["scale ai","ai trainer","data scientist","model evaluation","multilingual","annotation quality","2023 present","2023-present"],
     tr: "Mehmet, 2023'ten itibaren Scale AI'da uzaktan AI Trainer & Data Scientist olarak büyük ölçekli AI modellerinin çok dilli ortamlarda eğitimi ve değerlendirilmesi, veri anotasyon kalitesinin iyileştirilmesi ve model performansının yapılandırılmış değerlendirmesi üzerinde çalıştı. Uluslararası araştırma ve mühendislik ekipleriyle iş birliği yaptı.",
     en: "Since 2023, Mehmet has worked remotely as an AI Trainer & Data Scientist at Scale AI, contributing to training and evaluating large-scale AI models in multilingual environments, improving annotation quality and model performance through structured evaluation, and collaborating with international research and engineering teams.",
-    source: "CV / Portfolio"
+    source: "CV / Portfolio",
+    evidence: {
+      label: "Professional AI experience",
+      tools: ["Model evaluation", "Structured evaluation"],
+      useCases: ["Multilingual AI", "Annotation quality", "Model performance"],
+      approach: "Research + engineering collaboration",
+      why: "Documents hands-on work with large-scale AI model evaluation."
+    }
   },
   {
     id: "experience-tabit",
@@ -135,7 +163,14 @@ const KNOWLEDGE = [
     keywords: ["tabit","smart agriculture","ar-ge müdürü","ar-ge manager","research and development manager","azmud","horizon 2020","2021 2023"],
     tr: "Mehmet, 2021–2023 arasında Tabit Smart Agriculture Technologies'te Research and Development Manager olarak akıllı tarım ve karar destek sistemleri üzerine uygulamalı araştırma projeleri tasarlayıp koordine etti. Literatür taraması, araştırma tasarımı, nitel/nicel veri analizi, teknik raporlama, proje önerileri ve paydaş dokümantasyonu yürüttü; AI destekli çiftçi karar sistemlerine odaklanan Horizon 2020 AZMUD Projesi'ne katkı sağladı.",
     en: "From 2021 to 2023, Mehmet worked as Research and Development Manager at Tabit Smart Agriculture Technologies, designing and coordinating applied research projects in smart agriculture and decision-support systems. His work included literature reviews, research design, qualitative and quantitative analysis, technical reporting, project proposals and stakeholder documentation, including contributions to the Horizon 2020 AZMUD project on AI-supported farmer decision systems.",
-    source: "CV / Portfolio"
+    source: "CV / Portfolio",
+    evidence: {
+      label: "R&D leadership",
+      tools: ["Research design", "Data analysis", "Technical reporting"],
+      useCases: ["Smart agriculture", "Decision support", "Horizon 2020 AZMUD"],
+      approach: "Applied research + stakeholder delivery",
+      why: "Shows cross-functional ownership from research design through project execution."
+    }
   },
   {
     id: "experience-undp",
@@ -366,12 +401,20 @@ function needsSynthesis(question) {
   return /\b(karsilastir|compare|birlikte|arasindaki|sentez|ozetle|summarize|acikla|explain|tum|hepsi|career path|kariyer yolu)\b/.test(q);
 }
 
+function evidencePayload(items) {
+  return items
+    .filter(item => item?.evidence)
+    .slice(0, 3)
+    .map(item => ({ title: item.title, ...item.evidence, url: item.source || null }));
+}
+
 function directAnswer(question) {
   const hits = retrieve(question);
   if (needsSynthesis(question) || !hits.length || hits[0].score < 3) return null;
   return {
     answer: isTurkish(question) ? hits[0].item.tr : hits[0].item.en,
     sources: [{ title: hits[0].item.title, url: hits[0].item.source || null }],
+    evidence: evidencePayload([hits[0].item]),
     route: "knowledge"
   };
 }
@@ -525,6 +568,7 @@ export default {
         ok: true,
         answer: isTurkish(message) ? top.tr : top.en,
         sources: [{ title: top.title, url: top.source || null }],
+        evidence: evidencePayload([top]),
         route: "knowledge-fallback",
         grounded: true
       }, 200, origin);
@@ -550,6 +594,7 @@ export default {
             answer: result.answer,
             model: result.model,
             sources: hits.map(x => ({ title: x.item.title, url: x.item.source || null })),
+            evidence: evidencePayload(hits.map(x => x.item)),
             route: "rag-lite",
             grounded: true,
             fallbackUsed: model !== MODELS[0]
@@ -565,6 +610,7 @@ export default {
       ok: true,
       answer: isTurkish(message) ? top.tr : top.en,
       sources: [{ title: top.title, url: top.source || null }],
+      evidence: evidencePayload([top]),
       route: "graceful-fallback",
       grounded: true
     }, 200, origin);
