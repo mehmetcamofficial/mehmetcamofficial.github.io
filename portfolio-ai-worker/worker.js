@@ -46,6 +46,76 @@ const KNOWLEDGE = [
     en: "Alongside TourPilot, the portfolio includes Evalora, OncoConnect AI, Search Intelligence, Colon Cancer Histopathology AI and the ENRICH Triage Engine. These projects span product engineering, data systems, automation and applied AI."
   },
   {
+    id: "evalora",
+    title: "Evalora",
+    keywords: ["evalora"],
+    tr: "Evalora, Mehmet'in bağımsız olarak geliştirdiği; uygulamalı AI ve veri odaklı kullanıcı deneyimlerini araştıran dijital ürünlerinden biridir.",
+    en: "Evalora is an independently developed digital product by Mehmet exploring applied AI and data-driven user experiences."
+  },
+  {
+    id: "oncoconnect",
+    title: "OncoConnect",
+    keywords: ["oncoconnect","oncoconnect ai"],
+    tr: "OncoConnect, teknoloji destekli bilgi ve bağlantılı kullanıcı deneyimlerine odaklanan bir dijital platform projesidir.",
+    en: "OncoConnect is a digital platform project focused on technology-enabled information and connected user experiences."
+  },
+  {
+    id: "search-intelligence",
+    title: "Search Intelligence",
+    keywords: ["search intelligence","arama zekası","arama analizi"],
+    tr: "Search Intelligence, arama zekâsı ve AI destekli analiz üzerine geliştirilmiş etkileşimli bir Streamlit uygulamasıdır.",
+    en: "Search Intelligence is an interactive Streamlit application focused on search intelligence and AI-assisted analysis."
+  },
+  {
+    id: "histopathology",
+    title: "Colon Cancer Histopathology AI",
+    keywords: ["colon cancer","histopathology","histopatoloji","kolon kanseri"],
+    tr: "Colon Cancer Histopathology AI, kolon kanseri kullanım senaryosunda histopatoloji tabanlı analizi araştıran bir AI uygulamasıdır. Portföy bunu bir uygulamalı AI çalışması olarak sunar; tıbbi tanı iddiasında bulunmaz.",
+    en: "Colon Cancer Histopathology AI is an AI application exploring histopathology-based analysis in a colon cancer use case. The portfolio presents it as an applied AI project, not as a medical diagnostic claim."
+  },
+  {
+    id: "enrich",
+    title: "ENRICH Triage Engine",
+    keywords: ["enrich","triage","triage engine","triyaj"],
+    tr: "ENRICH Triage Engine, uygulamalı bir karar destek akışını gösteren etkileşimli bir triyaj motoru prototipidir.",
+    en: "ENRICH Triage Engine is an interactive triage-engine prototype demonstrating an applied decision-support workflow."
+  },
+  {
+    id: "n8n-automation",
+    title: "n8n Automation",
+    keywords: ["n8n","otomasyon","automation","workflow automation","email automation","messaging automation"],
+    tr: "Mehmet n8n ile operasyon süreçleri, mesajlaşma, e-posta akışları, müşteri yeniden aktivasyonu ve human-in-the-loop iş görevleri için AI destekli otomasyon iş akışları geliştiriyor.",
+    en: "Mehmet builds AI-assisted n8n workflows for operations, messaging, email flows, customer reactivation and human-in-the-loop business tasks."
+  },
+  {
+    id: "agrivision",
+    title: "AgriVision AI",
+    keywords: ["agrivision","weed detection","yabancı ot","yabanci ot","crop detection","precision agriculture","hassas tarım"],
+    tr: "AgriVision AI, TensorFlow Lite ve OpenCV ile yabancı ot ve ürün tespiti, bitki seviyesinde görüntü analizi, hava durumuna bağlı ilaçlama desteği, GPS saha takibi ve AI destekli tarımsal danışmanlığı bir araya getiren hassas tarım uygulamasıdır.",
+    en: "AgriVision AI is a precision-agriculture application combining TensorFlow Lite and OpenCV for weed and crop detection, plant-level image analysis, weather-aware spraying support, GPS field tracking and AI-assisted agricultural advisory."
+  },
+  {
+    id: "tomato-disease",
+    title: "Tomato Disease Detection",
+    keywords: ["tomato disease","domates hastalık","domates hastalik","cnn","plant disease","bitki hastalık"],
+    tr: "Tomato Disease Detection, yaprak görüntülerinden domates bitkisi hastalık sınıflandırmasını CNN tabanlı TensorFlow iş akışıyla araştıran açık kaynak uyarlamasıdır. Proje model serving, FastAPI, web/mobil arayüz ve cloud deployment kavramlarını kapsayan uçtan uca bir mimariyi gösterir.",
+    en: "Tomato Disease Detection is an open-source adaptation exploring tomato plant disease classification from leaf images with a CNN-based TensorFlow workflow, spanning model serving, FastAPI, web/mobile interfaces and cloud deployment concepts."
+  },
+  {
+    id: "education",
+    title: "Education",
+    keywords: ["eğitim","egitim","education","yüksek lisans","master","lisans","economics","iktisat","dokuz eylül","adnan menderes"],
+    tr: "Mehmet, Dokuz Eylül Üniversitesi'nde Ar-Ge ve İnovasyon alanında yüksek lisansını 2019–2023 arasında tamamladı. Lisans eğitimini 2009–2013 arasında Adnan Menderes Üniversitesi İktisat bölümünde tamamladı.",
+    en: "Mehmet completed an MSc in R&D and Innovation at Dokuz Eylül University between 2019 and 2023, after earning a BSc in Economics from Adnan Menderes University between 2009 and 2013."
+  },
+  {
+    id: "publication",
+    title: "Publication",
+    keywords: ["publication","yayın","yayin","springer","kasaplar","smart agriculture","akıllı tarım"],
+    tr: "Mehmet Çam ve Ö. Y. Saatçioğlu'nun “Transition to Smart Agriculture: Case of Kasaplar Village” başlıklı çalışması, Springer Nature tarafından yayımlanan Engineering and Technology Management in Challenging Times kitabında 2024 yılında yer aldı.",
+    en: "Mehmet Çam and Ö. Y. Saatçioğlu authored “Transition to Smart Agriculture: Case of Kasaplar Village,” published by Springer Nature in Engineering and Technology Management in Challenging Times in 2024."
+  },
+  {
     id: "collaboration",
     title: "Collaboration",
     keywords: ["collaboration","collaborate","iş birliği","is birligi","çalışmak","calismak","work together","contact"],
