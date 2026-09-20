@@ -476,6 +476,21 @@ const DEFAULT_SITE_CONFIG = {
     { label: "Writing", href: "#blog" },
     { label: "Contact", href: "#contact" }
   ],
+  projects: [
+    { id:"tourpilot", title:"TourPilot", category:"AI Engineering · Tourism Operations", description:"AI-assisted operations platform built around real tour-operator workflows, auditability and production-minded data handling.", url:"https://tourpilot.com.tr/", image:"", tags:["TypeScript","PostgreSQL","Automation"], enabled:true },
+    { id:"evalora", title:"Evalora", category:"Digital Product", description:"An independently developed digital product exploring applied AI and data-driven user experiences.", url:"https://www.evalora.com.tr/", image:"", tags:["Applied AI","Product"], enabled:true },
+    { id:"oncoconnect", title:"OncoConnect", category:"Digital Platform", description:"Technology-enabled information and connected user experience project.", url:"https://oncoconnectai.com.tr/", image:"", tags:["HealthTech","Platform"], enabled:true },
+    { id:"search-intelligence", title:"Search Intelligence", category:"AI Application", description:"Interactive application focused on search intelligence and AI-assisted analysis.", url:"https://mehmetcam-search-intelligence.streamlit.app/", image:"", tags:["Retrieval","AI"], enabled:true },
+    { id:"histopathology", title:"Colon Cancer Histopathology AI", category:"Applied AI", description:"Histopathology-focused AI exploration presented as a portfolio prototype, not a diagnostic product.", url:"https://colon-cancer-histopathology-ai.streamlit.app/", image:"", tags:["Computer Vision","HealthTech"], enabled:true },
+    { id:"enrich", title:"ENRICH Triage Engine", category:"Decision Support", description:"Interactive triage-engine prototype demonstrating an applied decision-support workflow.", url:"https://enrich-triage-engine-2.streamlit.app/", image:"", tags:["Decision Support","AI"], enabled:true }
+  ],
+  posts: [],
+  experience: [
+    { id:"scale-ai", period:"2023 – Present", role:"AI Trainer & Data Scientist", organization:"Scale AI · Remote", description:"Training and evaluating large-scale AI models in multilingual environments; annotation quality and structured evaluation.", enabled:true },
+    { id:"tabit", period:"2021 – 2023", role:"Research and Development Manager", organization:"Tabit Smart Agriculture Technologies · Türkiye", description:"Applied R&D in smart agriculture, decision-support systems, Horizon 2020 AZMUD and stakeholder documentation.", enabled:true },
+    { id:"undp", period:"2015 – 2016", role:"Teaching Professional", organization:"UNDP · Algeria", description:"Training programs on sustainable development and capacity building.", enabled:true },
+    { id:"evs", period:"2016 – 2017", role:"European Voluntary Service", organization:"Craiova · Romania", description:"Ecology, social inclusion and community engagement activities.", enabled:true }
+  ],
   sections: [],
   seo: {
     title: "Mehmet Cam | AI Engineer, Product Builder & Applied AI Researcher",
@@ -497,6 +512,9 @@ function sanitizeSiteConfig(input = {}) {
   const hero = input.hero || {};
   const nav = Array.isArray(input.navigation) ? input.navigation.slice(0, 12) : DEFAULT_SITE_CONFIG.navigation;
   const sections = Array.isArray(input.sections) ? input.sections.slice(0, 12) : [];
+  const projects = Array.isArray(input.projects) ? input.projects.slice(0, 24) : DEFAULT_SITE_CONFIG.projects;
+  const posts = Array.isArray(input.posts) ? input.posts.slice(0, 40) : DEFAULT_SITE_CONFIG.posts;
+  const experience = Array.isArray(input.experience) ? input.experience.slice(0, 24) : DEFAULT_SITE_CONFIG.experience;
   const seo = input.seo || {};
   return {
     hero: {
@@ -511,6 +529,33 @@ function sanitizeSiteConfig(input = {}) {
       label: cleanText(item?.label, 40),
       href: safeHref(item?.href)
     })).filter(item => item.label),
+    projects: projects.map((item, index) => ({
+      id: cleanText(item?.id, 60).replace(/[^a-z0-9-_]/gi, "-").toLowerCase() || "project-" + index,
+      title: cleanText(item?.title, 120),
+      category: cleanText(item?.category, 100),
+      description: cleanText(item?.description, 900),
+      url: safeHref(item?.url),
+      image: safeHref(item?.image),
+      tags: Array.isArray(item?.tags) ? item.tags.slice(0, 8).map(x => cleanText(x, 30)).filter(Boolean) : [],
+      enabled: item?.enabled !== false
+    })).filter(item => item.title),
+    posts: posts.map((item, index) => ({
+      id: cleanText(item?.id, 60).replace(/[^a-z0-9-_]/gi, "-").toLowerCase() || "post-" + index,
+      title: cleanText(item?.title, 180),
+      excerpt: cleanText(item?.excerpt, 700),
+      url: safeHref(item?.url),
+      date: cleanText(item?.date, 40),
+      image: safeHref(item?.image),
+      enabled: item?.enabled !== false
+    })).filter(item => item.title),
+    experience: experience.map((item, index) => ({
+      id: cleanText(item?.id, 60).replace(/[^a-z0-9-_]/gi, "-").toLowerCase() || "experience-" + index,
+      period: cleanText(item?.period, 60),
+      role: cleanText(item?.role, 120),
+      organization: cleanText(item?.organization, 140),
+      description: cleanText(item?.description, 900),
+      enabled: item?.enabled !== false
+    })).filter(item => item.role),
     sections: sections.map(section => ({
       id: cleanText(section?.id, 50).replace(/[^a-z0-9-_]/gi, "-").toLowerCase(),
       eyebrow: cleanText(section?.eyebrow, 80),
@@ -631,6 +676,69 @@ export default {
       const config = sanitizeSiteConfig(body?.config || {});
       await env.UNANSWERED_KV.put("cms:site-config", JSON.stringify(config));
       return jsonResponse({ ok: true, config }, 200, origin);
+    }
+
+    if (url.pathname.startsWith("/media/")) {
+      if (!env.UNANSWERED_KV) return jsonResponse({ error: "Media storage unavailable" }, 503, origin);
+      const id = url.pathname.slice("/media/".length).replace(/[^a-zA-Z0-9_-]/g, "");
+      if (!id) return jsonResponse({ error: "Invalid media id" }, 400, origin);
+      const raw = await env.UNANSWERED_KV.get("media:" + id);
+      if (!raw) return jsonResponse({ error: "Not found" }, 404, origin);
+      try {
+        const item = JSON.parse(raw);
+        const binary = Uint8Array.from(atob(item.data || ""), c => c.charCodeAt(0));
+        return new Response(binary, {
+          status: 200,
+          headers: {
+            "Content-Type": item.type || "application/octet-stream",
+            "Cache-Control": "public, max-age=31536000, immutable",
+            "Access-Control-Allow-Origin": "*"
+          }
+        });
+      } catch {
+        return jsonResponse({ error: "Invalid media" }, 500, origin);
+      }
+    }
+
+    if (url.pathname === "/admin/media") {
+      const auth = request.headers.get("Authorization") || "";
+      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({ error: "Media storage unavailable" }, 503, origin);
+
+      if (request.method === "GET") {
+        const listed = await env.UNANSWERED_KV.list({ prefix: "media:", limit: 100 });
+        const items = [];
+        for (const key of listed.keys) {
+          const raw = await env.UNANSWERED_KV.get(key.name);
+          if (!raw) continue;
+          try {
+            const item = JSON.parse(raw);
+            items.push({ id: item.id, name: item.name, type: item.type, size: item.size, createdAt: item.createdAt, url: "/media/" + item.id });
+          } catch {}
+        }
+        items.sort((a,b)=>String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
+        return jsonResponse({ ok:true, items }, 200, origin);
+      }
+
+      if (request.method === "DELETE") {
+        const id = (url.searchParams.get("id") || "").replace(/[^a-zA-Z0-9_-]/g, "");
+        if (!id) return jsonResponse({ error:"Invalid media id" }, 400, origin);
+        await env.UNANSWERED_KV.delete("media:" + id);
+        return jsonResponse({ ok:true, deleted:id }, 200, origin);
+      }
+
+      if (request.method !== "POST") return jsonResponse({ error:"GET, POST or DELETE required" }, 405, origin);
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error:"Invalid JSON" }, 400, origin); }
+      const name = cleanText(body?.name, 160) || "image";
+      const type = cleanText(body?.type, 80);
+      const data = typeof body?.data === "string" ? body.data : "";
+      if (!["image/png","image/jpeg","image/webp","image/gif"].includes(type)) return jsonResponse({ error:"Unsupported image type" }, 400, origin);
+      if (!data || data.length > 2800000) return jsonResponse({ error:"Image is missing or too large. Max ~2 MB." }, 400, origin);
+      const id = crypto.randomUUID().replace(/-/g,"");
+      const item = { id, name, type, size: Number(body?.size)||0, data, createdAt:new Date().toISOString() };
+      await env.UNANSWERED_KV.put("media:" + id, JSON.stringify(item));
+      return jsonResponse({ ok:true, item:{ id,name,type,size:item.size,createdAt:item.createdAt,url:"/media/"+id } }, 200, origin);
     }
 
     if (url.pathname === "/visit") {
