@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Portfolio AI — Knowledge Inbox</title>
+<style>
+:root{color-scheme:dark;--bg:#090b10;--panel:#121620;--muted:#8e98aa;--line:#252c39;--text:#f4f7fb;--accent:#9fd3ff}
+*{box-sizing:border-box}body{margin:0;font:15px/1.5 Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
+main{max-width:980px;margin:auto;padding:40px 20px}.top{display:flex;justify-content:space-between;gap:20px;align-items:end;flex-wrap:wrap}
+h1{margin:0;font-size:30px}.muted{color:var(--muted)}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:18px}
+.auth{display:flex;gap:10px;flex-wrap:wrap}input,button{font:inherit;border-radius:10px;border:1px solid var(--line);padding:11px 13px}
+input{background:#0c1018;color:var(--text);min-width:300px;flex:1}button{cursor:pointer;background:#1b2330;color:var(--text)}button.primary{background:var(--text);color:#0b0d12}
+.stats{display:flex;gap:12px;margin:18px 0}.stat{min-width:130px;padding:14px;border:1px solid var(--line);border-radius:14px}.stat strong{font-size:24px;display:block}
+.item{display:grid;grid-template-columns:1fr auto;gap:16px;padding:16px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}.q{font-size:16px;font-weight:650}.meta{font-size:12px;color:var(--muted);margin-top:6px}
+.empty{padding:28px 0;text-align:center;color:var(--muted)}.danger{color:#ffb6b6}.note{font-size:13px;color:var(--muted);margin-top:8px}
+@media(max-width:640px){.item{grid-template-columns:1fr}.item button{justify-self:start}input{min-width:100%}}
+</style>
+</head>
+<body><main>
+<div class="top"><div><div class="muted">PORTFOLIO AI / ADMIN</div><h1>Knowledge Inbox</h1><div class="muted">Botun cevaplayamadığı gerçek sorular.</div></div></div>
+<section class="card">
+<div class="auth"><input id="token" type="password" placeholder="ADMIN_TOKEN" autocomplete="off"><button class="primary" id="load">Soruları getir</button></div>
+<div class="note">Token yalnızca bu tarayıcı sekmesinde tutulur; localStorage'a kaydedilmez.</div>
+</section>
+<div class="stats"><div class="stat"><span class="muted">Kayıt</span><strong id="count">—</strong></div><div class="stat"><span class="muted">Son yenileme</span><strong id="updated" style="font-size:14px">—</strong></div></div>
+<section class="card" id="list"><div class="empty">ADMIN_TOKEN girip “Soruları getir”e bas.</div></section>
+</main>
+<script>
+const API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/unanswered";
+const token=document.querySelector("#token"),list=document.querySelector("#list"),count=document.querySelector("#count"),updated=document.querySelector("#updated");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+async function load(){
+ const t=token.value.trim(); if(!t){token.focus();return}
+ list.innerHTML='<div class="empty">Yükleniyor…</div>';
+ try{
+  const r=await fetch(API+"?limit=100",{headers:{Authorization:"Bearer "+t}});
+  const d=await r.json(); if(!r.ok)throw new Error(d.error||"İstek başarısız");
+  count.textContent=d.count; updated.textContent=new Date().toLocaleTimeString("tr-TR");
+  list.innerHTML=d.items.length?d.items.map(x=>'<div class="item"><div><div class="q">'+esc(x.question||x.raw)+'</div><div class="meta">'+esc(x.at?new Date(x.at).toLocaleString("tr-TR"):"")+'</div></div><button class="danger" data-key="'+esc(x.key)+'">Çözüldü / sil</button></div>').join(""):'<div class="empty">Cevaplanamayan soru yok.</div>';
+ }catch(e){list.innerHTML='<div class="empty danger">'+esc(e.message)+'</div>'}
+}
+async function del(key){
+ if(!confirm("Bu kaydı kuyruktan silmek istiyor musun?"))return;
+ const r=await fetch(API+"?key="+encodeURIComponent(key),{method:"DELETE",headers:{Authorization:"Bearer "+token.value.trim()}});
+ if(r.ok)load(); else alert("Silinemedi.");
+}
+document.querySelector("#load").addEventListener("click",load);
+token.addEventListener("keydown",e=>{if(e.key==="Enter")load()});
+list.addEventListener("click",e=>{const b=e.target.closest("[data-key]");if(b)del(b.dataset.key)});
+</script></body></html>
