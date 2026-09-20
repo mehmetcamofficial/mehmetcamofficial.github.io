@@ -1078,28 +1078,55 @@ export default {
       catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
 
       const visitorId = typeof visitBody.visitorId === "string" ? visitBody.visitorId.slice(0, 120) : "";
+      const pagePath = cleanText(visitBody?.path || "/", 180) || "/";
       if (!visitorId) return jsonResponse({ error: "visitorId required" }, 400, origin);
 
       const bytes = new TextEncoder().encode(visitorId);
       const digest = await crypto.subtle.digest("SHA-256", bytes);
       const visitorHash = [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 32);
+      const now = new Date();
+      const dateKey = now.toISOString().slice(0,10);
       const uniqueKey = "analytics:visitor:" + visitorHash;
+      const dayVisitorKey = "analytics:day-visitor:" + dateKey + ":" + visitorHash;
+      const dayKey = "analytics:day:" + dateKey;
       const statsKey = "analytics:stats";
+      const pagesKey = "analytics:pages";
 
-      const [seen, statsRaw] = await Promise.all([
+      const [seen, seenToday, statsRaw, dayRaw, pagesRaw] = await Promise.all([
         env.UNANSWERED_KV.get(uniqueKey),
-        env.UNANSWERED_KV.get(statsKey)
+        env.UNANSWERED_KV.get(dayVisitorKey),
+        env.UNANSWERED_KV.get(statsKey),
+        env.UNANSWERED_KV.get(dayKey),
+        env.UNANSWERED_KV.get(pagesKey)
       ]);
-      let stats = { totalVisitors: 0, pageViews: 0, firstSeenAt: new Date().toISOString(), updatedAt: null };
+
+      let stats = { totalVisitors: 0, pageViews: 0, firstSeenAt: now.toISOString(), updatedAt: null };
+      let day = { date:dateKey, pageViews:0, uniqueVisitors:0 };
+      let pages = {};
       try { if (statsRaw) stats = { ...stats, ...JSON.parse(statsRaw) }; } catch {}
+      try { if (dayRaw) day = { ...day, ...JSON.parse(dayRaw) }; } catch {}
+      try { if (pagesRaw) pages = JSON.parse(pagesRaw) || {}; } catch {}
 
       stats.pageViews = Math.max(0, Number(stats.pageViews) || 0) + 1;
+      day.pageViews = Math.max(0, Number(day.pageViews) || 0) + 1;
+      pages[pagePath] = Math.max(0, Number(pages[pagePath]) || 0) + 1;
+
       if (!seen) {
         stats.totalVisitors = Math.max(0, Number(stats.totalVisitors) || 0) + 1;
-        await env.UNANSWERED_KV.put(uniqueKey, JSON.stringify({ firstSeenAt: new Date().toISOString() }), { expirationTtl: 31536000 });
+        await env.UNANSWERED_KV.put(uniqueKey, JSON.stringify({ firstSeenAt: now.toISOString() }), { expirationTtl: 31536000 });
       }
-      stats.updatedAt = new Date().toISOString();
-      await env.UNANSWERED_KV.put(statsKey, JSON.stringify(stats));
+      if (!seenToday) {
+        day.uniqueVisitors = Math.max(0, Number(day.uniqueVisitors) || 0) + 1;
+        await env.UNANSWERED_KV.put(dayVisitorKey, "1", { expirationTtl: 7776000 });
+      }
+
+      stats.updatedAt = now.toISOString();
+      const trimmedPages = Object.fromEntries(Object.entries(pages).sort((a,b)=>Number(b[1])-Number(a[1])).slice(0,40));
+      await Promise.all([
+        env.UNANSWERED_KV.put(statsKey, JSON.stringify(stats)),
+        env.UNANSWERED_KV.put(dayKey, JSON.stringify(day), { expirationTtl:7776000 }),
+        env.UNANSWERED_KV.put(pagesKey, JSON.stringify(trimmedPages))
+      ]);
 
       return jsonResponse({ ok: true, totalVisitors: stats.totalVisitors, pageViews: stats.pageViews }, 200, origin);
     }
@@ -1107,10 +1134,33 @@ export default {
     if (url.pathname === "/admin/analytics") {
       if (!(await isAdminAuthorized(env, request))) return jsonResponse({ error: "Unauthorized" }, 401, origin);
       if (!env.UNANSWERED_KV) return jsonResponse({ error: "Analytics storage unavailable" }, 503, origin);
-      const statsRaw = await env.UNANSWERED_KV.get("analytics:stats");
+      const [statsRaw,pagesRaw,listed] = await Promise.all([
+        env.UNANSWERED_KV.get("analytics:stats"),
+        env.UNANSWERED_KV.get("analytics:pages"),
+        env.UNANSWERED_KV.list({ prefix:"analytics:day:", limit:90 })
+      ]);
       let stats = { totalVisitors: 0, pageViews: 0, firstSeenAt: null, updatedAt: null };
+      let pages = {};
       try { if (statsRaw) stats = { ...stats, ...JSON.parse(statsRaw) }; } catch {}
-      return jsonResponse({ ok: true, ...stats }, 200, origin);
+      try { if (pagesRaw) pages = JSON.parse(pagesRaw) || {}; } catch {}
+      const daily=[];
+      for (const key of listed.keys) {
+        if (key.name.startsWith("analytics:day-visitor:")) continue;
+        const raw=await env.UNANSWERED_KV.get(key.name);
+        if(!raw) continue;
+        try { daily.push(JSON.parse(raw)); } catch {}
+      }
+      daily.sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+      const recent=daily.slice(-30);
+      const topPages=Object.entries(pages).map(([path,views])=>({path,views:Number(views)||0})).sort((a,b)=>b.views-a.views).slice(0,10);
+      return jsonResponse({
+        ok:true,
+        ...stats,
+        avgViewsPerVisitor: stats.totalVisitors ? Number((stats.pageViews / stats.totalVisitors).toFixed(2)) : 0,
+        activeDays: recent.filter(x => Number(x.pageViews)>0).length,
+        daily: recent,
+        topPages
+      },200,origin);
     }
 
     if (url.pathname === "/" || url.pathname === "/health") {
