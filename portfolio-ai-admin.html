@@ -4,74 +4,260 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>Portfolio AI — Knowledge Inbox</title>
+<title>Mehmet Cam Portfolio CMS</title>
 <style>
-:root{color-scheme:dark;--bg:#090b10;--panel:#121620;--muted:#8e98aa;--line:#252c39;--text:#f4f7fb;--accent:#9fd3ff}
-*{box-sizing:border-box}body{margin:0;font:15px/1.5 Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}
-main{max-width:980px;margin:auto;padding:40px 20px}.top{display:flex;justify-content:space-between;gap:20px;align-items:end;flex-wrap:wrap}
-h1{margin:0;font-size:30px}.muted{color:var(--muted)}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:18px}
-.auth{display:flex;gap:10px;flex-wrap:wrap}input,button{font:inherit;border-radius:10px;border:1px solid var(--line);padding:11px 13px}
-input{background:#0c1018;color:var(--text);min-width:300px;flex:1}button{cursor:pointer;background:#1b2330;color:var(--text)}button.primary{background:var(--text);color:#0b0d12}
-.stats{display:flex;gap:12px;margin:18px 0}.stat{min-width:130px;padding:14px;border:1px solid var(--line);border-radius:14px}.stat strong{font-size:24px;display:block}
-.item{display:grid;grid-template-columns:1fr;gap:12px;padding:16px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}.q{font-size:16px;font-weight:650}.meta{font-size:12px;color:var(--muted);margin-top:6px}.badge{display:inline-block;margin-left:8px;padding:3px 7px;border:1px solid var(--line);border-radius:999px;color:var(--accent);font-size:11px}.item-actions{display:flex;gap:8px;flex-wrap:wrap}.curate{display:none;gap:8px}.curate.is-open{display:grid}.curate textarea{width:100%;min-height:96px;padding:11px;border:1px solid var(--line);border-radius:10px;background:#0c1018;color:var(--text);font:inherit}.success{color:#9fffc4}
-.empty{padding:28px 0;text-align:center;color:var(--muted)}.danger{color:#ffb6b6}.note{font-size:13px;color:var(--muted);margin-top:8px}.remember-row{margin-top:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.remember-row label{display:flex;align-items:center;gap:8px;color:var(--muted);font-size:13px}.remember-row input{min-width:auto;flex:0}.remember-row button{padding:7px 10px;font-size:12px}
-@media(max-width:640px){.item{grid-template-columns:1fr}.item button{justify-self:start}input{min-width:100%}}
+:root{color-scheme:dark;--bg:#070a0f;--panel:#0f141d;--panel2:#141b26;--line:#253044;--text:#f7f9fc;--muted:#8f9aae;--accent:#7cc7ff;--green:#76e0a3;--danger:#ff9f9f;--sidebar:250px}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;font:14px/1.5 Inter,system-ui,sans-serif;background:var(--bg);color:var(--text)}button,input,textarea,select{font:inherit}
+button{cursor:pointer}.app{display:grid;grid-template-columns:var(--sidebar) 1fr;min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;padding:22px 16px;border-right:1px solid var(--line);background:#0a0e15}
+.brand{display:flex;align-items:center;gap:12px;padding:6px 8px 22px}.mark{width:40px;height:40px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,#2b79ff,#6f51ff);font-weight:900}.brand small{display:block;color:var(--muted);font-size:11px}.brand strong{font-size:15px}
+.nav{display:grid;gap:6px}.nav button{width:100%;padding:11px 12px;border:1px solid transparent;border-radius:10px;color:var(--muted);background:transparent;text-align:left;font-weight:700}.nav button:hover,.nav button.active{color:var(--text);border-color:var(--line);background:var(--panel2)}.nav .sep{height:1px;margin:8px 0;background:var(--line)}
+.side-footer{position:absolute;left:16px;right:16px;bottom:18px;display:grid;gap:8px}.side-footer a,.side-footer button{padding:9px 10px;border:1px solid var(--line);border-radius:9px;color:var(--muted);background:transparent;text-decoration:none;text-align:center}
+.main{min-width:0}.topbar{position:sticky;top:0;z-index:10;display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 24px;border-bottom:1px solid var(--line);background:rgba(7,10,15,.9);backdrop-filter:blur(16px)}.topbar h1{margin:0;font-size:18px}.topbar-actions{display:flex;gap:8px;align-items:center}.status{display:inline-flex;align-items:center;gap:7px;color:var(--green);font-size:12px;font-weight:800}.status:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+.content{padding:24px;max-width:1280px}.view{display:none}.view.active{display:block}.view-head{display:flex;justify-content:space-between;gap:20px;align-items:flex-end;margin-bottom:18px}.view-head h2{margin:0 0 4px;font-size:28px}.muted{color:var(--muted)}.grid{display:grid;gap:16px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--panel)}.card h3{margin:0 0 12px;font-size:15px}.stat strong{display:block;margin-top:5px;font-size:30px}.stat span{color:var(--muted)}.kicker{color:var(--accent);font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}
+label{display:grid;gap:6px;color:var(--muted);font-size:12px;font-weight:700}input,textarea,select{width:100%;padding:11px 12px;border:1px solid var(--line);border-radius:10px;outline:none;color:var(--text);background:#0b1018}textarea{min-height:110px;resize:vertical}input:focus,textarea:focus,select:focus{border-color:#4d7bb1;box-shadow:0 0 0 3px rgba(82,145,218,.12)}
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.span-2{grid-column:1/-1}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.btn{padding:10px 13px;border:1px solid var(--line);border-radius:10px;color:var(--text);background:var(--panel2);font-weight:800}.btn.primary{border-color:transparent;color:#06101b;background:linear-gradient(135deg,#8bd2ff,#82f1b0)}.btn.danger{color:var(--danger)}.btn.small{padding:7px 9px;font-size:12px}
+.rows{display:grid;gap:10px}.row{display:grid;grid-template-columns:1fr 1.4fr auto;gap:8px;align-items:end;padding:12px;border:1px solid var(--line);border-radius:12px;background:#0c1119}.section-row{grid-template-columns:1fr;gap:10px}.section-row .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tabs-note{padding:11px 12px;border:1px solid rgba(124,199,255,.25);border-radius:10px;color:#a8d9ff;background:rgba(124,199,255,.06);font-size:12px}
+.authbar{display:grid;grid-template-columns:1fr auto;gap:8px}.remember{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:8px;color:var(--muted);font-size:12px}.remember label{display:flex;grid-template-columns:auto 1fr;align-items:center}.remember input{width:auto}
+.item{padding:16px 0;border-top:1px solid var(--line)}.item:first-child{border-top:0}.q{font-size:15px;font-weight:800}.meta{margin-top:5px;color:var(--muted);font-size:12px}.badge{display:inline-block;margin-left:7px;padding:2px 7px;border:1px solid var(--line);border-radius:999px;color:var(--accent);font-size:10px}.curate{display:none;margin-top:10px}.curate.open{display:block}
+.empty{padding:26px;text-align:center;color:var(--muted)}.toast{position:fixed;right:20px;bottom:20px;z-index:50;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:#101722;box-shadow:0 20px 60px rgba(0,0,0,.35);display:none}.toast.show{display:block}.preview{min-height:180px;padding:18px;border:1px dashed #38506d;border-radius:14px;background:linear-gradient(135deg,#0c121b,#121928)}.preview h4{margin:6px 0;font-size:22px}.preview .accent{color:#8bd2ff}
+@media(max-width:980px){.app{grid-template-columns:1fr}.sidebar{position:relative;height:auto;border-right:0;border-bottom:1px solid var(--line)}.nav{grid-template-columns:repeat(3,1fr)}.side-footer{position:static;margin-top:14px;grid-template-columns:1fr 1fr}.grid.four,.grid.two,.form-grid{grid-template-columns:1fr}.span-2{grid-column:auto}.content{padding:16px}.topbar{padding:12px 16px}.row{grid-template-columns:1fr}.section-row .mini-grid{grid-template-columns:1fr}}
 </style>
 </head>
-<body><main>
-<div class="top"><div><div class="muted">PORTFOLIO AI / ADMIN</div><h1>Knowledge Inbox</h1><div class="muted">Botun cevaplayamadığı gerçek sorular. Bir kaydı açıp <strong>Knowledge'a ekle</strong> ile canlı bilgi tabanına yayınlayabilirsin.</div></div></div>
-<section class="card">
-<div class="auth"><input id="token" type="password" placeholder="ADMIN_TOKEN" autocomplete="off"><button class="primary" id="load">Soruları getir</button></div>
-<div class="remember-row"><label><input id="remember" type="checkbox"> Bu cihazda hatırla</label><button id="forget" type="button">Token'ı unut</button></div>
-<div class="note">“Bu cihazda hatırla” seçersen token yalnızca bu tarayıcıda localStorage'a kaydedilir. Ortak bilgisayarda kullanma.</div>
-</section>
-<div class="stats"><div class="stat"><span class="muted">Kayıt</span><strong id="count">—</strong></div><div class="stat"><span class="muted">Ziyaretçi</span><strong id="visitors">—</strong></div><div class="stat"><span class="muted">Sayfa görüntüleme</span><strong id="pageviews">—</strong></div><div class="stat"><span class="muted">Son yenileme</span><strong id="updated" style="font-size:14px">—</strong></div></div>
-<section class="card" id="list"><div class="empty">ADMIN_TOKEN girip “Soruları getir”e bas.</div></section>
-</main>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="mark">MC</div><div><strong>Portfolio CMS</strong><small>Owner workspace</small></div></div>
+    <nav class="nav" id="nav">
+      <button class="active" data-view="dashboard">Dashboard</button>
+      <button data-view="content">Site Content</button>
+      <button data-view="navigation">Header & Navigation</button>
+      <button data-view="sections">Sections</button>
+      <button data-view="knowledge">Knowledge Inbox</button>
+      <button data-view="analytics">Analytics</button>
+      <button data-view="seo">SEO</button>
+      <div class="sep"></div>
+      <button data-view="settings">Settings</button>
+    </nav>
+    <div class="side-footer"><a href="/" target="_blank" rel="noopener">Siteyi aç ↗</a><button id="logout">Token'ı unut</button></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <h1 id="pageTitle">Dashboard</h1>
+      <div class="topbar-actions"><span class="status" id="status">Bağlantı bekliyor</span><button class="btn small" id="saveAll">Tüm değişiklikleri yayınla</button></div>
+    </header>
+
+    <div class="content">
+      <section class="card" id="authCard">
+        <div class="kicker">Secure access</div>
+        <h3>Admin bağlantısı</h3>
+        <div class="authbar"><input id="token" type="password" placeholder="ADMIN_TOKEN" autocomplete="off"><button class="btn primary" id="connect">Bağlan</button></div>
+        <div class="remember"><label><input id="remember" type="checkbox"> Bu cihazda hatırla</label><span>Ortak bilgisayarda kullanma.</span></div>
+      </section>
+
+      <section class="view active" data-view-panel="dashboard">
+        <div class="view-head"><div><div class="kicker">Overview</div><h2>Portfolio Control Center</h2><div class="muted">Site içeriği, AI knowledge, trafik ve SEO tek panelde.</div></div></div>
+        <div class="grid four">
+          <div class="card stat"><span>Ziyaretçi</span><strong id="dashVisitors">—</strong></div>
+          <div class="card stat"><span>Sayfa görüntüleme</span><strong id="dashPageviews">—</strong></div>
+          <div class="card stat"><span>Knowledge Inbox</span><strong id="dashInbox">—</strong></div>
+          <div class="card stat"><span>Özel bölüm</span><strong id="dashSections">—</strong></div>
+        </div>
+        <div class="grid two" style="margin-top:16px">
+          <div class="card"><div class="kicker">Quick actions</div><h3>İçeriği yönet</h3><div class="actions"><button class="btn" data-jump="content">Hero düzenle</button><button class="btn" data-jump="navigation">Yeni menü sekmesi</button><button class="btn" data-jump="sections">Yeni bölüm ekle</button></div></div>
+          <div class="card"><div class="kicker">AI</div><h3>Knowledge Inbox</h3><p class="muted">Ziyaretçilerin cevapsız sorularını gör, cevap ver ve canlı bilgi tabanına yayınla.</p><button class="btn" data-jump="knowledge">Inbox'ı aç</button></div>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="content">
+        <div class="view-head"><div><div class="kicker">Content</div><h2>Site Content</h2><div class="muted">Ana hero alanını kod değiştirmeden güncelle.</div></div></div>
+        <div class="grid two">
+          <div class="card">
+            <div class="form-grid">
+              <label class="span-2">Badge<input id="heroBadge"></label>
+              <label class="span-2">Eyebrow<input id="heroEyebrow"></label>
+              <label>Başlangıç<input id="heroLead"></label>
+              <label>Vurgulu metin<input id="heroAccent"></label>
+              <label class="span-2">Alt satır<input id="heroTail"></label>
+              <label class="span-2">Açıklama<textarea id="heroDescription"></textarea></label>
+            </div>
+            <div class="actions"><button class="btn primary" id="saveContent">İçeriği yayınla</button></div>
+          </div>
+          <div class="preview"><div class="kicker" id="previewBadge">Preview</div><h4><span id="previewLead">I build</span> <span class="accent" id="previewAccent">AI-powered products</span><br><span id="previewTail">that solve real problems.</span></h4><p class="muted" id="previewDescription"></p></div>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="navigation">
+        <div class="view-head"><div><div class="kicker">Header</div><h2>Header & Navigation</h2><div class="muted">Menü sırasını, isimlerini ve yeni sekmeleri buradan yönet.</div></div><button class="btn" id="addNav">+ Yeni sekme</button></div>
+        <div class="tabs-note">Site içi bağlantı için <b>#section-id</b>, dış bağlantı için <b>https://...</b> kullan.</div>
+        <div class="rows" id="navRows" style="margin-top:12px"></div>
+        <div class="actions"><button class="btn primary" id="saveNavigation">Menüyü yayınla</button></div>
+      </section>
+
+      <section class="view" data-view-panel="sections">
+        <div class="view-head"><div><div class="kicker">Page Builder</div><h2>Sections</h2><div class="muted">Ana sayfaya yeni içerik bölümleri ekle. Kod yazmadan yayınlanır.</div></div><button class="btn" id="addSection">+ Yeni bölüm</button></div>
+        <div class="rows" id="sectionRows"></div>
+        <div class="actions"><button class="btn primary" id="saveSections">Bölümleri yayınla</button></div>
+      </section>
+
+      <section class="view" data-view-panel="knowledge">
+        <div class="view-head"><div><div class="kicker">Portfolio AI</div><h2>Knowledge Inbox</h2><div class="muted">Botun bilmediği soruları insan onayıyla knowledge base'e ekle.</div></div><button class="btn" id="refreshInbox">Yenile</button></div>
+        <div class="card" id="inbox"><div class="empty">Bağlandıktan sonra kayıtlar burada görünecek.</div></div>
+      </section>
+
+      <section class="view" data-view-panel="analytics">
+        <div class="view-head"><div><div class="kicker">Traffic</div><h2>Analytics</h2><div class="muted">Privacy-preserving temel ziyaretçi ölçümü.</div></div></div>
+        <div class="grid four">
+          <div class="card stat"><span>Unique browser visitors</span><strong id="analyticsVisitors">—</strong></div>
+          <div class="card stat"><span>Page views</span><strong id="analyticsViews">—</strong></div>
+          <div class="card stat"><span>İlk ölçüm</span><strong id="analyticsFirst" style="font-size:15px">—</strong></div>
+          <div class="card stat"><span>Son güncelleme</span><strong id="analyticsUpdated" style="font-size:15px">—</strong></div>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="seo">
+        <div class="view-head"><div><div class="kicker">Search</div><h2>SEO</h2><div class="muted">Arama sonucu başlığı ve açıklamasını yönet.</div></div></div>
+        <div class="card">
+          <div class="form-grid">
+            <label class="span-2">SEO title<input id="seoTitle" maxlength="180"></label>
+            <label class="span-2">Meta description<textarea id="seoDescription" maxlength="320"></textarea></label>
+          </div>
+          <div class="actions"><button class="btn primary" id="saveSeo">SEO ayarlarını yayınla</button><a class="btn" href="/sitemap.xml" target="_blank">Sitemap ↗</a><a class="btn" href="/robots.txt" target="_blank">Robots ↗</a></div>
+        </div>
+      </section>
+
+      <section class="view" data-view-panel="settings">
+        <div class="view-head"><div><div class="kicker">System</div><h2>Settings</h2><div class="muted">CMS bağlantısı ve güvenlik bilgileri.</div></div></div>
+        <div class="grid two">
+          <div class="card"><h3>Authentication</h3><p class="muted">Panel ADMIN_TOKEN ile korunur. Token yalnızca bu cihazda hatırlanabilir.</p><button class="btn danger" id="forgetToken">Bu cihazdaki token'ı sil</button></div>
+          <div class="card"><h3>Storage</h3><p class="muted">CMS içeriği, analytics ve Portfolio AI knowledge Cloudflare KV üzerinde saklanır. Git deploylarından bağımsızdır.</p></div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+
 <script>
-const API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/unanswered";
-const KNOWLEDGE_API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/knowledge";
-const ANALYTICS_API="https://mehmetcam-portfolio-ai.aydin254.workers.dev/admin/analytics";
-const token=document.querySelector("#token"),list=document.querySelector("#list"),count=document.querySelector("#count"),updated=document.querySelector("#updated"),visitors=document.querySelector("#visitors"),pageviews=document.querySelector("#pageviews"),remember=document.querySelector("#remember"),forget=document.querySelector("#forget");
-const TOKEN_STORAGE_KEY="portfolio_ai_admin_token";
+const BASE="https://mehmetcam-portfolio-ai.aydin254.workers.dev";
+const TOKEN_KEY="portfolio_ai_admin_token";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
-async function load(){
- const t=token.value.trim(); if(!t){token.focus();return}
- if(remember.checked)localStorage.setItem(TOKEN_STORAGE_KEY,t); else localStorage.removeItem(TOKEN_STORAGE_KEY);
- list.innerHTML='<div class="empty">Yükleniyor…</div>';
- try{
-  const r=await fetch(API+"?limit=100",{headers:{Authorization:"Bearer "+t}});
-  const d=await r.json(); if(!r.ok)throw new Error(d.error||"İstek başarısız");
-  count.textContent=d.count; updated.textContent=new Date().toLocaleTimeString("tr-TR");
-  const ar=await fetch(ANALYTICS_API,{headers:{Authorization:"Bearer "+t}});
-  if(ar.ok){const ad=await ar.json();visitors.textContent=Number(ad.totalVisitors||0).toLocaleString("tr-TR");pageviews.textContent=Number(ad.pageViews||0).toLocaleString("tr-TR")}
-  list.innerHTML=d.items.length?d.items.map(x=>'<div class="item" data-item="'+esc(x.key)+'"><div><div class="q">'+esc(x.question||x.raw)+'<span class="badge">'+esc(x.count||1)+'× soruldu</span></div><div class="meta">İlk: '+esc(x.firstAt?new Date(x.firstAt).toLocaleString("tr-TR"):"—")+' · Son: '+esc((x.lastAt||x.at)?new Date(x.lastAt||x.at).toLocaleString("tr-TR"):"—")+'</div></div><div class="item-actions"><button class="primary" data-curate="'+esc(x.key)+'">Knowledge\'a ekle</button><button class="danger" data-key="'+esc(x.key)+'">Çözüldü / sil</button></div><div class="curate" data-curate-box="'+esc(x.key)+'"><textarea placeholder="Bu soruya Portfolio AI nasıl cevap vermeli?"></textarea><div class="item-actions"><button class="primary" data-save="'+esc(x.key)+'">Kaydet ve yayınla</button><button data-cancel="'+esc(x.key)+'">Vazgeç</button></div></div></div>').join(""):'<div class="empty">Cevaplanamayan soru yok.</div>';
- }catch(e){list.innerHTML='<div class="empty danger">'+esc(e.message)+'</div>'}
+let config=null;
+
+function toast(msg){const t=$("#toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+function token(){return $("#token").value.trim()}
+function authHeaders(json=false){const h={Authorization:"Bearer "+token()};if(json)h["Content-Type"]="application/json";return h}
+
+function showView(name){
+  $$(".view").forEach(v=>v.classList.toggle("active",v.dataset.viewPanel===name));
+  $$("#nav button[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===name));
+  $("#pageTitle").textContent=({"dashboard":"Dashboard","content":"Site Content","navigation":"Header & Navigation","sections":"Sections","knowledge":"Knowledge Inbox","analytics":"Analytics","seo":"SEO","settings":"Settings"})[name]||"Portfolio CMS";
 }
-async function del(key){
- if(!confirm("Bu kaydı kuyruktan silmek istiyor musun?"))return;
- const r=await fetch(API+"?key="+encodeURIComponent(key),{method:"DELETE",headers:{Authorization:"Bearer "+token.value.trim()}});
- if(r.ok)load(); else alert("Silinemedi.");
+$("#nav").addEventListener("click",e=>{const b=e.target.closest("[data-view]");if(b)showView(b.dataset.view)});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-jump]");if(b)showView(b.dataset.jump)});
+
+async function api(path,opts={}){
+  const r=await fetch(BASE+path,opts);
+  const d=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(d.error||"İstek başarısız");
+  return d;
 }
-document.querySelector("#load").addEventListener("click",load);
-token.addEventListener("keydown",e=>{if(e.key==="Enter")load()});
-forget.addEventListener("click",()=>{localStorage.removeItem(TOKEN_STORAGE_KEY);token.value="";remember.checked=false;token.focus()});
-const savedToken=localStorage.getItem(TOKEN_STORAGE_KEY);
-if(savedToken){token.value=savedToken;remember.checked=true;load()}
-async function saveKnowledge(key){
- const item=list.querySelector('[data-item="'+CSS.escape(key)+'"]');
- const answer=item?.querySelector("textarea")?.value.trim();
- const question=item?.querySelector(".q")?.childNodes?.[0]?.textContent?.trim();
- if(!answer||!question)return;
- const r=await fetch(KNOWLEDGE_API,{method:"POST",headers:{Authorization:"Bearer "+token.value.trim(),"Content-Type":"application/json"},body:JSON.stringify({question,answer,unansweredKey:key})});
- const d=await r.json().catch(()=>({}));
- if(!r.ok){alert(d.error||"Kaydedilemedi");return}
- await load();
+
+async function connect(){
+  if(!token()){ $("#token").focus(); return; }
+  if($("#remember").checked)localStorage.setItem(TOKEN_KEY,token());
+  else localStorage.removeItem(TOKEN_KEY);
+  try{
+    const [site,analytics,inbox]=await Promise.all([
+      api("/admin/site-config",{headers:authHeaders()}),
+      api("/admin/analytics",{headers:authHeaders()}),
+      api("/admin/unanswered?limit=100",{headers:authHeaders()})
+    ]);
+    config=site.config;
+    $("#status").textContent="CMS bağlı";
+    $("#authCard").style.display="none";
+    hydrateConfig(); renderAnalytics(analytics); renderInbox(inbox.items||[]);
+    $("#dashInbox").textContent=inbox.count||0;
+    $("#dashSections").textContent=(config.sections||[]).filter(x=>x.enabled!==false).length;
+    toast("CMS bağlandı");
+  }catch(e){$("#status").textContent="Bağlantı hatası";toast(e.message)}
 }
-list.addEventListener("click",e=>{
- const delBtn=e.target.closest("[data-key]"); if(delBtn){del(delBtn.dataset.key);return}
- const curateBtn=e.target.closest("[data-curate]"); if(curateBtn){list.querySelector('[data-curate-box="'+CSS.escape(curateBtn.dataset.curate)+'"]')?.classList.add("is-open");return}
- const cancel=e.target.closest("[data-cancel]"); if(cancel){list.querySelector('[data-curate-box="'+CSS.escape(cancel.dataset.cancel)+'"]')?.classList.remove("is-open");return}
- const save=e.target.closest("[data-save]"); if(save)saveKnowledge(save.dataset.save);
+
+function hydrateConfig(){
+  const h=config.hero||{};
+  $("#heroBadge").value=h.badge||"";$("#heroEyebrow").value=h.eyebrow||"";$("#heroLead").value=h.lead||"";$("#heroAccent").value=h.accent||"";$("#heroTail").value=h.tail||"";$("#heroDescription").value=h.description||"";
+  $("#seoTitle").value=config.seo?.title||"";$("#seoDescription").value=config.seo?.description||"";
+  renderNav(); renderSections(); updatePreview();
+}
+function updatePreview(){ $("#previewBadge").textContent=$("#heroBadge").value||"Preview";$("#previewLead").textContent=$("#heroLead").value;$("#previewAccent").textContent=$("#heroAccent").value;$("#previewTail").textContent=$("#heroTail").value;$("#previewDescription").textContent=$("#heroDescription").value}
+["heroBadge","heroLead","heroAccent","heroTail","heroDescription"].forEach(id=>$("#"+id).addEventListener("input",updatePreview));
+
+function renderNav(){
+  const rows=$("#navRows");rows.innerHTML="";
+  (config.navigation||[]).forEach((item,i)=>{
+    const row=document.createElement("div");row.className="row";row.innerHTML='<label>Label<input data-nav-label="'+i+'" value="'+esc(item.label)+'"></label><label>Link<input data-nav-href="'+i+'" value="'+esc(item.href)+'"></label><button class="btn danger small" data-nav-remove="'+i+'">Sil</button>';rows.appendChild(row);
+  });
+}
+$("#addNav").addEventListener("click",()=>{config.navigation=config.navigation||[];config.navigation.push({label:"New tab",href:"#"});renderNav()});
+$("#navRows").addEventListener("click",e=>{const b=e.target.closest("[data-nav-remove]");if(!b)return;config.navigation.splice(Number(b.dataset.navRemove),1);renderNav()});
+function collectNav(){config.navigation=$$("#navRows .row").map((row,i)=>({label:row.querySelector("[data-nav-label]").value.trim(),href:row.querySelector("[data-nav-href]").value.trim()})).filter(x=>x.label)}
+
+function renderSections(){
+  const rows=$("#sectionRows");rows.innerHTML="";
+  (config.sections||[]).forEach((s,i)=>{
+    const row=document.createElement("div");row.className="row section-row";
+    row.innerHTML='<div class="mini-grid"><label>Section ID<input data-sec-id value="'+esc(s.id||"")+'" placeholder="my-section"></label><label>Eyebrow<input data-sec-eye value="'+esc(s.eyebrow||"")+'" placeholder="// NEW SECTION"></label></div><label>Başlık<input data-sec-title value="'+esc(s.title||"")+'"></label><label>İçerik<textarea data-sec-body>'+esc(s.body||"")+'</textarea></label><div class="mini-grid"><label>Buton etiketi<input data-sec-linklabel value="'+esc(s.linkLabel||"")+'"></label><label>Buton linki<input data-sec-linkurl value="'+esc(s.linkUrl||"")+'"></label></div><div class="actions"><label style="display:flex;grid-template-columns:auto 1fr;align-items:center"><input type="checkbox" data-sec-enabled style="width:auto" '+(s.enabled!==false?'checked':'')+'> Yayında</label><button class="btn danger small" data-sec-remove="'+i+'">Bölümü sil</button></div>';
+    rows.appendChild(row);
+  });
+}
+$("#addSection").addEventListener("click",()=>{config.sections=config.sections||[];config.sections.push({id:"new-section",eyebrow:"// NEW SECTION",title:"New section",body:"",linkLabel:"",linkUrl:"#",enabled:true});renderSections()});
+$("#sectionRows").addEventListener("click",e=>{const b=e.target.closest("[data-sec-remove]");if(!b)return;config.sections.splice(Number(b.dataset.secRemove),1);renderSections()});
+function collectSections(){config.sections=$$("#sectionRows .section-row").map(row=>({id:row.querySelector("[data-sec-id]").value.trim(),eyebrow:row.querySelector("[data-sec-eye]").value.trim(),title:row.querySelector("[data-sec-title]").value.trim(),body:row.querySelector("[data-sec-body]").value.trim(),linkLabel:row.querySelector("[data-sec-linklabel]").value.trim(),linkUrl:row.querySelector("[data-sec-linkurl]").value.trim(),enabled:row.querySelector("[data-sec-enabled]").checked})).filter(x=>x.title)}
+
+function collectAll(){
+  if(!config)return;
+  config.hero={badge:$("#heroBadge").value.trim(),eyebrow:$("#heroEyebrow").value.trim(),lead:$("#heroLead").value.trim(),accent:$("#heroAccent").value.trim(),tail:$("#heroTail").value.trim(),description:$("#heroDescription").value.trim()};
+  collectNav();collectSections();
+  config.seo={title:$("#seoTitle").value.trim(),description:$("#seoDescription").value.trim()};
+}
+async function saveConfig(msg="Yayınlandı"){collectAll();const d=await api("/admin/site-config",{method:"POST",headers:authHeaders(true),body:JSON.stringify({config})});config=d.config;hydrateConfig();$("#dashSections").textContent=(config.sections||[]).filter(x=>x.enabled!==false).length;toast(msg)}
+$("#saveAll").addEventListener("click",()=>saveConfig("Tüm değişiklikler yayınlandı"));
+$("#saveContent").addEventListener("click",()=>saveConfig("Hero içeriği yayınlandı"));
+$("#saveNavigation").addEventListener("click",()=>saveConfig("Menü yayınlandı"));
+$("#saveSections").addEventListener("click",()=>saveConfig("Bölümler yayınlandı"));
+$("#saveSeo").addEventListener("click",()=>saveConfig("SEO ayarları yayınlandı"));
+
+function renderAnalytics(a){
+  const v=Number(a.totalVisitors||0),p=Number(a.pageViews||0);
+  $("#dashVisitors").textContent=v.toLocaleString("tr-TR");$("#dashPageviews").textContent=p.toLocaleString("tr-TR");
+  $("#analyticsVisitors").textContent=v.toLocaleString("tr-TR");$("#analyticsViews").textContent=p.toLocaleString("tr-TR");
+  $("#analyticsFirst").textContent=a.firstSeenAt?new Date(a.firstSeenAt).toLocaleString("tr-TR"):"—";
+  $("#analyticsUpdated").textContent=a.updatedAt?new Date(a.updatedAt).toLocaleString("tr-TR"):"—";
+}
+
+function renderInbox(items){
+  const box=$("#inbox");
+  if(!items.length){box.innerHTML='<div class="empty">Cevaplanamayan soru yok.</div>';return}
+  box.innerHTML=items.map(x=>'<div class="item" data-item="'+esc(x.key)+'"><div class="q">'+esc(x.question||x.raw)+'<span class="badge">'+esc(x.count||1)+'× soruldu</span></div><div class="meta">İlk: '+esc(x.firstAt?new Date(x.firstAt).toLocaleString("tr-TR"):"—")+' · Son: '+esc((x.lastAt||x.at)?new Date(x.lastAt||x.at).toLocaleString("tr-TR"):"—")+'</div><div class="actions"><button class="btn primary small" data-curate="'+esc(x.key)+'">Knowledge\'a ekle</button><button class="btn danger small" data-delete="'+esc(x.key)+'">Sil</button></div><div class="curate" data-curate-box="'+esc(x.key)+'"><textarea placeholder="Portfolio AI bu soruya nasıl cevap vermeli?"></textarea><div class="actions"><button class="btn primary small" data-save-knowledge="'+esc(x.key)+'">Kaydet ve yayınla</button><button class="btn small" data-cancel="'+esc(x.key)+'">Vazgeç</button></div></div></div>').join("");
+}
+async function refreshInbox(){const d=await api("/admin/unanswered?limit=100",{headers:authHeaders()});renderInbox(d.items||[]);$("#dashInbox").textContent=d.count||0}
+$("#refreshInbox").addEventListener("click",refreshInbox);
+$("#inbox").addEventListener("click",async e=>{
+  const curate=e.target.closest("[data-curate]");if(curate){$("#inbox").querySelector('[data-curate-box="'+CSS.escape(curate.dataset.curate)+'"]').classList.add("open");return}
+  const cancel=e.target.closest("[data-cancel]");if(cancel){$("#inbox").querySelector('[data-curate-box="'+CSS.escape(cancel.dataset.cancel)+'"]').classList.remove("open");return}
+  const del=e.target.closest("[data-delete]");if(del){if(confirm("Kaydı silmek istiyor musun?")){await api("/admin/unanswered?key="+encodeURIComponent(del.dataset.delete),{method:"DELETE",headers:authHeaders()});await refreshInbox();toast("Kayıt silindi")}return}
+  const save=e.target.closest("[data-save-knowledge]");if(save){const item=$("#inbox").querySelector('[data-item="'+CSS.escape(save.dataset.save)+'"]');const answer=item.querySelector("textarea").value.trim();const question=item.querySelector(".q").childNodes[0].textContent.trim();if(!answer)return;await api("/admin/knowledge",{method:"POST",headers:authHeaders(true),body:JSON.stringify({question,answer,unansweredKey:save.dataset.save})});await refreshInbox();toast("Knowledge base'e yayınlandı")}
 });
-</script></body></html>
+
+$("#connect").addEventListener("click",connect);$("#token").addEventListener("keydown",e=>{if(e.key==="Enter")connect()});
+$("#logout").addEventListener("click",forgetToken);$("#forgetToken").addEventListener("click",forgetToken);
+function forgetToken(){localStorage.removeItem(TOKEN_KEY);$("#token").value="";$("#remember").checked=false;$("#authCard").style.display="block";$("#status").textContent="Bağlantı bekliyor";toast("Token unutuldu")}
+
+const saved=localStorage.getItem(TOKEN_KEY);if(saved){$("#token").value=saved;$("#remember").checked=true;connect()}
+</script>
+</body>
+</html>
