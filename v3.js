@@ -557,10 +557,36 @@ function createMetrics() {
     });
   }
 
+  async function initVisitorCounter() {
+    const counter = document.getElementById("v3VisitCounter");
+    if (!counter) return;
+    try {
+      let visitorId = localStorage.getItem("mc_portfolio_visitor_id");
+      if (!visitorId) {
+        visitorId = crypto.randomUUID();
+        localStorage.setItem("mc_portfolio_visitor_id", visitorId);
+      }
+      const response = await fetch("https://mehmetcam-portfolio-ai.aydin254.workers.dev/visit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ visitorId })
+      });
+      const data = await response.json();
+      if (response.ok && Number.isFinite(Number(data.totalVisitors))) {
+        counter.textContent = "Portfolio visitors · " + new Intl.NumberFormat("en-US").format(Number(data.totalVisitors));
+      } else {
+        counter.textContent = "Portfolio analytics · live";
+      }
+    } catch {
+      counter.textContent = "Portfolio analytics · live";
+    }
+  }
+
   function init() {
     createMetrics();
     initCommandPalette();
     initAskPortfolio();
+    initVisitorCounter();
   }
 
   document.addEventListener("DOMContentLoaded", init);
