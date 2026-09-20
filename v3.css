@@ -961,3 +961,80 @@ a.v3-ask-source:hover {
     min-height: 74px;
   }
 }
+
+
+/* Portfolio AI — structured proof cards */
+.v3-evidence-grid {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.v3-evidence-card {
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: 13px;
+  background: var(--panel);
+}
+
+.v3-evidence-card small {
+  display: block;
+  margin-bottom: 3px;
+  color: var(--accent);
+  font-size: .58rem;
+  font-weight: 950;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.v3-evidence-card strong {
+  display: block;
+  color: var(--text-strong);
+  font-size: .76rem;
+}
+
+.v3-evidence-tags {
+  margin-top: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.v3-evidence-tags span {
+  padding: 4px 6px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--text-strong);
+  background: var(--primary-soft);
+  font-size: .57rem;
+  font-weight: 800;
+}
+
+.v3-evidence-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: .65rem;
+  line-height: 1.45;
+}
+
+.v3-evidence-card p b {
+  color: var(--text-strong);
+}
+
+.v3-evidence-card .v3-evidence-why {
+  padding-top: 7px;
+  border-top: 1px solid var(--border);
+}
+
+.v3-evidence-card > a {
+  margin-top: 8px;
+  display: inline-block;
+  color: var(--primary);
+  font-size: .63rem;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.v3-evidence-card > a:hover {
+  text-decoration: underline;
+}
