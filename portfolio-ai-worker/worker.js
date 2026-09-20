@@ -461,6 +461,15 @@ export default {
         return jsonResponse({ error: "UNANSWERED_KV is not configured" }, 503, origin);
       }
 
+      if (request.method === "DELETE") {
+        const key = url.searchParams.get("key") || "";
+        if (!key.startsWith("unanswered:")) {
+          return jsonResponse({ error: "Invalid key" }, 400, origin);
+        }
+        await env.UNANSWERED_KV.delete(key);
+        return jsonResponse({ ok: true, deleted: key }, 200, origin);
+      }
+
       const limit = Math.min(Math.max(Number(url.searchParams.get("limit")) || 50, 1), 100);
       const listed = await env.UNANSWERED_KV.list({ prefix: "unanswered:", limit });
       const items = [];
