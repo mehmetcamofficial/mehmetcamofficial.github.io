@@ -741,7 +741,7 @@ function createMetrics() {
       const response = await fetch("https://mehmetcam-portfolio-ai.aydin254.workers.dev/visit", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ visitorId })
+        body: JSON.stringify({ visitorId, path: location.pathname })
       });
       const data = await response.json();
       if (response.ok && Number.isFinite(Number(data.totalVisitors))) {
