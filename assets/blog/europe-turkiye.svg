@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 500" role="img" aria-labelledby="t d">
+<title id="t">EUROPE × TÜRKİYE</title><desc id="d">MIGRATION · GEOPOLITICS</desc>
+<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#e0f2fe"/><stop offset="1" stop-color="#f8fbff"/></linearGradient><filter id="s"><feDropShadow dx="0" dy="14" stdDeviation="18" flood-opacity=".12"/></filter></defs>
+<rect width="900" height="500" rx="34" fill="url(#g)"/>
+<circle cx="90" cy="65" r="8" fill="#7c3aed"/><text x="116" y="73" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" fill="#526985">MEHMET CAM · WRITING</text>
+<g filter="url(#s)"><circle cx="735" cy="145" r="78" fill="#7c3aed" opacity=".12"/><circle cx="735" cy="145" r="46" fill="none" stroke="#7c3aed" stroke-width="3" opacity=".55"/><circle cx="675" cy="140" r="48" fill="none" stroke="#7c3aed" stroke-width="6"/><circle cx="770" cy="140" r="48" fill="none" stroke="#7c3aed" stroke-width="6"/><path d="M710 140h25" stroke="#7c3aed" stroke-width="8" stroke-linecap="round"/></g>
+<text x="64" y="300" font-family="Arial,Helvetica,sans-serif" font-size="54" font-weight="800" fill="#071425">EUROPE × TÜRKİYE</text>
+<text x="66" y="350" font-family="Arial,Helvetica,sans-serif" font-size="22" font-weight="700" letter-spacing="2" fill="#7c3aed">MIGRATION · GEOPOLITICS</text>
+<path d="M66 405h170" stroke="#7c3aed" stroke-width="8" stroke-linecap="round"/><text x="66" y="452" font-family="Arial,Helvetica,sans-serif" font-size="18" font-weight="700" fill="#60738f">MEDIUM ARTICLE</text>
+</svg>
