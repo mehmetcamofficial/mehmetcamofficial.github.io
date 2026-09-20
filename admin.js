@@ -230,7 +230,7 @@ function evaluateSeo(showFeedback=false){
   if($("#socialTitle"))$("#socialTitle").textContent=ogTitle||title||"Open Graph title";
   if($("#socialDescription"))$("#socialDescription").textContent=ogDesc||desc||"Open Graph description";
   if($("#socialImage"))$("#socialImage").style.backgroundImage=ogImage?'url("'+ogImage.replace(/"/g,"")+'")':"none";
-  if(showFeedback&&$("#seoStatus"))$("#seoStatus").textContent="SEO yeniden değerlendirildi · "+score+"%";
+  if(showFeedback){if($("#seoStatus"))$("#seoStatus").textContent="SEO yeniden değerlendirildi · "+score+"%";toast("SEO yeniden değerlendirildi · "+score+"%");}
 }
 
 async function loadApprovals(){
