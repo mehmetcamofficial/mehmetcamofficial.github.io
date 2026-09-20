@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /portfolio-ai-admin.html
+
+Sitemap: https://mehmetcamofficial.com.tr/sitemap.xml
