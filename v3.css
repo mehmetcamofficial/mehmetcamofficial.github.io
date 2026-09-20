@@ -776,3 +776,188 @@ html[data-theme="dark"] .v3-msg.user {
   color: var(--muted);
   background: transparent !important;
 }
+
+
+/* =========================================================
+   Portfolio AI — Recruiter / Evidence Mode
+   ========================================================= */
+.v3-ask-panel {
+  width: min(520px, calc(100% - 32px));
+  max-height: min(780px, calc(100vh - 104px));
+}
+
+.v3-ai-modebar {
+  margin-bottom: 12px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--primary-soft);
+}
+
+.v3-ai-modebar button {
+  min-height: 38px;
+  border: 0;
+  border-radius: 10px;
+  color: var(--muted);
+  background: transparent;
+  font: inherit;
+  font-size: .76rem;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.v3-ai-modebar button.is-active {
+  color: var(--text-strong);
+  background: var(--panel-strong);
+  box-shadow: 0 7px 22px rgba(0,0,0,.08);
+}
+
+.v3-recruiter-panel {
+  margin-bottom: 12px;
+  padding: 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 92% 4%, var(--purple-soft), transparent 40%),
+    var(--panel);
+}
+
+.v3-recruiter-panel[hidden] { display: none; }
+
+.v3-recruiter-panel strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-strong);
+  font-size: .92rem;
+}
+
+.v3-recruiter-panel p {
+  margin: 5px 0 10px;
+  color: var(--muted);
+  font-size: .72rem;
+  line-height: 1.48;
+}
+
+.v3-recruiter-kicker {
+  color: var(--accent);
+  font-size: .61rem;
+  font-weight: 950;
+  letter-spacing: .12em;
+}
+
+.v3-recruiter-panel textarea {
+  width: 100%;
+  resize: vertical;
+  min-height: 86px;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  outline: 0;
+  color: var(--text-strong);
+  background: var(--panel-strong);
+  font: inherit;
+  font-size: .76rem;
+  line-height: 1.45;
+}
+
+.v3-recruiter-panel textarea:focus {
+  border-color: var(--border-strong);
+  box-shadow: 0 0 0 3px var(--primary-soft);
+}
+
+.v3-recruiter-panel button {
+  width: 100%;
+  min-height: 40px;
+  margin-top: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 11px;
+  color: #fff;
+  background: linear-gradient(135deg, #0077ff, #674cff);
+  font-weight: 900;
+  cursor: pointer;
+}
+
+html[data-theme="dark"] .v3-recruiter-panel button {
+  color: #020617;
+  background: linear-gradient(135deg, #00d4ff, #00ff88);
+}
+
+.v3-proof-badge {
+  width: fit-content;
+  margin-top: 10px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--accent);
+  background: var(--panel);
+  font-size: .61rem;
+  font-weight: 900;
+  letter-spacing: .01em;
+}
+
+.v3-ask-sources {
+  margin-top: 10px;
+  padding-top: 9px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-top: 1px solid var(--border);
+}
+
+.v3-ask-sources small {
+  width: 100%;
+  color: var(--muted);
+  font-size: .59rem;
+  font-weight: 900;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.v3-ask-source {
+  max-width: 100%;
+  padding: 6px 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--text-strong);
+  background: var(--panel);
+  font-size: .64rem;
+  font-weight: 800;
+  text-decoration: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+a.v3-ask-source:hover {
+  border-color: var(--border-strong);
+  transform: translateY(-1px);
+}
+
+.v3-ask-chips {
+  padding-bottom: 2px;
+}
+
+.v3-ask-chip:first-child {
+  border-color: var(--border-strong);
+  background: var(--primary-soft);
+}
+
+@media (max-width: 620px) {
+  .v3-ask-panel {
+    width: 100%;
+    max-height: 94dvh;
+  }
+
+  .v3-ai-modebar {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  .v3-recruiter-panel textarea {
+    min-height: 74px;
+  }
+}
