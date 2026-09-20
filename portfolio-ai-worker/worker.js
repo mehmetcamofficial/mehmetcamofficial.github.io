@@ -116,6 +116,38 @@ const KNOWLEDGE = [
     en: "Mehmet Çam and Ö. Y. Saatçioğlu authored “Transition to Smart Agriculture: Case of Kasaplar Village,” published by Springer Nature in Engineering and Technology Management in Challenging Times in 2024."
   },
   {
+    id: "professional-profile",
+    title: "Professional profile / CV",
+    keywords: ["cv","resume","özgeçmiş","ozgecmis","kariyer","career","deneyim","experience","scale ai","tabit","azmud","horizon 2020","undp"],
+    tr: "Mehmet; uygulamalı AI, veri analitiği, ürün geliştirme, Ar-Ge ve inovasyon ile akıllı tarımın kesişiminde çalışan disiplinler arası bir profesyoneldir. Portföyünde Scale AI'da AI model değerlendirme çalışmaları, Tabit Smart Agriculture döneminde Ar-Ge ve akıllı tarım projeleri, Horizon 2020/AZMUD deneyimi ve uluslararası proje/eğitim çalışmaları yer alır. Ar-Ge ve İnovasyon alanında yüksek lisans, İktisat alanında lisans derecesine sahiptir.",
+    en: "Mehmet is an interdisciplinary professional working across applied AI, data analytics, product engineering, R&D and innovation, and smart agriculture. His portfolio includes AI model evaluation work at Scale AI, R&D and smart-agriculture projects at Tabit Smart Agriculture, Horizon 2020/AZMUD experience, and international project and training work. He holds an MSc in R&D and Innovation and a BSc in Economics.",
+    source: "CV / Portfolio"
+  },
+  {
+    id: "linkedin-profile",
+    title: "LinkedIn",
+    keywords: ["linkedin","linked in","profil","profile","bağlantı","connect"],
+    tr: "Mehmet'in LinkedIn profili profesyonel deneyim, AI ve veri analitiği, Ar-Ge, inovasyon ve proje çalışmalarını tamamlayan profesyonel kaynaktır. Profil adresi linkedin.com/in/mehmet-cam09.",
+    en: "Mehmet's LinkedIn profile complements the portfolio with his professional experience across AI and data analytics, R&D, innovation and project work. His profile is linkedin.com/in/mehmet-cam09.",
+    source: "https://linkedin.com/in/mehmet-cam09"
+  },
+  {
+    id: "medium-writing",
+    title: "Medium writing",
+    keywords: ["medium","yazı","yazilar","makale","article","articles","blog","writing","forward deployed engineer","fde"],
+    tr: "Mehmet Medium'da uygulamalı AI, teknoloji, mühendislik ve kariyer kesişiminde yazıyor. 13 Haziran 2026 tarihli “Forward Deployed Engineer: The Fastest-Growing — and Most Misunderstood — Role in Tech” yazısında FDE rolünü; üretim ortamına geçiş, müşteri bağlamında entegrasyon, teknik ve iş etkisinin birleşimi üzerinden ele alıyor ve bunu Scale AI ile AZMUD deneyimleriyle ilişkilendiriyor.",
+    en: "Mehmet writes on Medium about applied AI, technology, engineering and career development. In his June 13, 2026 article “Forward Deployed Engineer: The Fastest-Growing — and Most Misunderstood — Role in Tech,” he discusses the FDE role through production deployment, customer-context integration and the intersection of technical and business impact, relating it to his Scale AI and AZMUD experience.",
+    source: "https://medium.com/@aydin254/forward-deployed-engineer-the-fastest-growing-and-most-misunderstood-role-in-tech-22120e30ff24"
+  },
+  {
+    id: "medium-profile",
+    title: "Medium profile",
+    keywords: ["medium profil","medium profile","medium hesabı","medium account","@aydin254"],
+    tr: "Mehmet'in Medium yazıları @aydin254 hesabında yayımlanıyor. Portfolio AI, doğrulanmış Medium yazılarından eklenen içerikleri bilgi tabanında kullanabilir.",
+    en: "Mehmet's Medium writing is published under @aydin254. Portfolio AI can use verified Medium articles that have been added to its knowledge base.",
+    source: "https://medium.com/@aydin254"
+  },
+  {
     id: "collaboration",
     title: "Collaboration",
     keywords: ["collaboration","collaborate","iş birliği","is birligi","çalışmak","calismak","work together","contact"],
@@ -155,12 +187,17 @@ function retrieve(question) {
   }).filter(x => x.score > 0).sort((a, b) => b.score - a.score).slice(0, 3);
 }
 
+function needsSynthesis(question) {
+  const q = normalize(question);
+  return /\b(karsilastir|compare|birlikte|arasindaki|sentez|ozetle|summarize|acikla|explain|tum|hepsi|career path|kariyer yolu)\b/.test(q);
+}
+
 function directAnswer(question) {
   const hits = retrieve(question);
-  if (!hits.length || hits[0].score < 3) return null;
+  if (needsSynthesis(question) || !hits.length || hits[0].score < 3) return null;
   return {
     answer: isTurkish(question) ? hits[0].item.tr : hits[0].item.en,
-    sources: [hits[0].item.title],
+    sources: [{ title: hits[0].item.title, url: hits[0].item.source || null }],
     route: "knowledge"
   };
 }
@@ -258,6 +295,16 @@ export default {
 
     const hits = retrieve(message);
     if (!hits.length) {
+      const unanswered = { question: message.slice(0, 500), at: new Date().toISOString() };
+      console.log("UNANSWERED_QUERY", JSON.stringify(unanswered));
+      if (env.UNANSWERED_KV) {
+        try {
+          const key = `unanswered:${Date.now()}:${crypto.randomUUID()}`;
+          await env.UNANSWERED_KV.put(key, JSON.stringify(unanswered), { expirationTtl: 2592000 });
+        } catch (error) {
+          console.error("UNANSWERED_KV write failed", error);
+        }
+      }
       return jsonResponse({
         ok: true,
         answer: isTurkish(message) ? "Bu bilgi portföyde belgelenmemiş." : "This information is not documented in the portfolio.",
@@ -297,7 +344,7 @@ export default {
             ok: true,
             answer: result.answer,
             model: result.model,
-            sources: hits.map(x => x.item.title),
+            sources: hits.map(x => ({ title: x.item.title, url: x.item.source || null })),
             route: "rag-lite",
             grounded: true,
             fallbackUsed: model !== MODELS[0]
