@@ -460,6 +460,7 @@ function dynamicKeywords(question, extra = []) {
 }
 
 const DEFAULT_SITE_CONFIG = {
+  schemaVersion: 3,
   hero: {
     badge: "Building with AI · From idea to production",
     eyebrow: "// AI ENGINEERING · AGENTIC DEVELOPMENT · AUTOMATION · RESEARCH",
@@ -473,7 +474,7 @@ const DEFAULT_SITE_CONFIG = {
     { label: "AI Workflow", href: "#ai-workflow" },
     { label: "Products", href: "#digital-products" },
     { label: "Research", href: "#profile" },
-    { label: "Writing", href: "#blog" },
+    { label: "Writing", href: "/blog.html" },
     { label: "Contact", href: "#contact" }
   ],
   projects: [
@@ -484,7 +485,21 @@ const DEFAULT_SITE_CONFIG = {
     { id:"histopathology", title:"Colon Cancer Histopathology AI", category:"Applied AI", description:"Histopathology-focused AI exploration presented as a portfolio prototype, not a diagnostic product.", url:"https://colon-cancer-histopathology-ai.streamlit.app/", image:"", tags:["Computer Vision","HealthTech"], enabled:true },
     { id:"enrich", title:"ENRICH Triage Engine", category:"Decision Support", description:"Interactive triage-engine prototype demonstrating an applied decision-support workflow.", url:"https://enrich-triage-engine-2.streamlit.app/", image:"", tags:["Decision Support","AI"], enabled:true }
   ],
-  posts: [],
+  posts: [
+    { id:"search-intelligence-medium", title:"From a Machine Learning Portfolio to a Search Intelligence System", excerpt:"Engineering a reproducible AI/search intelligence system from portfolio experimentation.", url:"https://medium.com/@aydin254/from-a-machine-learning-portfolio-to-a-search-intelligence-system-engineering-a-reproducible-ai-574309c683be", date:"2026", image:"", content:"A technical article about evolving a machine-learning portfolio project into a reproducible search intelligence system.", status:"published", enabled:true },
+    { id:"opspilot-ai", title:"Building OpsPilot AI", excerpt:"Developing a multi-agent incident command center with Qwen and Alibaba Cloud.", url:"https://medium.com/@aydin254/building-opspilot-ai-developing-a-multi-agent-incident-command-center-with-qwen-and-alibaba-cloud-120623f0c635", date:"2026", image:"", content:"A build-focused article about a multi-agent incident command center and the engineering decisions behind it.", status:"published", enabled:true },
+    { id:"forward-deployed-engineer", title:"Forward Deployed Engineer", excerpt:"The fastest-growing and most misunderstood role in tech.", url:"https://medium.com/@aydin254/forward-deployed-engineer-the-fastest-growing-and-most-misunderstood-role-in-tech-22120e30ff24", date:"2026", image:"", content:"An exploration of the Forward Deployed Engineer role, product delivery and close customer collaboration.", status:"published", enabled:true },
+    { id:"livable-world-food", title:"A Vision for a More Livable World", excerpt:"Ensuring access to safe, sustainable and affordable food.", url:"https://medium.com/@aydin254/a-vision-for-a-more-livable-world-ensuring-access-to-safe-sustainable-and-affordable-food-for-355a7e8e3252", date:"", image:"", content:"Thoughts on sustainable, safe and affordable food systems.", status:"published", enabled:true },
+    { id:"society-5-agriculture", title:"Farming for the Future: Society 5.0 and Agriculture", excerpt:"A human-centered perspective on the future of agriculture.", url:"https://medium.com/@aydin254/farming-for-the-future-how-toplum-5-0-is-putting-humanity-back-at-the-center-of-agriculture-62768d9064f2", date:"", image:"", content:"A human-centered look at technology, farming and Society 5.0.", status:"published", enabled:true },
+    { id:"gelecegin-tarimi", title:"Geleneksel Tarımdan Yeni Teknolojilere", excerpt:"Geleceğin tarımı hangi yöne gidiyor?", url:"https://medium.com/@aydin254/geleneksel-tarımdan-yeni-teknolojilere-geleceğin-tarımı-hangi-yöne-gidiyor-7913d32c76be", date:"", image:"", content:"Geleneksel tarımdan akıllı ve veri odaklı tarım teknolojilerine geçiş üzerine bir değerlendirme.", status:"published", enabled:true },
+    { id:"smart-village-story", title:"Smart Village Story", excerpt:"A story about rural innovation, technology and smart village transformation.", url:"https://medium.com/@aydin254/smart-village-story-f4c139076e68", date:"", image:"", content:"Smart village transformation and rural innovation through a field-oriented lens.", status:"published", enabled:true },
+    { id:"tabit-akilli-koy", title:"Tabit Akıllı Köyün Hikayesi", excerpt:"Akıllı Köy yaklaşımının hikayesi ve saha deneyimi.", url:"https://medium.com/@aydin254/tabit-akıllı-köyün-hikayesi-9847a480250", date:"", image:"", content:"Akıllı Köy yaklaşımını saha, teknoloji ve çiftçi ihtiyaçları üzerinden ele alan yazı.", status:"published", enabled:true },
+    { id:"tarimda-dijital-ikiz", title:"Tarımda Dijital İkiz", excerpt:"Tarımda digital twin yaklaşımına giriş.", url:"https://medium.com/@aydin254/tarımda-dijital-i̇kiz-5246147859e1", date:"", image:"", content:"Dijital ikiz yaklaşımının tarımsal üretim ve karar destek sistemleri açısından değerlendirilmesi.", status:"published", enabled:true },
+    { id:"ai-in-agriculture", title:"AI in Agriculture", excerpt:"Artificial intelligence applications and opportunities in agriculture.", url:"https://medium.com/@aydin254/ai-in-agriculture-5cbfaa0bba23", date:"", image:"", content:"An overview of AI applications, opportunities and transformation in agriculture.", status:"published", enabled:true },
+    { id:"eu-turkiye-migration-russia", title:"Avrupa ve Türkiye İlişkilerinde Göç Krizi ve Rusya Savaşının Etkileri", excerpt:"Avrupa-Türkiye ilişkilerine göç ve savaş bağlamında bir bakış.", url:"https://medium.com/@aydin254/avrupa-ve-türkiye-i̇lişkilerinde-göç-krizi-ve-rusya-savaşının-etkileri-d44b80ab2842", date:"", image:"", content:"Avrupa ve Türkiye ilişkilerinde göç krizi ve Rusya savaşının etkilerini ele alan değerlendirme.", status:"published", enabled:true },
+    { id:"exploring-data-science", title:"Exploring Data Science", excerpt:"Notes on learning, experimentation and data-science practice.", url:"https://medium.com/@aydin254/exploring-data-science-1f5dba57f1cc", date:"", image:"", content:"A learning-oriented exploration of data science, experimentation and applied practice.", status:"published", enabled:true },
+    { id:"blockchain-energy", title:"Gelecek Enerji Sistemlerinde Blockchain", excerpt:"Blockchain teknolojisinin geleceğin enerji sistemlerindeki rolü.", url:"https://medium.com/@aydin254/gelecek-enerji-sistemlerinde-blockchain-f8e471ab22db", date:"", image:"", content:"Blockchain teknolojisinin yeni nesil enerji sistemleri açısından potansiyelini ele alan yazı.", status:"published", enabled:true }
+  ],
   experience: [
     { id:"scale-ai", period:"2023 – Present", role:"AI Trainer & Data Scientist", organization:"Scale AI · Remote", description:"Training and evaluating large-scale AI models in multilingual environments; annotation quality and structured evaluation.", enabled:true },
     { id:"tabit", period:"2021 – 2023", role:"Research and Development Manager", organization:"Tabit Smart Agriculture Technologies · Türkiye", description:"Applied R&D in smart agriculture, decision-support systems, Horizon 2020 AZMUD and stakeholder documentation.", enabled:true },
@@ -505,7 +520,7 @@ function cleanText(value, max = 300) {
 
 function safeHref(value) {
   const href = cleanText(value, 500);
-  return /^(#|https:\/\/|mailto:)/i.test(href) ? href : "#";
+  return /^(#|\/|https:\/\/|mailto:)/i.test(href) ? href : "#";
 }
 
 function sanitizeSiteConfig(input = {}) {
@@ -517,6 +532,7 @@ function sanitizeSiteConfig(input = {}) {
   const experience = Array.isArray(input.experience) ? input.experience.slice(0, 24) : DEFAULT_SITE_CONFIG.experience;
   const seo = input.seo || {};
   return {
+    schemaVersion: 3,
     hero: {
       badge: cleanText(hero.badge, 120) || DEFAULT_SITE_CONFIG.hero.badge,
       eyebrow: cleanText(hero.eyebrow, 180) || DEFAULT_SITE_CONFIG.hero.eyebrow,
@@ -536,7 +552,9 @@ function sanitizeSiteConfig(input = {}) {
       description: cleanText(item?.description, 900),
       url: safeHref(item?.url),
       image: safeHref(item?.image),
+      content: cleanText(item?.content, 6000),
       tags: Array.isArray(item?.tags) ? item.tags.slice(0, 8).map(x => cleanText(x, 30)).filter(Boolean) : [],
+      status: item?.status === "draft" ? "draft" : "published",
       enabled: item?.enabled !== false
     })).filter(item => item.title),
     posts: posts.map((item, index) => ({
@@ -546,6 +564,8 @@ function sanitizeSiteConfig(input = {}) {
       url: safeHref(item?.url),
       date: cleanText(item?.date, 40),
       image: safeHref(item?.image),
+      content: cleanText(item?.content, 8000),
+      status: item?.status === "draft" ? "draft" : "published",
       enabled: item?.enabled !== false
     })).filter(item => item.title),
     experience: experience.map((item, index) => ({
@@ -554,6 +574,7 @@ function sanitizeSiteConfig(input = {}) {
       role: cleanText(item?.role, 120),
       organization: cleanText(item?.organization, 140),
       description: cleanText(item?.description, 900),
+      status: item?.status === "draft" ? "draft" : "published",
       enabled: item?.enabled !== false
     })).filter(item => item.role),
     sections: sections.map(section => ({
@@ -563,6 +584,7 @@ function sanitizeSiteConfig(input = {}) {
       body: cleanText(section?.body, 1200),
       linkLabel: cleanText(section?.linkLabel, 50),
       linkUrl: safeHref(section?.linkUrl),
+      status: section?.status === "draft" ? "draft" : "published",
       enabled: section?.enabled !== false
     })).filter(section => section.title),
     seo: {
@@ -577,8 +599,32 @@ async function readSiteConfig(env) {
   if (!env.UNANSWERED_KV) return DEFAULT_SITE_CONFIG;
   const raw = await env.UNANSWERED_KV.get("cms:site-config");
   if (!raw) return DEFAULT_SITE_CONFIG;
-  try { return { ...DEFAULT_SITE_CONFIG, ...JSON.parse(raw) }; }
-  catch { return DEFAULT_SITE_CONFIG; }
+  try {
+    const parsed = JSON.parse(raw);
+    const merged = { ...DEFAULT_SITE_CONFIG, ...parsed };
+    if (!Number(parsed.schemaVersion) || Number(parsed.schemaVersion) < 3) {
+      if (!Array.isArray(parsed.posts) || parsed.posts.length === 0) merged.posts = DEFAULT_SITE_CONFIG.posts;
+      merged.navigation = (Array.isArray(merged.navigation) ? merged.navigation : DEFAULT_SITE_CONFIG.navigation).map(item =>
+        item?.href === "#blog" ? { ...item, href: "/blog.html" } : item
+      );
+      merged.schemaVersion = 3;
+    }
+    return merged;
+  } catch { return DEFAULT_SITE_CONFIG; }
+}
+
+async function isAdminAuthorized(env, request) {
+  const auth = request.headers.get("Authorization") || "";
+  const bearer = auth.startsWith("Bearer ") ? auth.slice(7) : "";
+  if (env.ADMIN_TOKEN && bearer === env.ADMIN_TOKEN) return true;
+  if (!bearer || !env.UNANSWERED_KV) return false;
+  return Boolean(await env.UNANSWERED_KV.get("admin-session:" + bearer));
+}
+
+async function createAdminSession(env) {
+  const token = crypto.randomUUID().replace(/-/g, "") + crypto.randomUUID().replace(/-/g, "");
+  await env.UNANSWERED_KV.put("admin-session:" + token, JSON.stringify({ createdAt: new Date().toISOString() }), { expirationTtl: 43200 });
+  return token;
 }
 
 function corsHeaders(origin) {
@@ -653,19 +699,74 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
+    if (url.pathname === "/admin/login") {
+      if (request.method !== "POST") return jsonResponse({ error: "POST required" }, 405, origin);
+      if (!env.ADMIN_TOKEN || !env.UNANSWERED_KV) return jsonResponse({ error: "Admin login is not configured" }, 503, origin);
+      let body;
+      try { body = await request.json(); } catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
+      const password = typeof body?.password === "string" ? body.password : "";
+      if (!password || password !== env.ADMIN_TOKEN) return jsonResponse({ error: "Invalid password" }, 401, origin);
+      const session = await createAdminSession(env);
+      return jsonResponse({ ok:true, session, expiresIn:43200 }, 200, origin);
+    }
+
+    if (url.pathname === "/admin/revisions") {
+      if (!(await isAdminAuthorized(env, request))) return jsonResponse({ error:"Unauthorized" }, 401, origin);
+      if (!env.UNANSWERED_KV) return jsonResponse({ error:"Revision storage unavailable" }, 503, origin);
+      if (request.method === "GET") {
+        const listed = await env.UNANSWERED_KV.list({ prefix:"revision:", limit:30 });
+        const items=[];
+        for (const key of listed.keys) {
+          const raw=await env.UNANSWERED_KV.get(key.name);
+          if(!raw) continue;
+          try {
+            const r=JSON.parse(raw);
+            items.push({ key:key.name, createdAt:r.createdAt, note:r.note || "Published revision", config:r.config });
+          } catch {}
+        }
+        items.sort((a,b)=>String(b.createdAt||"").localeCompare(String(a.createdAt||"")));
+        return jsonResponse({ ok:true, items },200,origin);
+      }
+      if (request.method === "POST") {
+        let body; try{body=await request.json();}catch{return jsonResponse({error:"Invalid JSON"},400,origin);}
+        const key=typeof body?.key==="string"?body.key:"";
+        if(!key.startsWith("revision:")) return jsonResponse({error:"Invalid revision key"},400,origin);
+        const raw=await env.UNANSWERED_KV.get(key);
+        if(!raw) return jsonResponse({error:"Revision not found"},404,origin);
+        const revision=JSON.parse(raw);
+        const current=await readSiteConfig(env);
+        const backupKey="revision:"+Date.now()+":"+crypto.randomUUID();
+        await env.UNANSWERED_KV.put(backupKey,JSON.stringify({createdAt:new Date().toISOString(),note:"Auto backup before restore",config:current}),{expirationTtl:7776000});
+        await env.UNANSWERED_KV.put("cms:site-config",JSON.stringify(revision.config));
+        await env.UNANSWERED_KV.put("cms:site-draft",JSON.stringify(revision.config));
+        return jsonResponse({ok:true,config:revision.config},200,origin);
+      }
+      return jsonResponse({error:"GET or POST required"},405,origin);
+    }
+
     if (url.pathname === "/site-config") {
       if (request.method !== "GET") return jsonResponse({ error: "GET required" }, 405, origin);
       const config = await readSiteConfig(env);
-      return jsonResponse({ ok: true, config }, 200, origin);
+      const publicConfig = {
+        ...config,
+        projects: (config.projects || []).filter(x => x.enabled !== false && x.status !== "draft"),
+        posts: (config.posts || []).filter(x => x.enabled !== false && x.status !== "draft"),
+        experience: (config.experience || []).filter(x => x.enabled !== false && x.status !== "draft"),
+        sections: (config.sections || []).filter(x => x.enabled !== false && x.status !== "draft")
+      };
+      return jsonResponse({ ok: true, config: publicConfig }, 200, origin);
     }
 
     if (url.pathname === "/admin/site-config") {
-      const auth = request.headers.get("Authorization") || "";
-      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      if (!(await isAdminAuthorized(env, request))) return jsonResponse({ error: "Unauthorized" }, 401, origin);
       if (!env.UNANSWERED_KV) return jsonResponse({ error: "CMS storage unavailable" }, 503, origin);
 
       if (request.method === "GET") {
-        return jsonResponse({ ok: true, config: await readSiteConfig(env) }, 200, origin);
+        const published = await readSiteConfig(env);
+        const draftRaw = await env.UNANSWERED_KV.get("cms:site-draft");
+        let draft = published;
+        try { if (draftRaw) draft = { ...published, ...JSON.parse(draftRaw) }; } catch {}
+        return jsonResponse({ ok: true, config: draft, publishedConfig: published }, 200, origin);
       }
       if (request.method !== "POST") return jsonResponse({ error: "GET or POST required" }, 405, origin);
 
@@ -674,8 +775,23 @@ export default {
       catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
 
       const config = sanitizeSiteConfig(body?.config || {});
+      const mode = body?.mode === "draft" ? "draft" : "publish";
+      if (mode === "draft") {
+        await env.UNANSWERED_KV.put("cms:site-draft", JSON.stringify(config));
+        return jsonResponse({ ok:true, mode:"draft", config },200,origin);
+      }
+
+      const current = await readSiteConfig(env);
+      const revisionKey = "revision:" + Date.now() + ":" + crypto.randomUUID();
+      await env.UNANSWERED_KV.put(revisionKey, JSON.stringify({
+        createdAt:new Date().toISOString(),
+        note: cleanText(body?.note,120) || "Before publish",
+        config: current
+      }), { expirationTtl:7776000 });
+
       await env.UNANSWERED_KV.put("cms:site-config", JSON.stringify(config));
-      return jsonResponse({ ok: true, config }, 200, origin);
+      await env.UNANSWERED_KV.put("cms:site-draft", JSON.stringify(config));
+      return jsonResponse({ ok:true, mode:"publish", config, revisionKey },200,origin);
     }
 
     if (url.pathname.startsWith("/media/")) {
@@ -701,8 +817,7 @@ export default {
     }
 
     if (url.pathname === "/admin/media") {
-      const auth = request.headers.get("Authorization") || "";
-      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      if (!(await isAdminAuthorized(env, request))) return jsonResponse({ error: "Unauthorized" }, 401, origin);
       if (!env.UNANSWERED_KV) return jsonResponse({ error: "Media storage unavailable" }, 503, origin);
 
       if (request.method === "GET") {
@@ -778,8 +893,7 @@ export default {
     }
 
     if (url.pathname === "/admin/analytics") {
-      const auth = request.headers.get("Authorization") || "";
-      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) return jsonResponse({ error: "Unauthorized" }, 401, origin);
+      if (!(await isAdminAuthorized(env, request))) return jsonResponse({ error: "Unauthorized" }, 401, origin);
       if (!env.UNANSWERED_KV) return jsonResponse({ error: "Analytics storage unavailable" }, 503, origin);
       const statsRaw = await env.UNANSWERED_KV.get("analytics:stats");
       let stats = { totalVisitors: 0, pageViews: 0, firstSeenAt: null, updatedAt: null };
@@ -792,8 +906,7 @@ export default {
     }
 
     if (url.pathname === "/admin/knowledge") {
-      const auth = request.headers.get("Authorization") || "";
-      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) {
+      if (!(await isAdminAuthorized(env, request))) {
         return jsonResponse({ error: "Unauthorized" }, 401, origin);
       }
       if (!env.UNANSWERED_KV) {
@@ -843,8 +956,7 @@ export default {
     }
 
     if (url.pathname === "/admin/unanswered") {
-      const auth = request.headers.get("Authorization") || "";
-      if (!env.ADMIN_TOKEN || auth !== `Bearer ${env.ADMIN_TOKEN}`) {
+      if (!(await isAdminAuthorized(env, request))) {
         return jsonResponse({ error: "Unauthorized" }, 401, origin);
       }
       if (!env.UNANSWERED_KV) {
