@@ -106,16 +106,34 @@ function renderEvidenceCards(evidence) {
     const useCases = Array.isArray(item.useCases) ? item.useCases : [];
     const tags = [...tools, ...useCases].slice(0, 6)
       .map(tag => '<span>' + escapeHtml(tag) + '</span>').join("");
-    const source = item.url && /^https:\/\//i.test(item.url)
-      ? '<a href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">Inspect evidence ↗</a>'
+
+    const timeline = item.kind === "timeline"
+      ? '<div class="v3-evidence-timeline"><b>' + escapeHtml(item.period || "") + '</b><span>' +
+        escapeHtml(item.role || "") + (item.organization ? ' · ' + escapeHtml(item.organization) : '') + '</span></div>'
       : "";
-    return '<article class="v3-evidence-card">' +
+
+    const primary = item.cta?.url && /^https:\/\//i.test(item.cta.url)
+      ? '<a class="v3-evidence-cta primary" href="' + escapeHtml(item.cta.url) + '" target="_blank" rel="noopener">' +
+        escapeHtml(item.cta.label || "Open") + ' ↗</a>'
+      : "";
+
+    const secondary = item.secondary?.target
+      ? '<button class="v3-evidence-cta" type="button" data-v3-evidence-target="' +
+        escapeHtml(item.secondary.target) + '">' + escapeHtml(item.secondary.label || "View") + '</button>'
+      : "";
+
+    const source = !primary && item.url && /^https:\/\//i.test(item.url)
+      ? '<a class="v3-evidence-cta" href="' + escapeHtml(item.url) + '" target="_blank" rel="noopener">Inspect evidence ↗</a>'
+      : "";
+
+    return '<article class="v3-evidence-card' + (item.kind ? ' is-' + escapeHtml(item.kind) : '') + '">' +
       '<small>' + escapeHtml(item.label || "Evidence") + '</small>' +
       '<strong>' + escapeHtml(item.title || "") + '</strong>' +
+      timeline +
       '<div class="v3-evidence-tags">' + tags + '</div>' +
       (item.approach ? '<p><b>Approach</b> · ' + escapeHtml(item.approach) + '</p>' : '') +
       (item.why ? '<p class="v3-evidence-why">' + escapeHtml(item.why) + '</p>' : '') +
-      source +
+      ((primary || secondary || source) ? '<div class="v3-evidence-actions">' + primary + secondary + source + '</div>' : '') +
     '</article>';
   }).join("") + '</div>';
 }
@@ -499,6 +517,16 @@ function createMetrics() {
       }
       const prompt = "Act as an evidence navigator for a recruiter. Using only Mehmet's documented portfolio knowledge, analyze this role brief. Summarize the strongest relevant evidence, concrete projects/experience to inspect, and any important requirement that is not documented. Do not invent a fit score. Role brief: " + brief.slice(0, 800);
       ask(prompt);
+    });
+
+    conversation.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-v3-evidence-target]");
+      if (!button) return;
+      const target = button.getAttribute("data-v3-evidence-target");
+      if (!target) return;
+      document.querySelector(target)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      panel.classList.remove("is-open");
+      trigger.setAttribute("aria-expanded", "false");
     });
 
     submit.addEventListener("click", () => ask(input.value));
