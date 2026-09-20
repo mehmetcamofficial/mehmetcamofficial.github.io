@@ -16,4 +16,4 @@ This avoids sending simple questions to slow reasoning models.
 
 The production Worker currently lives in Cloudflare. Keep `OPENROUTER_API_KEY` as a Cloudflare secret and never commit it.
 
-Next migration step: move the deployed Worker source here and connect Cloudflare deployment to the repository so future changes are versioned.
+Cloudflare Builds is connected to this repository. Production deploys use the `main` branch with `/portfolio-ai-worker` as the project path.
