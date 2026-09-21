@@ -134,19 +134,18 @@
       video.muted = false;
       video.volume = 1;
       video.classList.add("is-ready", "is-playing");
-      if (this.introBase) this.introBase.classList.add("is-video-playing");
+      /* Keep the approved portrait visible; video is only a facial motion overlay. */
       this.setState(STATES.SPEAKING);
       this.setVoiceMeta("Dudak senkronlu Digital Mehmet");
       video.onended = () => {
         video.classList.remove("is-playing", "is-ready");
         video.currentTime = 0;
-        if (this.introBase) this.introBase.classList.remove("is-video-playing");
+        /* Base portrait remains visible throughout playback. */
         this.setState(STATES.IDLE);
         this.setVoiceMeta("Doğal erkek AI sesi hazır");
       };
       video.onerror = () => {
         video.classList.remove("is-playing");
-        if (this.introBase) this.introBase.classList.remove("is-video-playing");
         this.speak(this.intro());
       };
       video.play().catch(() => {
