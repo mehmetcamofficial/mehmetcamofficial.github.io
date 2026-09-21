@@ -32,6 +32,8 @@
       this.mute = root.querySelector("[data-dm-mute]");
       this.ask = root.querySelector("[data-dm-ask]");
       this.avatar = root.querySelector("[data-dm-avatar]");
+      this.introVideo = document.querySelector("[data-dm-intro-video]");
+      this.introBase = document.querySelector(".dm-character-base");
       this.quickForm = root.querySelector("[data-dm-form]");
       this.quickInput = root.querySelector("[data-dm-input]");
       this.quickButtons = root.querySelectorAll("[data-dm-question]");
@@ -48,6 +50,7 @@
         this.root.dataset.voiceEnabled = "true";
         this.root.dataset.muted = "false";
         this.mute?.setAttribute("aria-pressed", "false");
+        if (!this.lastText && this.playIntroVideo()) return;
         this.speak(this.lastText || this.intro());
       };
 
@@ -121,6 +124,36 @@
         this.avatar.style.setProperty("--dm-ry", "0deg");
         this.avatar.style.setProperty("--dm-rx", "0deg");
       });
+    }
+
+    playIntroVideo() {
+      const video = this.introVideo;
+      if (!video) return false;
+      this.stopPlayback();
+      video.currentTime = 0;
+      video.muted = false;
+      video.volume = 1;
+      video.classList.add("is-playing");
+      if (this.introBase) this.introBase.classList.add("is-video-playing");
+      this.setState(STATES.SPEAKING);
+      this.setVoiceMeta("Dudak senkronlu Digital Mehmet");
+      video.onended = () => {
+        video.classList.remove("is-playing");
+        if (this.introBase) this.introBase.classList.remove("is-video-playing");
+        this.setState(STATES.IDLE);
+        this.setVoiceMeta("Doğal erkek AI sesi hazır");
+      };
+      video.onerror = () => {
+        video.classList.remove("is-playing");
+        if (this.introBase) this.introBase.classList.remove("is-video-playing");
+        this.speak(this.intro());
+      };
+      video.play().catch(() => {
+        video.classList.remove("is-playing");
+        if (this.introBase) this.introBase.classList.remove("is-video-playing");
+        this.speak(this.intro());
+      });
+      return true;
     }
 
     intro() {
