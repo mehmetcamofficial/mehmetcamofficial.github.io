@@ -19,7 +19,7 @@ const shell=({title,desc,canonical,body,schema,type="website"})=>`<!doctype html
 <link rel="stylesheet" href="/content-pages.css?v=seo-pages"><script type="application/ld+json">${JSON.stringify(schema)}</script></head>
 <body><div class="shell"><header class="navbar content-nav"><a class="logo" href="/">MC<span>.</span></a><nav class="nav-links"><a href="/#featured-project">Work</a><a href="/#profile">Research</a><a href="/blog.html">Writing</a><a href="/#contact">Contact</a></nav></header>${body}<footer class="footer">© 2026 Mehmet Cam</footer></div></body></html>`;
 await rm("projects",{recursive:true,force:true});await rm("writing",{recursive:true,force:true});
-const urls=[SITE+"/",SITE+"/about/",SITE+"/blog.html"];
+const urls=[SITE+"/",SITE+"/about/",SITE+"/research/agritech/",SITE+"/research/applied-ai/",SITE+"/blog.html"];
 for(const p of projects){
   const id=slug(p.id||p.title),canonical=`${SITE}/projects/${id}/`,desc=p.description||p.content||p.title;
   const schema={"@context":"https://schema.org","@type":["CreativeWork","SoftwareApplication"],"name":p.title,"description":desc,"url":canonical,"creator":{"@type":"Person","@id":SITE+"/#person","name":"Mehmet Cam","url":SITE+"/"},"author":{"@id":SITE+"/#person"},"applicationCategory":p.category||"SoftwareApplication","keywords":(p.tags||[]).join(", "),"sameAs":p.url&&p.url!=="#"?p.url:undefined,"isPartOf":{"@type":"WebSite","@id":SITE+"/#website","name":"Mehmet Cam Portfolio","url":SITE+"/"}};
