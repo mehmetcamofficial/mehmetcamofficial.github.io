@@ -16,3 +16,6 @@
 .dm-stage:hover .dm-stage-hint,.dm-stage:focus-visible .dm-stage-hint{color:var(--primary);transform:translateX(-50%) translateY(-2px)}
 .digital-mehmet[data-voice-enabled="true"] .dm-stage-hint{opacity:0;pointer-events:none}
 .dm-stage:focus-visible{outline:2px solid var(--primary);outline-offset:6px;border-radius:28px}
+
+.dm-ask{width:100%;margin:0 0 9px;padding:9px 11px;border:1px solid var(--border);border-radius:11px;background:var(--primary-soft);color:var(--primary);font-size:.72rem;font-weight:900;cursor:pointer;text-align:left;transition:transform .2s ease,border-color .2s ease,background .2s ease}
+.dm-ask:hover,.dm-ask:focus-visible{transform:translateY(-1px);border-color:var(--border-strong);background:var(--panel-strong)}
