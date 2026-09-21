@@ -45,3 +45,125 @@ html[data-theme="dark"] .dm-stage-hint,html[data-theme="dark"] .dm-live-badge{ba
 @media(max-width:1160px){.hero-visual-v2.has-digital-mehmet{min-height:560px}.digital-mehmet{grid-template-columns:minmax(240px,1fr) minmax(270px,330px);gap:18px}.dm-portrait-wrap{min-height:530px}.dm-stage{width:min(390px,92%)}}
 @media(max-width:760px){.hero-visual-v2.has-digital-mehmet{min-height:auto!important;padding-top:8px}.digital-mehmet{position:relative;inset:auto;grid-template-columns:1fr;gap:12px}.dm-portrait-wrap{min-height:auto;padding:0 18px}.dm-stage{width:min(360px,92vw);aspect-ratio:.84}.dm-console{width:auto;margin:0 12px 8px;padding:18px}.dm-copy{font-size:.82rem}}
 @media(prefers-reduced-motion:reduce){.digital-mehmet[data-state="speaking"] .dm-stage img,.digital-mehmet[data-state="thinking"] .dm-portrait-glow{animation:none!important}.dm-stage img,.dm-stage-hint,.dm-actions button,.dm-ask{transition:none!important}}
+
+
+/* Digital Mehmet — polished motion layer */
+.dm-portrait-wrap{
+  animation:dmIdlePresence 7.2s ease-in-out infinite;
+  will-change:transform;
+}
+.dm-stage{
+  --dm-mx:0px;
+  --dm-my:0px;
+  --dm-rx:0deg;
+  --dm-ry:0deg;
+  perspective:900px;
+  transform-style:preserve-3d;
+}
+.dm-stage img{
+  transform:
+    translate3d(var(--dm-mx),var(--dm-my),0)
+    rotateX(var(--dm-rx))
+    rotateY(var(--dm-ry))
+    scale(1.008);
+  transform-origin:50% 52%;
+  will-change:transform;
+}
+.dm-stage:hover img,.dm-stage:focus-visible img{
+  transform:
+    translate3d(var(--dm-mx),calc(var(--dm-my) - 3px),0)
+    rotateX(var(--dm-rx))
+    rotateY(var(--dm-ry))
+    scale(1.015);
+}
+.dm-portrait-glow{
+  animation:dmGlowBreath 5.2s ease-in-out infinite;
+}
+.dm-live-badge i{
+  animation:dmLiveDot 1.8s ease-in-out infinite;
+}
+
+.dm-voice-row{
+  min-height:24px;
+  margin-bottom:14px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.dm-voice-row .dm-voice-meta{
+  min-height:0;
+  margin:0;
+}
+.dm-wave{
+  height:22px;
+  display:flex;
+  align-items:center;
+  gap:3px;
+  opacity:.34;
+  transition:opacity .2s ease;
+}
+.dm-wave i{
+  width:3px;
+  height:7px;
+  display:block;
+  border-radius:999px;
+  background:linear-gradient(180deg,#0a7bff,#5a4cff);
+  transform-origin:center;
+}
+.digital-mehmet[data-state="speaking"] .dm-wave{
+  opacity:1;
+}
+.digital-mehmet[data-state="speaking"] .dm-wave i{
+  animation:dmWave .72s ease-in-out infinite;
+}
+.digital-mehmet[data-state="speaking"] .dm-wave i:nth-child(2){animation-delay:-.12s}
+.digital-mehmet[data-state="speaking"] .dm-wave i:nth-child(3){animation-delay:-.24s}
+.digital-mehmet[data-state="speaking"] .dm-wave i:nth-child(4){animation-delay:-.36s}
+.digital-mehmet[data-state="speaking"] .dm-wave i:nth-child(5){animation-delay:-.48s}
+
+.digital-mehmet[data-state="speaking"] .dm-portrait-wrap{
+  animation:dmSpeakingPresence 2.1s ease-in-out infinite;
+}
+.digital-mehmet[data-state="thinking"] .dm-portrait-wrap{
+  animation:dmThinkingPresence 3.4s ease-in-out infinite;
+}
+.digital-mehmet[data-state="paused"] .dm-portrait-wrap{
+  animation-play-state:paused;
+}
+
+@keyframes dmIdlePresence{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  38%{transform:translate3d(0,-4px,0) scale(1.003)}
+  68%{transform:translate3d(1px,-2px,0) scale(1.001)}
+}
+@keyframes dmSpeakingPresence{
+  0%,100%{transform:translate3d(0,0,0) scale(1)}
+  35%{transform:translate3d(1px,-5px,0) scale(1.006)}
+  70%{transform:translate3d(-1px,-2px,0) scale(1.003)}
+}
+@keyframes dmThinkingPresence{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg)}
+  50%{transform:translate3d(-2px,-3px,0) rotate(-.3deg)}
+}
+@keyframes dmGlowBreath{
+  0%,100%{opacity:.62;transform:scale(.985)}
+  50%{opacity:.94;transform:scale(1.025)}
+}
+@keyframes dmLiveDot{
+  0%,100%{transform:scale(.9);opacity:.72}
+  50%{transform:scale(1.18);opacity:1}
+}
+@keyframes dmWave{
+  0%,100%{height:6px}
+  50%{height:20px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .dm-portrait-wrap,.dm-portrait-glow,.dm-live-badge i,.digital-mehmet[data-state="speaking"] .dm-wave i{
+    animation:none!important;
+  }
+  .dm-stage img{
+    transform:none!important;
+  }
+}
