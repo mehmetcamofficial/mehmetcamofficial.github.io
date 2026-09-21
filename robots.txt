@@ -2,5 +2,25 @@ User-agent: *
 Allow: /
 Disallow: /portfolio-ai-admin.html
 Disallow: /admin.html
+Disallow: /control-center.html
+
+# AI search / answer-engine discovery
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /portfolio-ai-admin.html
+Disallow: /admin.html
+Disallow: /control-center.html
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /portfolio-ai-admin.html
+Disallow: /admin.html
+Disallow: /control-center.html
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /portfolio-ai-admin.html
+Disallow: /admin.html
+Disallow: /control-center.html
 
 Sitemap: https://mehmetcamofficial.com.tr/sitemap.xml
