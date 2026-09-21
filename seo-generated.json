@@ -1,7 +1,31 @@
 {
-  "generatedAt": "2026-09-21T00:00:00.000Z",
-  "source": "CMS snapshot on seo/indexable-content-pages",
+  "generatedAt": "2026-09-21T04:52:22.490Z",
   "projects": 6,
   "posts": 13,
-  "urls": 21
+  "urls": [
+    "https://mehmetcamofficial.com.tr/",
+    "https://mehmetcamofficial.com.tr/about/",
+    "https://mehmetcamofficial.com.tr/research/agritech/",
+    "https://mehmetcamofficial.com.tr/research/applied-ai/",
+    "https://mehmetcamofficial.com.tr/blog.html",
+    "https://mehmetcamofficial.com.tr/projects/tourpilot/",
+    "https://mehmetcamofficial.com.tr/projects/evalora/",
+    "https://mehmetcamofficial.com.tr/projects/oncoconnect/",
+    "https://mehmetcamofficial.com.tr/projects/search-intelligence/",
+    "https://mehmetcamofficial.com.tr/projects/histopathology/",
+    "https://mehmetcamofficial.com.tr/projects/enrich/",
+    "https://mehmetcamofficial.com.tr/writing/search-intelligence-medium/",
+    "https://mehmetcamofficial.com.tr/writing/opspilot-ai/",
+    "https://mehmetcamofficial.com.tr/writing/forward-deployed-engineer/",
+    "https://mehmetcamofficial.com.tr/writing/livable-world-food/",
+    "https://mehmetcamofficial.com.tr/writing/society-5-agriculture/",
+    "https://mehmetcamofficial.com.tr/writing/gelecegin-tarimi/",
+    "https://mehmetcamofficial.com.tr/writing/smart-village-story/",
+    "https://mehmetcamofficial.com.tr/writing/tabit-akilli-koy/",
+    "https://mehmetcamofficial.com.tr/writing/tarimda-dijital-ikiz/",
+    "https://mehmetcamofficial.com.tr/writing/ai-in-agriculture/",
+    "https://mehmetcamofficial.com.tr/writing/eu-turkiye-migration-russia/",
+    "https://mehmetcamofficial.com.tr/writing/exploring-data-science/",
+    "https://mehmetcamofficial.com.tr/writing/blockchain-energy/"
+  ]
 }
