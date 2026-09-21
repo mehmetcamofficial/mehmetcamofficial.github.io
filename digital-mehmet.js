@@ -133,13 +133,14 @@
       video.currentTime = 0;
       video.muted = false;
       video.volume = 1;
-      video.classList.add("is-playing");
+      video.classList.add("is-ready", "is-playing");
       if (this.introBase) this.introBase.classList.add("is-video-playing");
       this.setState(STATES.SPEAKING);
       this.setVoiceMeta("Dudak senkronlu Digital Mehmet");
       video.onended = () => {
         video.classList.remove("is-playing");
-        if (this.introBase) this.introBase.classList.remove("is-video-playing");
+        video.classList.add("is-ready");
+        if (this.introBase) this.introBase.classList.add("is-video-playing");
         this.setState(STATES.IDLE);
         this.setVoiceMeta("Doğal erkek AI sesi hazır");
       };
