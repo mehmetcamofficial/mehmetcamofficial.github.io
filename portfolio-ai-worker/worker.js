@@ -1352,8 +1352,23 @@ export default {
 
       if (!upstream.ok) {
         const detail = await upstream.text().catch(() => "");
-        console.error("Portfolio TTS ElevenLabs error:", upstream.status, detail.slice(0, 500));
-        return jsonResponse({ error: "Voice generation failed" }, 502, origin);
+        let upstreamCode = "unknown";
+        let upstreamMessage = "";
+        try {
+          const parsed = JSON.parse(detail);
+          upstreamCode = cleanText(parsed?.detail?.status || parsed?.detail?.code || parsed?.code || "unknown", 80) || "unknown";
+          upstreamMessage = cleanText(parsed?.detail?.message || parsed?.message || "", 240);
+        } catch {
+          upstreamMessage = cleanText(detail, 240);
+        }
+        console.error("Portfolio TTS ElevenLabs error:", upstream.status, upstreamCode);
+        return jsonResponse({
+          error: "Voice generation failed",
+          provider: "elevenlabs",
+          upstreamStatus: upstream.status,
+          upstreamCode,
+          upstreamMessage
+        }, 502, origin);
       }
 
       return new Response(upstream.body, {
