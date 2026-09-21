@@ -414,7 +414,7 @@
         <div class="dm-panel-head">
           <div class="dm-profile-chip">
             <span class="dm-mini-avatar" aria-hidden="true">
-              <img src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-static1" alt="">
+              <img src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-static2" alt="">
             </span>
             <span>
               <strong>Digital Mehmet</strong>
