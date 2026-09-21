@@ -1513,9 +1513,9 @@
     object-position:center 44%!important;
     opacity:0;
     pointer-events:none;
-    transform-origin:63% 34%!important;
-    -webkit-mask-image:radial-gradient(ellipse 17% 8% at 63% 34%,#000 38%,rgba(0,0,0,.82) 54%,transparent 76%);
-    mask-image:radial-gradient(ellipse 17% 8% at 63% 34%,#000 38%,rgba(0,0,0,.82) 54%,transparent 76%);
+    transform-origin:50.5% 31.5%!important;
+    -webkit-mask-image:radial-gradient(ellipse 11% 3.4% at 50.5% 31.5%,#000 42%,rgba(0,0,0,.88) 57%,transparent 78%);
+    mask-image:radial-gradient(ellipse 11% 3.4% at 50.5% 31.5%,#000 42%,rgba(0,0,0,.88) 57%,transparent 78%);
     will-change:transform,opacity;
   }
 
@@ -1547,8 +1547,8 @@
 
 @keyframes dmCharacterMouth{
   0%,100%{transform:translate3d(0,0,0) scaleY(1)}
-  32%{transform:translate3d(0,2.5px,0) scaleY(1.12)}
-  68%{transform:translate3d(0,-1px,0) scaleY(.94)}
+  32%{transform:translate3d(0,2px,0) scaleY(1.1)}
+  68%{transform:translate3d(0,-.75px,0) scaleY(.96)}
 }
 
 @keyframes dmCharacterThinking{
