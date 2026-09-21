@@ -346,7 +346,7 @@
       const clean = this.cleanForSpeech(text);
       if (!clean) return;
 
-      this.stopPlayback();
+      this.stopPlayback({ keepMotion: Boolean(options.keepMotion) });
       const lang = this.detectLanguage(clean);
 
       if (await this.playNeuralTts(clean.slice(0, 1400), lang)) return;
