@@ -32,6 +32,9 @@
       this.mute = root.querySelector("[data-dm-mute]");
       this.ask = root.querySelector("[data-dm-ask]");
       this.avatar = root.querySelector("[data-dm-avatar]");
+      this.quickForm = root.querySelector("[data-dm-form]");
+      this.quickInput = root.querySelector("[data-dm-input]");
+      this.quickButtons = root.querySelectorAll("[data-dm-question]");
       this.motionFrame = null;
       this.bind();
       this.loadVoices();
@@ -50,10 +53,30 @@
 
       this.play?.addEventListener("click", enableVoice);
       this.avatar?.addEventListener("click", enableVoice);
+      document.addEventListener("digital-mehmet:listen", enableVoice);
       this.pause?.addEventListener("click", () => this.togglePause());
       this.mute?.addEventListener("click", () => this.toggleMute());
       this.ask?.addEventListener("click", () => {
         document.dispatchEvent(new CustomEvent("digital-mehmet:open-chat"));
+      });
+
+      this.quickButtons?.forEach((button) => {
+        button.addEventListener("click", () => {
+          const question = String(button.getAttribute("data-dm-question") || "").trim();
+          if (!question) return;
+          document.dispatchEvent(new CustomEvent("digital-mehmet:ask", { detail: { question } }));
+        });
+      });
+
+      this.quickForm?.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const question = String(this.quickInput?.value || "").trim();
+        if (!question) {
+          document.dispatchEvent(new CustomEvent("digital-mehmet:open-chat"));
+          return;
+        }
+        if (this.quickInput) this.quickInput.value = "";
+        document.dispatchEvent(new CustomEvent("digital-mehmet:ask", { detail: { question } }));
       });
 
       this.bindPortraitMotion();
@@ -391,48 +414,70 @@
         <button class="dm-stage dm-character-stage" data-dm-avatar type="button" aria-label="Digital Mehmet sesli anlatımı aç">
           <span class="dm-portrait-glow" aria-hidden="true"></span>
           <span class="dm-character-frame" aria-hidden="true">
-            <img src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-clean1" alt="" loading="eager" decoding="async">
+            <img src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-final1" alt="" loading="eager" decoding="async">
             <span class="dm-character-vignette"></span>
             <span class="dm-character-aura"></span>
           </span>
-          <span class="dm-live-badge"><i></i> DIGITAL MEHMET</span>
-          <span class="dm-stage-hint">Konuşmayı başlat</span>
         </button>
       </div>
 
-      <div class="dm-console glass-panel">
-        <div class="dm-heading">
-          <div>
-            <small>DIGITAL MEHMET</small>
-            <strong data-dm-status>Hazır</strong>
+      <div class="dm-console">
+        <div class="dm-panel-head">
+          <div class="dm-profile-chip">
+            <span class="dm-mini-avatar" aria-hidden="true">
+              <img src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-final1" alt="">
+            </span>
+            <span>
+              <strong>Digital Mehmet</strong>
+              <small>AI Assistant</small>
+            </span>
+            <i aria-hidden="true"></i>
           </div>
-          <i aria-hidden="true"></i>
+          <div class="dm-panel-controls">
+            <button type="button" data-dm-pause aria-label="Konuşmayı duraklat">−</button>
+            <button type="button" data-dm-mute aria-label="Sesi aç veya kapat" aria-pressed="false">◌</button>
+          </div>
         </div>
 
-        <p class="dm-copy">Projelerim, araştırmalarım ve çalışma deneyimim hakkında bana sorabilirsiniz.</p>
-        <div class="dm-voice-row">
-          <div class="dm-voice-meta" data-dm-voice-meta>Doğal erkek AI sesi hazırlanıyor…</div>
+        <div class="dm-greeting">
           <div class="dm-wave" aria-hidden="true">
             <i></i><i></i><i></i><i></i><i></i>
           </div>
+          <div class="dm-bubble">
+            <span>Merhaba!</span>
+            <strong>Ben Digital Mehmet.</strong>
+            <span>Size nasıl yardımcı olabilirim?</span>
+          </div>
         </div>
-        <small class="dm-ai-disclosure">Ses, yapay zekâ tarafından üretilir.</small>
 
-        <button type="button" class="dm-ask" data-dm-ask>
-          <span>Bana bir soru sor</span>
-          <b>→</b>
-        </button>
+        <div class="dm-quick-list">
+          <button type="button" data-dm-question="Projelerin hakkında bilgi verir misin?"><span>◇</span><b>Projelerin hakkında bilgi ver</b><em>›</em></button>
+          <button type="button" data-dm-question="Hangi teknolojileri kullanıyorsun?"><span>⚙</span><b>Hangi teknolojileri kullanıyorsun?</b><em>›</em></button>
+          <button type="button" data-dm-question="Deneyim ve yetkinliklerin neler?"><span>○</span><b>Deneyim ve yetkinliklerin neler?</b><em>›</em></button>
+          <button type="button" data-dm-question="İletişim bilgilerini paylaşır mısın?"><span>⌕</span><b>İletişim bilgilerini paylaş</b><em>›</em></button>
+        </div>
 
-        <div class="dm-actions">
-          <button type="button" data-dm-play class="dm-primary" aria-label="Mehmet'i dinle">
-            <span class="dm-play-icon">▶</span>
-            <span>Beni Dinle</span>
-          </button>
-          <button type="button" data-dm-pause aria-label="Konuşmayı duraklat">Ⅱ</button>
-          <button type="button" data-dm-mute aria-label="Sesi kapat" aria-pressed="false">⌁</button>
+        <form class="dm-inline-form" data-dm-form>
+          <input data-dm-input type="text" autocomplete="off" placeholder="Sorunuzu buraya yazın..." aria-label="Digital Mehmet'e soru sor">
+          <button type="submit" aria-label="Soruyu gönder">➤</button>
+        </form>
+
+        <div class="dm-panel-foot">
+          <span data-dm-status>Hazır</span>
+          <span data-dm-voice-meta>Doğal erkek AI sesi hazır</span>
+          <small>Ses, yapay zekâ tarafından üretilir.</small>
         </div>
       </div>
     `;
+
+    const heroListen = document.getElementById("dmHeroListen");
+    const heroAsk = document.getElementById("dmHeroAsk");
+    heroListen?.addEventListener("click", () => {
+      document.dispatchEvent(new CustomEvent("digital-mehmet:listen"));
+    });
+    heroAsk?.addEventListener("click", () => {
+      document.dispatchEvent(new CustomEvent("digital-mehmet:open-chat"));
+    });
 
     host.appendChild(root);
     window.digitalMehmet = new DigitalMehmet(root);
