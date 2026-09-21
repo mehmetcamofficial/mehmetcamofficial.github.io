@@ -27,6 +27,7 @@
       this.mute = root.querySelector("[data-dm-mute]");
       this.ask = root.querySelector("[data-dm-ask]");
       this.avatar = root.querySelector("[data-dm-avatar]");
+      this.motionFrame = null;
       this.bind();
       this.loadVoices();
       this.setState(STATES.IDLE);
@@ -50,6 +51,8 @@
         document.dispatchEvent(new CustomEvent("digital-mehmet:open-chat"));
       });
 
+      this.bindPortraitMotion();
+
       document.addEventListener("portfolio-ai:thinking", () => this.setState(STATES.THINKING));
       document.addEventListener("portfolio-ai:answer", (event) => {
         const text = String(event.detail?.text || "").trim();
@@ -64,6 +67,32 @@
       }
 
       window.addEventListener("beforeunload", () => window.speechSynthesis?.cancel());
+    }
+
+    bindPortraitMotion() {
+      if (!this.avatar || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      const update = (clientX, clientY) => {
+        const rect = this.avatar.getBoundingClientRect();
+        const x = Math.max(-1, Math.min(1, ((clientX - rect.left) / rect.width - 0.5) * 2));
+        const y = Math.max(-1, Math.min(1, ((clientY - rect.top) / rect.height - 0.5) * 2));
+        this.avatar.style.setProperty("--dm-mx", (x * 4.5).toFixed(2) + "px");
+        this.avatar.style.setProperty("--dm-my", (y * 3.2).toFixed(2) + "px");
+        this.avatar.style.setProperty("--dm-ry", (x * 1.8).toFixed(2) + "deg");
+        this.avatar.style.setProperty("--dm-rx", (-y * 1.25).toFixed(2) + "deg");
+      };
+
+      this.avatar.addEventListener("pointermove", (event) => {
+        if (this.motionFrame) cancelAnimationFrame(this.motionFrame);
+        this.motionFrame = requestAnimationFrame(() => update(event.clientX, event.clientY));
+      });
+
+      this.avatar.addEventListener("pointerleave", () => {
+        this.avatar.style.setProperty("--dm-mx", "0px");
+        this.avatar.style.setProperty("--dm-my", "0px");
+        this.avatar.style.setProperty("--dm-ry", "0deg");
+        this.avatar.style.setProperty("--dm-rx", "0deg");
+      });
     }
 
     intro() {
@@ -257,7 +286,12 @@
         </div>
 
         <p class="dm-copy">Projelerim, araştırmalarım ve çalışma deneyimim hakkında bana sorabilirsiniz.</p>
-        <div class="dm-voice-meta" data-dm-voice-meta>Profesyonel ses modu hazırlanıyor…</div>
+        <div class="dm-voice-row">
+          <div class="dm-voice-meta" data-dm-voice-meta>Profesyonel ses modu hazırlanıyor…</div>
+          <div class="dm-wave" aria-hidden="true">
+            <i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
 
         <button type="button" class="dm-ask" data-dm-ask>
           <span>Bana bir soru sor</span>
