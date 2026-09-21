@@ -1587,3 +1587,6 @@
 /* Lip-synced intro visibility fix */
 .dm-character-video.is-playing{opacity:1!important;visibility:visible!important;z-index:4!important;display:block!important;}
 .dm-character-base.is-video-playing{opacity:0!important;visibility:hidden!important;}
+
+/* Keep the same rendered video surface before/after speech to prevent portrait snap-back. */
+.dm-character-video.is-ready{opacity:1!important;visibility:visible!important;z-index:4!important;display:block!important;}
