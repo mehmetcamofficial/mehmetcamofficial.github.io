@@ -22,14 +22,14 @@ await rm("projects",{recursive:true,force:true});await rm("writing",{recursive:t
 const urls=[SITE+"/",SITE+"/blog.html"];
 for(const p of projects){
   const id=slug(p.id||p.title),canonical=`${SITE}/projects/${id}/`,desc=p.description||p.content||p.title;
-  const schema={"@context":"https://schema.org","@type":"CreativeWork","name":p.title,"description":desc,"url":canonical,"creator":{"@type":"Person","name":"Mehmet Cam","url":SITE+"/"},"sameAs":p.url&&p.url!=="#"?p.url:undefined};
+  const schema={"@context":"https://schema.org","@type":["CreativeWork","SoftwareApplication"],"name":p.title,"description":desc,"url":canonical,"creator":{"@type":"Person","@id":SITE+"/#person","name":"Mehmet Cam","url":SITE+"/"},"author":{"@id":SITE+"/#person"},"applicationCategory":p.category||"SoftwareApplication","keywords":(p.tags||[]).join(", "),"sameAs":p.url&&p.url!=="#"?p.url:undefined,"isPartOf":{"@type":"WebSite","@id":SITE+"/#website","name":"Mehmet Cam Portfolio","url":SITE+"/"}};
   const tags=(p.tags||[]).map(t=>`<span>${esc(t)}</span>`).join("");
   const body=`<main class="article"><div class="meta">${esc(p.category||"Project")}</div><h1>${esc(p.title)}</h1><p class="body">${esc(p.content||p.description||"")}</p>${tags?`<div class="tags">${tags}</div>`:""}<div class="actions">${p.url&&p.url!=="#"?`<a class="btn primary" href="${esc(p.url)}" target="_blank" rel="noopener">Open live project ↗</a>`:""}<a class="btn" href="/#live-apps">← Portfolio</a></div></main>`;
   await mkdir(`projects/${id}`,{recursive:true});await writeFile(`projects/${id}/index.html`,shell({title:p.title,desc,canonical,body,schema}),"utf8");urls.push(canonical);
 }
 for(const p of posts){
   const id=slug(p.id||p.title),canonical=`${SITE}/writing/${id}/`,desc=p.excerpt||p.content||p.title;
-  const schema={"@context":"https://schema.org","@type":"Article","headline":p.title,"description":desc,"url":canonical,"author":{"@type":"Person","name":"Mehmet Cam","url":SITE+"/"},"mainEntityOfPage":canonical};
+  const schema={"@context":"https://schema.org","@type":"Article","headline":p.title,"description":desc,"url":canonical,"author":{"@type":"Person","@id":SITE+"/#person","name":"Mehmet Cam","url":SITE+"/"},"creator":{"@id":SITE+"/#person"},"mainEntityOfPage":{"@type":"WebPage","@id":canonical},"isPartOf":{"@type":"WebSite","@id":SITE+"/#website","name":"Mehmet Cam Portfolio","url":SITE+"/"},"sameAs":p.url&&p.url!=="#"?p.url:undefined};
   const body=`<main class="article"><div class="meta">${esc(p.date||"Writing")}</div><h1>${esc(p.title)}</h1><p class="body">${esc(p.excerpt||"")}</p><p class="body">${esc(p.content||"")}</p><div class="actions">${p.url&&p.url!=="#"?`<a class="btn primary" href="${esc(p.url)}" target="_blank" rel="noopener">Read original on Medium ↗</a>`:""}<a class="btn" href="/blog.html">← All writing</a></div></main>`;
   await mkdir(`writing/${id}`,{recursive:true});await writeFile(`writing/${id}/index.html`,shell({title:p.title,desc,canonical,body,schema,type:"article"}),"utf8");urls.push(canonical);
 }
