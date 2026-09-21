@@ -410,22 +410,11 @@
     root.setAttribute("aria-label", "Digital Mehmet voice assistant");
 
     root.innerHTML = `
-      <div class="dm-portrait-wrap">
-        <button class="dm-stage dm-character-stage" data-dm-avatar type="button" aria-label="Digital Mehmet sesli anlatımı aç">
-          <span class="dm-portrait-glow" aria-hidden="true"></span>
-          <span class="dm-character-frame" aria-hidden="true">
-            <img src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-final1" alt="" loading="eager" decoding="async">
-            <span class="dm-character-vignette"></span>
-            <span class="dm-character-aura"></span>
-          </span>
-        </button>
-      </div>
-
       <div class="dm-console">
         <div class="dm-panel-head">
           <div class="dm-profile-chip">
             <span class="dm-mini-avatar" aria-hidden="true">
-              <img src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-final1" alt="">
+              <img src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-static1" alt="">
             </span>
             <span>
               <strong>Digital Mehmet</strong>
