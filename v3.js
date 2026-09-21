@@ -620,20 +620,23 @@ function createMetrics() {
       const eyebrow = document.querySelector(".hero-content > .eyebrow");
       const title = document.querySelector(".hero-title-v2");
       const description = document.querySelector(".hero-description");
-      if (badge && hero.badge) {
-        const dot = badge.querySelector(".mission-dot");
-        badge.textContent = hero.badge;
-        if (dot) badge.prepend(dot);
+      const lockDigitalMehmetHero = document.body.classList.contains("dm-hero-page");
+      if (!lockDigitalMehmetHero) {
+        if (badge && hero.badge) {
+          const dot = badge.querySelector(".mission-dot");
+          badge.textContent = hero.badge;
+          if (dot) badge.prepend(dot);
+        }
+        if (eyebrow && hero.eyebrow) eyebrow.textContent = hero.eyebrow;
+        if (title && hero.lead && hero.accent && hero.tail) {
+          title.replaceChildren();
+          title.append(document.createTextNode(hero.lead + " "));
+          const accent = document.createElement("span");
+          accent.textContent = hero.accent;
+          title.append(accent, document.createElement("br"), document.createTextNode(hero.tail));
+        }
+        if (description && hero.description) description.textContent = hero.description;
       }
-      if (eyebrow && hero.eyebrow) eyebrow.textContent = hero.eyebrow;
-      if (title && hero.lead && hero.accent && hero.tail) {
-        title.replaceChildren();
-        title.append(document.createTextNode(hero.lead + " "));
-        const accent = document.createElement("span");
-        accent.textContent = hero.accent;
-        title.append(accent, document.createElement("br"), document.createTextNode(hero.tail));
-      }
-      if (description && hero.description) description.textContent = hero.description;
 
       if (Array.isArray(config.navigation)) {
         const nav = document.querySelector(".nav-links");
