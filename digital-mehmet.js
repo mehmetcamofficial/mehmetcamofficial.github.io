@@ -50,6 +50,7 @@
         this.root.dataset.voiceEnabled = "true";
         this.root.dataset.muted = "false";
         this.mute?.setAttribute("aria-pressed", "false");
+        if (!this.lastText && this.playIntroMotion()) return;
         this.speak(this.lastText || this.intro());
       };
 
@@ -125,32 +126,40 @@
       });
     }
 
-    playIntroVideo() {
+    playIntroMotion() {
       const video = this.introVideo;
       if (!video) return false;
-      this.stopPlayback();
-      video.currentTime = 0;
-      video.muted = false;
-      video.volume = 1;
-      video.classList.add("is-ready", "is-playing");
-      /* Keep the approved portrait visible; video is only a facial motion overlay. */
-      this.setState(STATES.SPEAKING);
-      this.setVoiceMeta("Dudak senkronlu Digital Mehmet");
-      video.onended = () => {
-        video.classList.remove("is-playing", "is-ready");
+
+      this.stopPlayback({ keepMotion: Boolean(options.keepMotion) });
+      try {
+        video.pause();
         video.currentTime = 0;
-        /* Base portrait remains visible throughout playback. */
+      } catch {}
+
+      video.muted = true;
+      video.volume = 0;
+      video.classList.add("is-ready", "is-playing");
+      this.setState(STATES.SPEAKING);
+      this.setVoiceMeta("Türkçe ses + doğal hareket");
+
+      const cleanup = () => {
+        video.classList.remove("is-playing", "is-ready");
+        try {
+          video.pause();
+          video.currentTime = 0;
+        } catch {}
         this.setState(STATES.IDLE);
         this.setVoiceMeta("Doğal erkek AI sesi hazır");
       };
-      video.onerror = () => {
-        video.classList.remove("is-playing");
-        this.speak(this.intro());
-      };
+
+      video.onended = cleanup;
+      video.onerror = cleanup;
+
+      const speech = this.speak(this.intro(), { keepMotion: true });
+      Promise.resolve(speech).catch(() => {});
+
       video.play().catch(() => {
-        video.classList.remove("is-playing");
-        if (this.introBase) this.introBase.classList.remove("is-video-playing");
-        this.speak(this.intro());
+        video.classList.remove("is-playing", "is-ready");
       });
       return true;
     }
@@ -225,7 +234,15 @@
         .trim();
     }
 
-    stopPlayback() {
+    stopPlayback(options = {}) {
+      if (!options.keepMotion && this.introVideo) {
+        try {
+          this.introVideo.pause();
+          this.introVideo.currentTime = 0;
+        } catch {}
+        this.introVideo.classList.remove("is-playing", "is-ready");
+      }
+
       this.ttsController?.abort();
       this.ttsController = null;
       window.speechSynthesis?.cancel();
@@ -323,7 +340,7 @@
       );
     }
 
-    async speak(text) {
+    async speak(text, options = {}) {
       if (!text || this.muted) return;
 
       const clean = this.cleanForSpeech(text);
