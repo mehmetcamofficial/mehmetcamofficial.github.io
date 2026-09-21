@@ -194,6 +194,45 @@ function collectSeoForm(){
   if($("#seoTitle"))$("#seoTitle").value=config.seo.title||"";
   if($("#seoDescription"))$("#seoDescription").value=config.seo.description||"";
 }
+async function loadSeoIndexHealth(){
+  if(!config)return;
+  const publishedProjects=(config.projects||[]).filter(x=>x.enabled!==false&&x.status!=="draft");
+  const publishedPosts=(config.posts||[]).filter(x=>x.enabled!==false&&x.status!=="draft");
+  const draftItems=[...(config.projects||[]),...(config.posts||[])].filter(x=>x.status==="draft"||x.enabled===false);
+  const expected=2+publishedProjects.length+publishedPosts.length;
+  try{
+    const [manifestRes,sitemapRes]=await Promise.all([
+      fetch("/seo-generated.json?ts="+Date.now(),{cache:"no-store"}),
+      fetch("/sitemap.xml?ts="+Date.now(),{cache:"no-store"})
+    ]);
+    if(!manifestRes.ok||!sitemapRes.ok)throw new Error("SEO çıktıları okunamadı");
+    const manifest=await manifestRes.json(),xml=await sitemapRes.text();
+    const sitemapUrls=[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
+    const sitemapCount=sitemapUrls.length;
+    const generatedContent=(Number(manifest.projects)||0)+(Number(manifest.posts)||0);
+    const expectedContent=publishedProjects.length+publishedPosts.length;
+    const coverage=[
+      {label:"Ana sayfa sitemap'te",ok:sitemapUrls.includes("https://mehmetcamofficial.com.tr/"),detail:"Homepage"},
+      {label:"Writing index sitemap'te",ok:sitemapUrls.includes("https://mehmetcamofficial.com.tr/blog.html"),detail:"/blog.html"},
+      {label:"Published project sayfaları",ok:(Number(manifest.projects)||0)===publishedProjects.length,detail:(manifest.projects||0)+" / "+publishedProjects.length},
+      {label:"Published writing sayfaları",ok:(Number(manifest.posts)||0)===publishedPosts.length,detail:(manifest.posts||0)+" / "+publishedPosts.length},
+      {label:"Sitemap ve CMS kapsamı eşleşiyor",ok:sitemapCount===expected,detail:sitemapCount+" / "+expected+" URL"},
+      {label:"Draft / pasif içerik sitemap dışında",ok:sitemapCount===2+generatedContent,detail:draftItems.length+" taslak/pasif içerik"}
+    ];
+    const healthy=coverage.every(x=>x.ok);
+    if($("#seoIndexablePages"))$("#seoIndexablePages").textContent=expected;
+    if($("#seoSitemapPages"))$("#seoSitemapPages").textContent=sitemapCount;
+    if($("#seoPublishedIndex"))$("#seoPublishedIndex").textContent=expectedContent?Math.round(generatedContent/expectedContent*100)+"%":"100%";
+    if($("#seoDraftNoindex"))$("#seoDraftNoindex").textContent=draftItems.length;
+    if($("#seoIndexCoverage"))$("#seoIndexCoverage").innerHTML=coverage.map(x=>'<div class="coverage-row '+(x.ok?"ok":"warn")+'"><span>'+(x.ok?"✓":"!")+'</span><div><strong>'+esc(x.label)+'</strong><small>'+esc(x.detail)+'</small></div></div>').join("");
+    if($("#seoIndexStatus")){$("#seoIndexStatus").textContent=healthy?"Healthy":"Review";$("#seoIndexStatus").className="status-pill "+(healthy?"ok":"off")}
+    if($("#seoGeneratedAt"))$("#seoGeneratedAt").textContent="Son statik SEO üretimi: "+(manifest.generatedAt?new Date(manifest.generatedAt).toLocaleString("tr-TR"):"Bilinmiyor")+" · Bu panel Google indeks durumunu değil, sitenin teknik indekslenebilirlik/sitemap tutarlılığını gösterir.";
+  }catch(e){
+    if($("#seoIndexStatus")){$("#seoIndexStatus").textContent="Unavailable";$("#seoIndexStatus").className="status-pill off"}
+    if($("#seoIndexCoverage"))$("#seoIndexCoverage").innerHTML='<p class="muted">'+esc(e.message)+'</p>';
+  }
+}
+
 function evaluateSeo(showFeedback=false){
   if(!config)return;
   collectSeoForm();
@@ -230,7 +269,7 @@ function evaluateSeo(showFeedback=false){
   if($("#socialTitle"))$("#socialTitle").textContent=ogTitle||title||"Open Graph title";
   if($("#socialDescription"))$("#socialDescription").textContent=ogDesc||desc||"Open Graph description";
   if($("#socialImage"))$("#socialImage").style.backgroundImage=ogImage?'url("'+ogImage.replace(/"/g,"")+'")':"none";
-  if(showFeedback){if($("#seoStatus"))$("#seoStatus").textContent="SEO yeniden değerlendirildi · "+score+"%";toast("SEO yeniden değerlendirildi · "+score+"%");}
+  loadSeoIndexHealth();if(showFeedback){if($("#seoStatus"))$("#seoStatus").textContent="SEO yeniden değerlendirildi · "+score+"%";toast("SEO yeniden değerlendirildi · "+score+"%");}
 }
 
 async function loadApprovals(){
