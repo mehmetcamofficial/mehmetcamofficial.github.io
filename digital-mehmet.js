@@ -138,9 +138,9 @@
       this.setState(STATES.SPEAKING);
       this.setVoiceMeta("Dudak senkronlu Digital Mehmet");
       video.onended = () => {
-        video.classList.remove("is-playing");
-        video.classList.add("is-ready");
-        if (this.introBase) this.introBase.classList.add("is-video-playing");
+        video.classList.remove("is-playing", "is-ready");
+        video.currentTime = 0;
+        if (this.introBase) this.introBase.classList.remove("is-video-playing");
         this.setState(STATES.IDLE);
         this.setVoiceMeta("Doğal erkek AI sesi hazır");
       };
