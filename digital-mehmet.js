@@ -223,7 +223,7 @@
           this.root.dataset.voiceGender = "male";
           this.root.dataset.voiceProvider = "neural";
           this.setState(STATES.SPEAKING);
-          this.setVoiceMeta("AI üretimi · doğal erkek Türkçe ses");
+          this.setVoiceMeta(lang.startsWith("tr") ? "AI üretimi · neural erkek ses" : "AI generated · neural male voice");
         };
 
         audio.onended = () => {
@@ -388,9 +388,13 @@
 
     root.innerHTML = `
       <div class="dm-portrait-wrap">
-        <button class="dm-stage" data-dm-avatar type="button" aria-label="Digital Mehmet sesli anlatımı aç">
+        <button class="dm-stage dm-character-stage" data-dm-avatar type="button" aria-label="Digital Mehmet sesli anlatımı aç">
           <span class="dm-portrait-glow" aria-hidden="true"></span>
-          <img src="profile.jpeg" alt="Mehmet Cam" loading="eager" decoding="async">
+          <span class="dm-character-frame" aria-hidden="true">
+            <img src="assets/digital-mehmet/digital-mehmet-hero.webp" alt="" loading="eager" decoding="async">
+            <span class="dm-character-vignette"></span>
+            <span class="dm-character-aura"></span>
+          </span>
           <span class="dm-live-badge"><i></i> DIGITAL MEHMET</span>
           <span class="dm-stage-hint">Konuşmayı başlat</span>
         </button>
