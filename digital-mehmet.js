@@ -50,7 +50,6 @@
         this.root.dataset.voiceEnabled = "true";
         this.root.dataset.muted = "false";
         this.mute?.setAttribute("aria-pressed", "false");
-        if (!this.lastText && this.playIntroVideo()) return;
         this.speak(this.lastText || this.intro());
       };
 
