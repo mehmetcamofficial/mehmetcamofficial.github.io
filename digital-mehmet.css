@@ -19,3 +19,45 @@
 
 .dm-ask{width:100%;margin:0 0 9px;padding:9px 11px;border:1px solid var(--border);border-radius:11px;background:var(--primary-soft);color:var(--primary);font-size:.72rem;font-weight:900;cursor:pointer;text-align:left;transition:transform .2s ease,border-color .2s ease,background .2s ease}
 .dm-ask:hover,.dm-ask:focus-visible{transform:translateY(-1px);border-color:var(--border-strong);background:var(--panel-strong)}
+
+
+/* Digital Mehmet V2 — Three.js layer */
+.dm-3d-canvas{
+  position:absolute;
+  inset:-7% -12% -4%;
+  z-index:3;
+  width:124%!important;
+  height:111%!important;
+  pointer-events:none;
+  opacity:0;
+  transform:translateY(8px) scale(.985);
+  transition:opacity .45s ease,transform .45s ease;
+}
+.digital-mehmet.dm-3d-ready .dm-3d-canvas{
+  opacity:1;
+  transform:translateY(0) scale(1);
+}
+.digital-mehmet.dm-3d-ready .dm-stage>img{
+  opacity:0;
+  visibility:hidden;
+}
+.digital-mehmet[data-avatar-mode="procedural"] .dm-stage-hint::before{
+  content:"3D · ";
+  color:var(--primary);
+}
+.digital-mehmet[data-avatar-mode="glb"] .dm-stage-hint::before{
+  content:"LIVE 3D · ";
+  color:var(--accent);
+}
+.digital-mehmet[data-state="thinking"].dm-3d-ready .dm-stage{
+  filter:drop-shadow(0 30px 46px rgba(68,97,255,.26));
+}
+.digital-mehmet[data-state="speaking"].dm-3d-ready .dm-stage{
+  filter:drop-shadow(0 34px 52px rgba(0,122,255,.30));
+}
+@media(max-width:760px){
+  .dm-3d-canvas{inset:-2% -18% 0;width:136%!important;height:102%!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .dm-3d-canvas{transition:none}
+}
