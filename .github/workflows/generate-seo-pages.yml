@@ -1,0 +1,28 @@
+name: Generate SEO content pages
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 * * * *"
+permissions:
+  contents: write
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Generate indexable CMS pages
+        run: node scripts/generate-seo-pages.mjs
+      - name: Commit generated SEO pages
+        run: |
+          if git diff --quiet -- projects writing sitemap.xml seo-generated.json; then
+            echo "No SEO content changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add projects writing sitemap.xml seo-generated.json
+          git commit -m "chore(seo): regenerate indexable CMS pages"
+          git push

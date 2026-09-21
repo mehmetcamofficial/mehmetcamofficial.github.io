@@ -1,15 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://mehmetcamofficial.com.tr/</loc>
-    <lastmod>2026-09-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://mehmetcamofficial.com.tr/blog.html</loc>
-    <lastmod>2026-09-21</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
+  <url><loc>https://mehmetcamofficial.com.tr/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/blog.html</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/projects/tourpilot/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/projects/evalora/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/projects/oncoconnect/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/projects/search-intelligence/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/projects/histopathology/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/projects/enrich/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/search-intelligence-medium/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/opspilot-ai/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/forward-deployed-engineer/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/livable-world-food/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/society-5-agriculture/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/gelecegin-tarimi/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/smart-village-story/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/tabit-akilli-koy/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/tarimda-dijital-ikiz/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/ai-in-agriculture/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/eu-turkiye-migration-russia/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/exploring-data-science/</loc><lastmod>2026-09-21</lastmod></url>
+  <url><loc>https://mehmetcamofficial.com.tr/writing/blockchain-energy/</loc><lastmod>2026-09-21</lastmod></url>
 </urlset>

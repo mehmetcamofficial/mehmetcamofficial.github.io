@@ -667,7 +667,7 @@ function createMetrics() {
               card.appendChild(tags);
             }
             const actions=document.createElement("div");actions.className="cms-card-actions";
-            const detail=document.createElement("a");detail.className="btn primary";detail.href="/project.html?id="+encodeURIComponent(project.id);detail.textContent="View case study →";actions.appendChild(detail);
+            const detail=document.createElement("a");detail.className="btn primary";detail.href="/projects/"+encodeURIComponent(project.id)+"/";detail.textContent="View case study →";actions.appendChild(detail);
             if (project.url && project.url !== "#") {
               const live=document.createElement("a");live.className="btn secondary";live.href=project.url;live.textContent="Open live ↗";
               if (/^https:\/\//i.test(project.url)){live.target="_blank";live.rel="noopener";}
