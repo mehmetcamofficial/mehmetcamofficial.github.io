@@ -118,31 +118,43 @@
       const matching = all.filter((voice) => String(voice.lang || "").toLowerCase().startsWith(base));
       if (!matching.length) return null;
 
-      const preferredNames = base === "tr"
-        ? ["cem", "ahmet", "tolga", "mert", "yagiz", "yağız", "emre", "google türkçe", "microsoft"]
-        : ["daniel", "alex", "guy", "ryan", "aaron", "google us english", "microsoft"];
+      const maleHints = base === "tr"
+        ? ["cem", "ahmet", "tolga", "mert", "yagiz", "yağız", "emre", "kerem", "kaan", "onur", "baris", "barış", "male", "erkek"]
+        : ["daniel", "alex", "guy", "ryan", "aaron", "fred", "ralph", "tom", "oliver", "male"];
 
-      const qualityWords = ["premium", "enhanced", "natural", "neural", "google", "microsoft"];
-      const penaltyWords = ["novelty", "whisper", "organ", "bells", "bad news", "good news"];
+      const femaleHints = base === "tr"
+        ? ["yelda", "aylin", "emel", "filiz", "seda", "zeynep", "selin", "eda", "female", "kadın", "kadin"]
+        : ["samantha", "victoria", "karen", "moira", "tessa", "fiona", "serena", "female"];
 
-      return matching
+      const qualityWords = ["premium", "enhanced", "natural", "neural"];
+      const noveltyWords = ["novelty", "whisper", "organ", "bells", "bad news", "good news"];
+
+      const ranked = matching
         .map((voice) => {
           const name = String(voice.name || "").toLowerCase();
-          let score = 0;
-          preferredNames.forEach((word, i) => {
-            if (name.includes(word)) score += 40 - i;
+          const isMale = maleHints.some((hint) => name.includes(hint));
+          const isFemale = femaleHints.some((hint) => name.includes(hint));
+
+          if (!isMale || isFemale) return { voice, score: -10000 };
+
+          let score = 100;
+          maleHints.forEach((word, i) => {
+            if (name.includes(word)) score += 60 - Math.min(i, 40);
           });
           qualityWords.forEach((word) => {
-            if (name.includes(word)) score += 12;
+            if (name.includes(word)) score += 18;
           });
-          penaltyWords.forEach((word) => {
-            if (name.includes(word)) score -= 100;
+          noveltyWords.forEach((word) => {
+            if (name.includes(word)) score -= 1000;
           });
-          if (String(voice.lang || "").toLowerCase() === lang.toLowerCase()) score += 15;
-          if (voice.localService) score += 2;
+          if (String(voice.lang || "").toLowerCase() === lang.toLowerCase()) score += 20;
+          if (voice.localService) score += 3;
           return { voice, score };
         })
-        .sort((a, b) => b.score - a.score)[0]?.voice || matching[0];
+        .filter((item) => item.score > 0)
+        .sort((a, b) => b.score - a.score);
+
+      return ranked[0]?.voice || null;
     }
 
     cleanForSpeech(text) {
@@ -191,8 +203,8 @@
 
       if (!voice) {
         this.setVoiceMeta(lang.startsWith("tr")
-          ? "Türkçe sistem sesi bulunamadı"
-          : "Uygun sistem sesi bulunamadı");
+          ? "Erkek Türkçe sesi bu tarayıcıda bulunamadı"
+          : "Male system voice not available in this browser");
         this.setState(STATES.IDLE);
         return;
       }
@@ -200,13 +212,14 @@
       const utterance = new SpeechSynthesisUtterance(clean);
       utterance.lang = lang;
       utterance.voice = voice;
-      utterance.rate = lang.startsWith("tr") ? 1.04 : 1.02;
-      utterance.pitch = 1.0;
+      utterance.rate = lang.startsWith("tr") ? 1.01 : 1.0;
+      utterance.pitch = 0.92;
       utterance.volume = 1;
 
       utterance.onstart = () => {
         this.setState(STATES.SPEAKING);
-        this.setVoiceMeta("Ses · " + voice.name);
+        this.root.dataset.voiceGender = "male";
+        this.setVoiceMeta("Erkek ses · " + voice.name);
       };
       utterance.onend = () => {
         this.setState(STATES.IDLE);

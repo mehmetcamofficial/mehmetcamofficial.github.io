@@ -167,3 +167,90 @@ html[data-theme="dark"] .dm-stage-hint,html[data-theme="dark"] .dm-live-badge{ba
     transform:none!important;
   }
 }
+
+
+/* Digital Mehmet — entrance + head/gesture polish */
+.digital-mehmet{
+  animation:dmHeroEnter .72s cubic-bezier(.2,.8,.2,1) both;
+}
+.dm-console{
+  animation:dmPanelEnter .82s .08s cubic-bezier(.2,.8,.2,1) both;
+}
+.digital-mehmet[data-state="speaking"] .dm-stage img{
+  animation:dmSpeakPortrait 2.35s ease-in-out infinite;
+  transform-origin:50% 58%;
+}
+.digital-mehmet[data-state="thinking"] .dm-stage img{
+  animation:dmThinkPortrait 3.1s ease-in-out infinite;
+}
+.digital-mehmet[data-state="speaking"] .dm-console{
+  box-shadow:
+    0 28px 76px rgba(39,75,135,.20),
+    0 0 0 1px rgba(10,123,255,.07);
+}
+.dm-ask b{
+  display:inline-block;
+  transition:transform .2s ease;
+}
+.dm-ask:hover b,.dm-ask:focus-visible b{
+  transform:translateX(3px);
+}
+
+@keyframes dmHeroEnter{
+  0%{opacity:0;transform:translate3d(0,16px,0) scale(.985)}
+  100%{opacity:1;transform:translate3d(0,0,0) scale(1)}
+}
+@keyframes dmPanelEnter{
+  0%{opacity:0;transform:translate3d(18px,10px,0)}
+  100%{opacity:1;transform:translate3d(0,0,0)}
+}
+@keyframes dmSpeakPortrait{
+  0%,100%{
+    transform:
+      translate3d(var(--dm-mx),var(--dm-my),0)
+      rotateX(var(--dm-rx))
+      rotateY(var(--dm-ry))
+      rotateZ(0deg)
+      scale(1.008);
+  }
+  32%{
+    transform:
+      translate3d(calc(var(--dm-mx) + 1px),calc(var(--dm-my) - 3px),0)
+      rotateX(calc(var(--dm-rx) - .45deg))
+      rotateY(calc(var(--dm-ry) + .8deg))
+      rotateZ(-.35deg)
+      scale(1.013);
+  }
+  68%{
+    transform:
+      translate3d(calc(var(--dm-mx) - 1px),calc(var(--dm-my) - 1px),0)
+      rotateX(calc(var(--dm-rx) + .25deg))
+      rotateY(calc(var(--dm-ry) - .5deg))
+      rotateZ(.22deg)
+      scale(1.01);
+  }
+}
+@keyframes dmThinkPortrait{
+  0%,100%{
+    transform:
+      translate3d(var(--dm-mx),var(--dm-my),0)
+      rotateX(var(--dm-rx))
+      rotateY(var(--dm-ry))
+      rotateZ(0deg)
+      scale(1.008);
+  }
+  50%{
+    transform:
+      translate3d(calc(var(--dm-mx) - 2px),calc(var(--dm-my) - 2px),0)
+      rotateX(calc(var(--dm-rx) - .4deg))
+      rotateY(calc(var(--dm-ry) - 1.1deg))
+      rotateZ(-.45deg)
+      scale(1.01);
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .digital-mehmet,.dm-console,.digital-mehmet[data-state="speaking"] .dm-stage img,.digital-mehmet[data-state="thinking"] .dm-stage img{
+    animation:none!important;
+  }
+}
