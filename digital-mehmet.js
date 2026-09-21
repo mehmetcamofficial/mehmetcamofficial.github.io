@@ -10,6 +10,7 @@
   });
 
   const TURKISH_RE = /[çğıöşüÇĞİÖŞÜ]|\b(merhaba|ben|bana|proje|projeler|araştırma|çalışma|deneyim|hakkında|nasıl|nedir|yapay zeka|tarım|turizm|rezervasyon)\b/i;
+  const TTS_URL = "https://mehmetcam-portfolio-ai.aydin254.workers.dev/tts";
 
   class DigitalMehmet {
     constructor(root) {
@@ -20,6 +21,10 @@
       this.lastText = "";
       this.utterance = null;
       this.voices = [];
+      this.audio = null;
+      this.audioUrl = "";
+      this.ttsController = null;
+      this.neuralConfigured = null;
       this.status = root.querySelector("[data-dm-status]");
       this.voiceMeta = root.querySelector("[data-dm-voice-meta]");
       this.play = root.querySelector("[data-dm-play]");
@@ -66,7 +71,7 @@
         window.speechSynthesis.addEventListener?.("voiceschanged", () => this.loadVoices());
       }
 
-      window.addEventListener("beforeunload", () => window.speechSynthesis?.cancel());
+      window.addEventListener("beforeunload", () => this.stopPlayback());
     }
 
     bindPortraitMotion() {
@@ -165,6 +170,85 @@
         .trim();
     }
 
+    stopPlayback() {
+      this.ttsController?.abort();
+      this.ttsController = null;
+      window.speechSynthesis?.cancel();
+
+      if (this.audio) {
+        try {
+          this.audio.pause();
+          this.audio.src = "";
+        } catch {}
+        this.audio = null;
+      }
+
+      if (this.audioUrl) {
+        URL.revokeObjectURL(this.audioUrl);
+        this.audioUrl = "";
+      }
+    }
+
+    async playNeuralTts(text, lang) {
+      this.ttsController?.abort();
+      this.ttsController = new AbortController();
+      this.setVoiceMeta("Doğal erkek AI sesi hazırlanıyor…");
+
+      try {
+        const response = await fetch(TTS_URL, {
+          method: "POST",
+          signal: this.ttsController.signal,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text,
+            lang: lang.startsWith("tr") ? "tr" : "en"
+          })
+        });
+
+        if (!response.ok) {
+          this.neuralConfigured = response.status !== 503;
+          return false;
+        }
+
+        const blob = await response.blob();
+        if (!blob.size) return false;
+
+        this.neuralConfigured = true;
+        this.audioUrl = URL.createObjectURL(blob);
+        const audio = new Audio(this.audioUrl);
+        audio.preload = "auto";
+        this.audio = audio;
+
+        audio.onplay = () => {
+          this.root.dataset.voiceGender = "male";
+          this.root.dataset.voiceProvider = "neural";
+          this.setState(STATES.SPEAKING);
+          this.setVoiceMeta("AI üretimi · doğal erkek Türkçe ses");
+        };
+
+        audio.onended = () => {
+          this.setState(STATES.IDLE);
+          this.setVoiceMeta("Doğal erkek AI sesi hazır");
+          if (this.audioUrl) URL.revokeObjectURL(this.audioUrl);
+          this.audioUrl = "";
+          this.audio = null;
+        };
+
+        audio.onerror = () => {
+          this.setState(STATES.IDLE);
+          this.setVoiceMeta("Neural ses oynatılamadı");
+        };
+
+        await audio.play();
+        return true;
+      } catch (error) {
+        if (error?.name !== "AbortError") console.warn("Digital Mehmet neural TTS fallback:", error);
+        return false;
+      } finally {
+        this.ttsController = null;
+      }
+    }
+
     setVoiceMeta(text) {
       if (this.voiceMeta) this.voiceMeta.textContent = text;
     }
@@ -185,12 +269,21 @@
     }
 
     async speak(text) {
-      if (!text || this.muted || !("speechSynthesis" in window)) return;
+      if (!text || this.muted) return;
 
       const clean = this.cleanForSpeech(text);
       if (!clean) return;
 
-      window.speechSynthesis.cancel();
+      this.stopPlayback();
+      const lang = this.detectLanguage(clean);
+
+      if (await this.playNeuralTts(clean.slice(0, 1400), lang)) return;
+
+      if (!("speechSynthesis" in window)) {
+        this.setVoiceMeta("Neural erkek ses için servis bağlantısı gerekli");
+        this.setState(STATES.IDLE);
+        return;
+      }
 
       if (!this.voices.length) {
         this.loadVoices();
@@ -198,13 +291,16 @@
         this.loadVoices();
       }
 
-      const lang = this.detectLanguage(clean);
       const voice = this.selectVoice(lang);
 
       if (!voice) {
-        this.setVoiceMeta(lang.startsWith("tr")
-          ? "Erkek Türkçe sesi bu tarayıcıda bulunamadı"
-          : "Male system voice not available in this browser");
+        this.setVoiceMeta(
+          this.neuralConfigured === false
+            ? "Doğal erkek ses için ElevenLabs bağlantısı bekleniyor"
+            : (lang.startsWith("tr")
+              ? "Tarayıcıda erkek Türkçe sesi yok"
+              : "Male browser voice unavailable")
+        );
         this.setState(STATES.IDLE);
         return;
       }
@@ -219,7 +315,8 @@
       utterance.onstart = () => {
         this.setState(STATES.SPEAKING);
         this.root.dataset.voiceGender = "male";
-        this.setVoiceMeta("Erkek ses · " + voice.name);
+        this.root.dataset.voiceProvider = "browser";
+        this.setVoiceMeta("Erkek sistem sesi · " + voice.name);
       };
       utterance.onend = () => {
         this.setState(STATES.IDLE);
@@ -235,6 +332,16 @@
     }
 
     togglePause() {
+      if (this.audio) {
+        if (this.audio.paused) {
+          this.audio.play().then(() => this.setState(STATES.SPEAKING)).catch(() => {});
+        } else {
+          this.audio.pause();
+          this.setState(STATES.PAUSED);
+        }
+        return;
+      }
+
       if (!("speechSynthesis" in window)) return;
 
       if (window.speechSynthesis.paused) {
@@ -253,7 +360,7 @@
       this.root.dataset.voiceEnabled = String(this.voiceEnabled);
 
       if (this.muted) {
-        window.speechSynthesis?.cancel();
+        this.stopPlayback();
         this.setVoiceMeta("Ses kapalı");
       } else {
         this.setVoiceMeta("Profesyonel ses modu hazır");
@@ -300,11 +407,12 @@
 
         <p class="dm-copy">Projelerim, araştırmalarım ve çalışma deneyimim hakkında bana sorabilirsiniz.</p>
         <div class="dm-voice-row">
-          <div class="dm-voice-meta" data-dm-voice-meta>Profesyonel ses modu hazırlanıyor…</div>
+          <div class="dm-voice-meta" data-dm-voice-meta>Doğal erkek AI sesi hazırlanıyor…</div>
           <div class="dm-wave" aria-hidden="true">
             <i></i><i></i><i></i><i></i><i></i>
           </div>
         </div>
+        <small class="dm-ai-disclosure">Ses, yapay zekâ tarafından üretilir.</small>
 
         <button type="button" class="dm-ask" data-dm-ask>
           <span>Bana bir soru sor</span>

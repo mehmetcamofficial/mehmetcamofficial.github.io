@@ -1308,6 +1308,65 @@ export default {
       },200,origin);
     }
 
+    if (url.pathname === "/tts") {
+      if (request.method !== "POST") return jsonResponse({ error: "POST required" }, 405, origin);
+      if (origin && !ALLOWED_ORIGINS.includes(origin)) return jsonResponse({ error: "Origin not allowed" }, 403, origin);
+      if (!env.ELEVENLABS_API_KEY || !env.ELEVENLABS_VOICE_ID) {
+        return jsonResponse({ error: "Neural voice is not configured" }, 503, origin);
+      }
+
+      let body;
+      try { body = await request.json(); }
+      catch { return jsonResponse({ error: "Invalid JSON" }, 400, origin); }
+
+      const text = typeof body?.text === "string" ? body.text.trim() : "";
+      if (!text) return jsonResponse({ error: "Text is required" }, 400, origin);
+      if (text.length > 1400) return jsonResponse({ error: "Text is too long" }, 400, origin);
+
+      const voiceId = String(env.ELEVENLABS_VOICE_ID).trim();
+      const upstream = await fetch(
+        "https://api.elevenlabs.io/v1/text-to-speech/" +
+          encodeURIComponent(voiceId) +
+          "/stream?output_format=mp3_44100_128",
+        {
+          method: "POST",
+          headers: {
+            "xi-api-key": env.ELEVENLABS_API_KEY,
+            "Content-Type": "application/json",
+            "Accept": "audio/mpeg"
+          },
+          body: JSON.stringify({
+            text,
+            model_id: "eleven_flash_v2_5",
+            language_code: "tr",
+            voice_settings: {
+              stability: 0.58,
+              similarity_boost: 0.82,
+              style: 0.18,
+              use_speaker_boost: true,
+              speed: 1.0
+            }
+          })
+        }
+      );
+
+      if (!upstream.ok) {
+        const detail = await upstream.text().catch(() => "");
+        console.error("Portfolio TTS ElevenLabs error:", upstream.status, detail.slice(0, 500));
+        return jsonResponse({ error: "Voice generation failed" }, 502, origin);
+      }
+
+      return new Response(upstream.body, {
+        status: 200,
+        headers: {
+          "Content-Type": upstream.headers.get("Content-Type") || "audio/mpeg",
+          "Cache-Control": "no-store",
+          "X-AI-Voice": "true",
+          ...corsHeaders(origin)
+        }
+      });
+    }
+
     if (url.pathname === "/" || url.pathname === "/health") {
       return jsonResponse({ ok: true, service: "Mehmet Cam Portfolio AI", status: "online", architecture: "knowledge-first-rag-v2", knowledgeItems: KNOWLEDGE.length, mediumArticlesIndexed: KNOWLEDGE.filter(x => x.id.startsWith("medium-") && x.id !== "medium-profile").length, cvExperienceItems: KNOWLEDGE.filter(x => x.id.startsWith("experience-") || x.id.startsWith("education-") || x.id.startsWith("training-")).length, unansweredPersistence: Boolean(env.UNANSWERED_KV) }, 200, origin);
     }

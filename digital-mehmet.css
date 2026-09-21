@@ -254,3 +254,13 @@ html[data-theme="dark"] .dm-stage-hint,html[data-theme="dark"] .dm-live-badge{ba
     animation:none!important;
   }
 }
+
+
+.dm-ai-disclosure{
+  display:block;
+  margin:-7px 0 12px;
+  color:#8a9bb0;
+  font-size:.62rem;
+  line-height:1.35;
+}
+html[data-theme="dark"] .dm-ai-disclosure{color:#738aa8}
