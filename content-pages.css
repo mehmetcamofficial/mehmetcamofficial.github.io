@@ -184,3 +184,6 @@ html[data-theme="dark"] .writing-item{background:rgba(10,24,39,.78)}
  .writing-item{grid-template-columns:38px minmax(0,1fr)!important;gap:12px!important;padding:24px 0!important}
  .writing-copy h2{font-size:1.45rem!important}
 }
+
+/* Citation evidence pages v10 */
+.article h2{margin:34px 0 10px;font-size:1.45rem;letter-spacing:-.025em}.article h3{margin:22px 0 8px}.evidence-lead{font-size:1.16rem!important;color:#142b47!important}.evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}.evidence-card{padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.62)}.evidence-card strong{display:block;margin-bottom:6px}.evidence-card p{margin:0;color:var(--muted);line-height:1.6}.evidence-list{padding-left:20px;color:#20344e;line-height:1.8}.evidence-note{padding:16px 18px;margin:24px 0;border-left:4px solid var(--accent);border-radius:10px;background:rgba(9,111,255,.06);color:#20344e;line-height:1.65}.source-list{display:grid;gap:8px}.source-list a{color:var(--accent);font-weight:800}.citation-chip{display:inline-flex;margin:4px 5px 4px 0;padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:.74rem;font-weight:850}@media(max-width:700px){.evidence-grid{grid-template-columns:1fr}}
