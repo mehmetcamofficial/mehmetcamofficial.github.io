@@ -14,6 +14,11 @@ Canonical website: https://mehmetcamofficial.com.tr/
 - R&D and Innovation Management master's background
 - EU-funded research project experience
 
+## Citation-ready expertise pages
+
+- [Applied AI & Product Engineering](https://mehmetcamofficial.com.tr/research/applied-ai/) — evidence hub for AI-assisted engineering, model evaluation, automation and product development.
+- [AgriTech & Smart Agriculture](https://mehmetcamofficial.com.tr/research/agritech/) — evidence hub for smart agriculture, decision support, rural innovation and research.
+
 ## Featured work
 
 - [TourPilot](https://mehmetcamofficial.com.tr/projects/tourpilot/) — AI-assisted operations platform built around real tour-operator workflows, reservation ingestion, operational planning, auditability, RBAC and data quality.
