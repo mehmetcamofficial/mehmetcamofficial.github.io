@@ -1,6 +1,6 @@
 /* Digital Mehmet V1 */
 .digital-mehmet{position:absolute;inset:0;z-index:60;pointer-events:none;display:flex;align-items:flex-end;justify-content:center}
-.dm-stage{position:absolute;left:4%;bottom:88px;width:min(290px,46%);aspect-ratio:.72;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 28px 40px rgba(0,0,0,.18))}
+.dm-stage{position:absolute;left:4%;bottom:88px;width:min(290px,46%);aspect-ratio:.72;display:flex;align-items:flex-end;justify-content:center;filter:drop-shadow(0 28px 40px rgba(0,0,0,.18));pointer-events:auto;border:0;padding:0;background:transparent;cursor:pointer}
 .dm-stage img{position:relative;z-index:2;width:82%;height:82%;object-fit:cover;object-position:50% 24%;border-radius:46% 46% 30% 30%/34% 34% 18% 18%;mask-image:linear-gradient(#000 0 78%,transparent 100%);transition:transform .35s ease,filter .35s ease}
 .dm-aura{position:absolute;inset:18% 5% 3%;border-radius:50%;background:radial-gradient(circle,var(--primary-soft),transparent 68%);filter:blur(8px);animation:dmBreath 4.6s ease-in-out infinite}
 .dm-pulse{position:absolute;left:50%;bottom:3%;width:82%;height:13%;transform:translateX(-50%);border:2px solid var(--primary);border-radius:50%;opacity:.48;box-shadow:0 0 28px var(--primary-soft)}
@@ -12,3 +12,7 @@
 @keyframes dmBreath{0%,100%{transform:scale(.96);opacity:.5}50%{transform:scale(1.04);opacity:.82}}@keyframes dmTalk{0%,100%{transform:translateY(0) rotate(0)}35%{transform:translateY(-3px) rotate(-.4deg)}70%{transform:translateY(-1px) rotate(.35deg)}}@keyframes dmRing{0%{transform:translateX(-50%) scale(.92);opacity:.6}100%{transform:translateX(-50%) scale(1.12);opacity:0}}
 @media(max-width:760px){.dm-stage{left:-2%;bottom:108px;width:48%}.dm-console{right:0;bottom:0;width:72%;padding:13px}.dm-console p{display:none}.dm-actions{grid-template-columns:1fr 40px 40px}.dm-actions button{min-height:40px}.dm-primary span{font-size:.72rem}}
 @media(prefers-reduced-motion:reduce){.dm-aura,.digital-mehmet[data-state="speaking"] .dm-stage img,.digital-mehmet[data-state="speaking"] .dm-pulse{animation:none!important}}
+.dm-stage-hint{position:absolute;z-index:4;left:50%;bottom:-12px;transform:translateX(-50%);white-space:nowrap;padding:7px 10px;border:1px solid var(--border);border-radius:999px;background:var(--panel-strong);color:var(--muted);font-size:.62rem;font-weight:850;letter-spacing:.02em;box-shadow:var(--shadow-soft);transition:opacity .25s ease,transform .25s ease}
+.dm-stage:hover .dm-stage-hint,.dm-stage:focus-visible .dm-stage-hint{color:var(--primary);transform:translateX(-50%) translateY(-2px)}
+.digital-mehmet[data-voice-enabled="true"] .dm-stage-hint{opacity:0;pointer-events:none}
+.dm-stage:focus-visible{outline:2px solid var(--primary);outline-offset:6px;border-radius:28px}
