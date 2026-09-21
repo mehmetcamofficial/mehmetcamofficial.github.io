@@ -1486,8 +1486,8 @@
   .dm-language{display:none}
 }
 
-/* Voice-synchronised portrait motion + collision-safe desktop stats */
-.dm-character-mouth{display:none}
+/* Natural portrait presence + collision-safe desktop stats.
+   Lip-sync needs rendered visemes/video; never deform the source portrait. */
 
 @media (min-width:1101px){
   .dm-hero-stats{
@@ -1502,30 +1502,8 @@
     will-change:transform,filter;
   }
 
-  .dm-static-character .dm-character-mouth{
-    position:absolute!important;
-    inset:0!important;
-    z-index:3!important;
-    display:block!important;
-    width:100%!important;
-    height:100%!important;
-    object-fit:contain!important;
-    object-position:center 44%!important;
-    opacity:0;
-    pointer-events:none;
-    transform-origin:50.5% 31.5%!important;
-    -webkit-mask-image:radial-gradient(ellipse 11% 3.4% at 50.5% 31.5%,#000 42%,rgba(0,0,0,.88) 57%,transparent 78%);
-    mask-image:radial-gradient(ellipse 11% 3.4% at 50.5% 31.5%,#000 42%,rgba(0,0,0,.88) 57%,transparent 78%);
-    will-change:transform,opacity;
-  }
-
   .hero-visual-v2:has(.digital-mehmet[data-state="speaking"]) .dm-character-base{
-    animation:dmCharacterSpeaking .78s ease-in-out infinite!important;
-  }
-
-  .hero-visual-v2:has(.digital-mehmet[data-state="speaking"]) .dm-character-mouth{
-    opacity:.96;
-    animation:dmCharacterMouth .26s steps(2,end) infinite!important;
+    animation:dmCharacterSpeaking 3.8s ease-in-out infinite!important;
   }
 
   .hero-visual-v2:has(.digital-mehmet[data-state="thinking"]) .dm-character-base{
@@ -1540,15 +1518,8 @@
 
 @keyframes dmCharacterSpeaking{
   0%,100%{transform:translate3d(0,0,0) rotate(0deg) scale(1)}
-  25%{transform:translate3d(1px,-2px,0) rotate(.12deg) scale(1.002)}
-  55%{transform:translate3d(-1px,-1px,0) rotate(-.1deg) scale(1.001)}
-  78%{transform:translate3d(1px,-3px,0) rotate(.08deg) scale(1.003)}
-}
-
-@keyframes dmCharacterMouth{
-  0%,100%{transform:translate3d(0,0,0) scaleY(1)}
-  32%{transform:translate3d(0,2px,0) scaleY(1.1)}
-  68%{transform:translate3d(0,-.75px,0) scaleY(.96)}
+  30%{transform:translate3d(.4px,-1px,0) rotate(.035deg) scale(1.001)}
+  65%{transform:translate3d(-.35px,-.4px,0) rotate(-.03deg) scale(1.0005)}
 }
 
 @keyframes dmCharacterThinking{
@@ -1557,8 +1528,7 @@
 }
 
 @media (prefers-reduced-motion:reduce){
-  .dm-static-character .dm-character-base,
-  .dm-static-character .dm-character-mouth{
+  .dm-static-character .dm-character-base{
     animation:none!important;
   }
 }
