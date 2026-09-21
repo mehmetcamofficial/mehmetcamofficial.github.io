@@ -1590,37 +1590,3 @@
 
 /* Keep the same rendered video surface before/after speech to prevent portrait snap-back. */
 .dm-character-video.is-ready{opacity:1!important;visibility:visible!important;z-index:4!important;display:block!important;}
-
-/* Seamless lip-sync: preserve the approved hero portrait and reveal motion only around the face.
-   This prevents the alternate video's background/body/crop from replacing the hero. */
-.dm-static-character .dm-character-base{
-  opacity:1!important;
-  visibility:visible!important;
-}
-.dm-static-character .dm-character-video,
-.dm-static-character .dm-character-video.is-ready,
-.dm-static-character .dm-character-video.is-playing{
-  inset:0!important;
-  width:100%!important;
-  height:100%!important;
-  object-fit:cover!important;
-  object-position:center 47%!important;
-  border-radius:30px!important;
-  z-index:3!important;
-  pointer-events:none!important;
-  -webkit-mask-image:radial-gradient(ellipse 18% 22% at 53% 31%,#000 0 58%,rgba(0,0,0,.92) 70%,rgba(0,0,0,.45) 82%,transparent 100%)!important;
-  mask-image:radial-gradient(ellipse 18% 22% at 53% 31%,#000 0 58%,rgba(0,0,0,.92) 70%,rgba(0,0,0,.45) 82%,transparent 100%)!important;
-  filter:saturate(.98) contrast(1.02) brightness(.97)!important;
-}
-.dm-static-character .dm-character-video:not(.is-playing){
-  opacity:0!important;
-  visibility:hidden!important;
-}
-.dm-static-character .dm-character-video.is-playing{
-  opacity:1!important;
-  visibility:visible!important;
-}
-.dm-character-base.is-video-playing{
-  opacity:1!important;
-  visibility:visible!important;
-}
