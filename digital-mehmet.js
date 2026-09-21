@@ -130,7 +130,7 @@
       const video = this.introVideo;
       if (!video) return false;
 
-      this.stopPlayback({ keepMotion: Boolean(options.keepMotion) });
+      this.stopPlayback();
       try {
         video.pause();
         video.currentTime = 0;
