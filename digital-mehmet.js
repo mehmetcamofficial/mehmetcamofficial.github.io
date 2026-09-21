@@ -23,6 +23,7 @@
       this.play = root.querySelector("[data-dm-play]");
       this.pause = root.querySelector("[data-dm-pause]");
       this.mute = root.querySelector("[data-dm-mute]");
+      this.ask = root.querySelector("[data-dm-ask]");
       this.avatar = root.querySelector("[data-dm-avatar]");
       this.bind();
       this.setState(STATES.IDLE);
@@ -42,6 +43,7 @@
       this.avatar?.addEventListener("click", enableVoice);
       this.pause?.addEventListener("click", () => this.togglePause());
       this.mute?.addEventListener("click", () => this.toggleMute());
+      this.ask?.addEventListener("click", () => document.dispatchEvent(new CustomEvent("digital-mehmet:open-chat")));
 
       document.addEventListener("portfolio-ai:thinking", () => this.setState(STATES.THINKING));
       document.addEventListener("portfolio-ai:answer", (event) => {
@@ -134,6 +136,7 @@
           <i aria-hidden="true"></i>
         </div>
         <p>Portfolio AI yanıtlarını sesli dinleyin.</p>
+        <button type="button" class="dm-ask" data-dm-ask>Bana bir soru sor →</button>
         <div class="dm-actions">
           <button type="button" data-dm-play class="dm-primary" aria-label="Mehmet'i dinle">▶ <span>Beni Dinle</span></button>
           <button type="button" data-dm-pause aria-label="Konuşmayı duraklat">Ⅱ</button>
