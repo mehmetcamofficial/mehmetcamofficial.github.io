@@ -44,22 +44,43 @@
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "ProfilePage",
-    "name": "Mehmet Cam — AI Engineer, Product Builder & Researcher",
-    "url": "https://mehmetcamofficial.com.tr/",
-    "mainEntity": {
-      "@type": "Person",
-      "name": "Mehmet Cam",
-      "url": "https://mehmetcamofficial.com.tr/",
-      "image": "https://mehmetcamofficial.com.tr/profile.jpeg",
-      "jobTitle": "AI Engineer, Product Builder & Researcher",
-      "knowsAbout": ["Artificial Intelligence","AI Engineering","Automation","Data Science","AgriTech","Research and Development","Product Engineering"],
-      "sameAs": [
-        "https://github.com/mehmetcamofficial",
-        "https://linkedin.com/in/mehmet-cam09",
-        "https://medium.com/@aydin254"
-      ]
-    }
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://mehmetcamofficial.com.tr/#website",
+        "url": "https://mehmetcamofficial.com.tr/",
+        "name": "Mehmet Cam Portfolio",
+        "inLanguage": ["en","tr"],
+        "publisher": {"@id":"https://mehmetcamofficial.com.tr/#person"}
+      },
+      {
+        "@type": "ProfilePage",
+        "@id": "https://mehmetcamofficial.com.tr/#profile",
+        "name": "Mehmet Cam — AI Engineer, Product Builder & Researcher",
+        "url": "https://mehmetcamofficial.com.tr/",
+        "isPartOf": {"@id":"https://mehmetcamofficial.com.tr/#website"},
+        "mainEntity": {"@id":"https://mehmetcamofficial.com.tr/#person"}
+      },
+      {
+        "@type": "Person",
+        "@id": "https://mehmetcamofficial.com.tr/#person",
+        "name": "Mehmet Cam",
+        "url": "https://mehmetcamofficial.com.tr/",
+        "image": "https://mehmetcamofficial.com.tr/profile.jpeg",
+        "jobTitle": "AI Engineer, Product Builder & Researcher",
+        "description": "AI engineer, product builder and applied AI researcher working across AI engineering, automation, data systems, AgriTech and research.",
+        "knowsAbout": ["Artificial Intelligence","AI Engineering","Automation","Data Science","AgriTech","Sustainable Agriculture","Research and Development","Product Engineering","Decision Support Systems"],
+        "sameAs": [
+          "https://github.com/mehmetcamofficial",
+          "https://linkedin.com/in/mehmet-cam09",
+          "https://medium.com/@aydin254"
+        ],
+        "subjectOf": [
+          {"@type":"CreativeWork","name":"TourPilot","url":"https://mehmetcamofficial.com.tr/projects/tourpilot/"},
+          {"@type":"CreativeWork","name":"Search Intelligence","url":"https://mehmetcamofficial.com.tr/projects/search-intelligence/"}
+        ]
+      }
+    ]
   }
   </script>
 </head>
