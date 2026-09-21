@@ -16,6 +16,7 @@
       this.root = root;
       this.state = STATES.IDLE;
       this.muted = false;
+      this.voiceEnabled = false;
       this.lastText = "";
       this.utterance = null;
       this.status = root.querySelector("[data-dm-status]");
@@ -28,7 +29,17 @@
     }
 
     bind() {
-      this.play?.addEventListener("click", () => this.speak(this.lastText || this.intro()));
+      const enableVoice = () => {
+        this.voiceEnabled = true;
+        this.muted = false;
+        this.root.dataset.voiceEnabled = "true";
+        this.root.dataset.muted = "false";
+        if (this.mute) this.mute.setAttribute("aria-pressed", "false");
+        this.speak(this.lastText || this.intro());
+      };
+
+      this.play?.addEventListener("click", enableVoice);
+      this.avatar?.addEventListener("click", enableVoice);
       this.pause?.addEventListener("click", () => this.togglePause());
       this.mute?.addEventListener("click", () => this.toggleMute());
 
@@ -37,7 +48,7 @@
         const text = String(event.detail?.text || "").trim();
         if (!text) return;
         this.lastText = text;
-        this.speak(text);
+        if (this.voiceEnabled && !this.muted) this.speak(text);
       });
 
       window.addEventListener("beforeunload", () => window.speechSynthesis?.cancel());
@@ -90,7 +101,9 @@
 
     toggleMute() {
       this.muted = !this.muted;
+      if (!this.muted) this.voiceEnabled = true;
       this.root.dataset.muted = String(this.muted);
+      this.root.dataset.voiceEnabled = String(this.voiceEnabled);
       if (this.muted) window.speechSynthesis?.cancel();
       if (this.mute) this.mute.setAttribute("aria-pressed", String(this.muted));
       this.setState(STATES.IDLE);
@@ -106,13 +119,15 @@
     root.className = "digital-mehmet";
     root.dataset.digitalMehmet = "";
     root.dataset.state = STATES.IDLE;
+    root.dataset.voiceEnabled = "false";
     root.setAttribute("aria-label", "Digital Mehmet voice assistant");
     root.innerHTML = `
-      <div class="dm-stage" data-dm-avatar aria-hidden="true">
+      <button class="dm-stage" data-dm-avatar type="button" aria-label="Digital Mehmet sesli anlatımı aç">
         <div class="dm-aura"></div>
         <img src="profile.jpeg" alt="" loading="eager" decoding="async">
         <span class="dm-pulse"></span>
-      </div>
+        <span class="dm-stage-hint">Konuşmak için bana dokun</span>
+      </button>
       <div class="dm-console glass-panel">
         <div class="dm-heading">
           <div><small>DIGITAL MEHMET</small><strong data-dm-status>Hazır</strong></div>
