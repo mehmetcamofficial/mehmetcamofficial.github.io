@@ -194,6 +194,20 @@ function collectSeoForm(){
   if($("#seoTitle"))$("#seoTitle").value=config.seo.title||"";
   if($("#seoDescription"))$("#seoDescription").value=config.seo.description||"";
 }
+async function loadAiSearchHealth(){
+  const checks=[];
+  const get=async path=>{try{const r=await fetch(path+"?ts="+Date.now(),{cache:"no-store"});return r.ok?await r.text():""}catch{return ""}};
+  const [robots,llms,about,sitemap]=await Promise.all([get("/robots.txt"),get("/llms.txt"),get("/about/"),get("/sitemap.xml")]);
+  checks.push({label:"OAI-SearchBot erişimi",ok:/User-agent:\s*OAI-SearchBot[\s\S]*?Allow:\s*\//i.test(robots),detail:"ChatGPT Search discovery"});
+  checks.push({label:"AI-readable llms.txt",ok:llms.includes("# Mehmet Cam")&&llms.includes("## Featured work"),detail:llms?"Mevcut":"Eksik"});
+  checks.push({label:"Canonical About / entity page",ok:about.includes('id":"https://mehmetcamofficial.com.tr/#person')||about.includes('https://mehmetcamofficial.com.tr/#person'),detail:"/about/"});
+  checks.push({label:"Entity external identity links",ok:about.includes("github.com/mehmetcamofficial")&&about.includes("linkedin.com/in/mehmet-cam09")&&about.includes("medium.com/@aydin254"),detail:"GitHub · LinkedIn · Medium"});
+  checks.push({label:"About sitemap'te",ok:sitemap.includes("https://mehmetcamofficial.com.tr/about/"),detail:"Canonical discovery"});
+  checks.push({label:"Citation-ready project pages",ok:(config?.projects||[]).filter(x=>x.enabled!==false&&x.status!=="draft").length>=5,detail:"Published evidence pages"});
+  const score=Math.round(checks.filter(x=>x.ok).length/checks.length*100),healthy=score===100;
+  if($("#aiSearchStatus")){$("#aiSearchStatus").textContent=healthy?"Ready · "+score+"%":"Review · "+score+"%";$("#aiSearchStatus").className="status-pill "+(healthy?"ok":"off")}
+  if($("#aiSearchChecklist"))$("#aiSearchChecklist").innerHTML=checks.map(x=>'<div class="check-item '+(x.ok?"ok":"warn")+'"><span>'+(x.ok?"✓":"!")+'</span><div><strong>'+esc(x.label)+'</strong><small>'+esc(x.detail)+'</small></div></div>').join("");
+}
 async function loadSeoIndexHealth(){
   if(!config)return;
   const publishedProjects=(config.projects||[]).filter(x=>x.enabled!==false&&x.status!=="draft");
@@ -269,7 +283,7 @@ function evaluateSeo(showFeedback=false){
   if($("#socialTitle"))$("#socialTitle").textContent=ogTitle||title||"Open Graph title";
   if($("#socialDescription"))$("#socialDescription").textContent=ogDesc||desc||"Open Graph description";
   if($("#socialImage"))$("#socialImage").style.backgroundImage=ogImage?'url("'+ogImage.replace(/"/g,"")+'")':"none";
-  loadSeoIndexHealth();if(showFeedback){if($("#seoStatus"))$("#seoStatus").textContent="SEO yeniden değerlendirildi · "+score+"%";toast("SEO yeniden değerlendirildi · "+score+"%");}
+  loadSeoIndexHealth();loadAiSearchHealth();if(showFeedback){if($("#seoStatus"))$("#seoStatus").textContent="SEO yeniden değerlendirildi · "+score+"%";toast("SEO yeniden değerlendirildi · "+score+"%");}
 }
 
 async function loadApprovals(){
