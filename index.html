@@ -34,7 +34,7 @@
   <link rel="stylesheet" href="style.css?v=20260920-v3" />
   <link rel="stylesheet" href="v2-fixes.css?v=20260920-2" />
   <link rel="stylesheet" href="v3.css?v=20260921-hero5" />
-  <link rel="stylesheet" href="digital-mehmet.css?v=20260921-final9" />
+  <link rel="stylesheet" href="digital-mehmet.css?v=20260921-reference10" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -94,22 +94,26 @@
 
   <!-- NAVBAR -->
   <header class="navbar">
-    <a href="#" class="logo" aria-label="Mehmet Cam homepage">
-      MC<span>.</span>
+    <a href="#" class="logo" aria-label="Mehmet Cam ana sayfa">
+      <strong>Mehmet Cam</strong>
+      <small>AI · Innovation · Impact</small>
     </a>
 
     <nav class="nav-links" aria-label="Main navigation">
-      <a href="#featured-project">Work</a>
-      <a href="#ai-workflow">AI Workflow</a>
-      <a href="#digital-products">Products</a>
-      <a href="#profile">Research</a>
-      <a href="/blog.html?v=20260921-public3">Writing</a>
-      <a href="#contact">Contact</a>
+      <a href="#" class="active-nav">Ana Sayfa</a>
+      <a href="#profile">Hakkımda</a>
+      <a href="#featured-project">Projeler</a>
+      <a href="#experience">Deneyim</a>
+      <a href="#skills">Yetenekler</a>
+      <a href="/blog.html?v=20260921-public3">Blog</a>
+      <a href="#contact">İletişim</a>
     </nav>
 
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-      ☀️
-    </button>
+    <div class="dm-nav-actions">
+      <a class="dm-nav-contact" href="#contact">İletişime Geç <span aria-hidden="true">→</span></a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Temayı değiştir">☀️</button>
+      <span class="dm-language" aria-label="Dil: Türkçe">◎ TR⌄</span>
+    </div>
   </header>
 
   <main>
@@ -276,7 +280,7 @@
     </section>
 
     <!-- RESEARCH FOCUS -->
-    <section class="section compact-section">
+    <section id="skills" class="section compact-section">
       <div class="section-heading small-heading">
         <p class="eyebrow">// RESEARCH FOCUS</p>
         <h2>Core areas of <span>expertise.</span></h2>
