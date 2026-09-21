@@ -534,6 +534,11 @@ function createMetrics() {
     });
 
     document.addEventListener("digital-mehmet:open-chat", () => open());
+    document.addEventListener("digital-mehmet:ask", (event) => {
+      const question = String(event.detail?.question || "").trim();
+      open();
+      if (question) ask(question);
+    });
 
     closeButton?.addEventListener("click", close);
 
