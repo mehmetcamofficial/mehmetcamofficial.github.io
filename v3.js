@@ -387,6 +387,10 @@ function createMetrics() {
     const chatHistory = [];
     let currentMode = "explore";
 
+    const emitPortfolioAI = (name, detail = {}) => {
+      document.dispatchEvent(new CustomEvent("portfolio-ai:" + name, { detail }));
+    };
+
     const appendAIText = (text, model, sources = [], metaData = {}) => {
       const msg = document.createElement("div");
       msg.className = "v3-msg assistant";
@@ -456,6 +460,7 @@ function createMetrics() {
 
       submit.disabled = true;
       input.disabled = true;
+      emitPortfolioAI("thinking", { question: clean, mode: currentMode });
 
       try {
         const response = await fetch(API_URL, {
@@ -473,6 +478,12 @@ function createMetrics() {
 
         typing.remove();
         appendAIText(data.answer, "Live", data.sources || [], data);
+        emitPortfolioAI("answer", {
+          text: data.answer,
+          route: data.route || "",
+          grounded: Boolean(data.grounded),
+          sources: data.sources || []
+        });
         chatHistory.push(
           { role: "user", content: clean },
           { role: "assistant", content: data.answer }
@@ -480,7 +491,17 @@ function createMetrics() {
       } catch (error) {
         console.warn("Portfolio AI fallback:", error);
         typing.remove();
-        appendAssistant(findAnswer(clean));
+        const fallback = findAnswer(clean);
+        appendAssistant(fallback);
+        const fallbackNode = document.createElement("div");
+        fallbackNode.innerHTML = fallback?.html ||
+          "I can help with TourPilot, AI workflow, tech stack, research, products or collaboration.";
+        emitPortfolioAI("answer", {
+          text: fallbackNode.textContent || fallbackNode.innerText || "",
+          route: "client-fallback",
+          grounded: true,
+          sources: []
+        });
       } finally {
         submit.disabled = false;
         input.disabled = false;
