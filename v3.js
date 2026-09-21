@@ -533,6 +533,8 @@ function createMetrics() {
       panel.classList.contains("is-open") ? close() : open();
     });
 
+    document.addEventListener("digital-mehmet:open-chat", () => open());
+
     closeButton?.addEventListener("click", close);
 
     chips.forEach((chip) => {
