@@ -638,7 +638,7 @@ function createMetrics() {
         if (description && hero.description) description.textContent = hero.description;
       }
 
-      if (Array.isArray(config.navigation)) {
+      if (!lockDigitalMehmetHero && Array.isArray(config.navigation)) {
         const nav = document.querySelector(".nav-links");
         if (nav) {
           nav.replaceChildren();
