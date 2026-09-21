@@ -818,3 +818,155 @@
     width:min(405px,39%)!important;
   }
 }
+
+
+/* REFERENCE MATCH PASS — 2026-09-21 */
+@media(min-width:1101px){
+  .dm-hero-final{
+    width:min(1500px,calc(100% - 26px))!important;
+    min-height:820px!important;
+    grid-template-columns:minmax(360px,31%) minmax(0,69%)!important;
+    gap:24px!important;
+    padding:54px 48px 122px!important;
+  }
+
+  .dm-hero-copy{
+    max-width:430px!important;
+    padding-right:0!important;
+    align-self:center!important;
+  }
+
+  .dm-hero-kicker{
+    margin-bottom:14px!important;
+    font-size:.76rem!important;
+    letter-spacing:.28em!important;
+  }
+
+  .dm-hero-title{
+    max-width:430px!important;
+    font-size:clamp(4.35rem,5.2vw,5.9rem)!important;
+    line-height:.86!important;
+    letter-spacing:-.065em!important;
+  }
+
+  .dm-hero-title .dm-title-white,
+  .dm-hero-title .dm-title-gold{
+    display:block!important;
+    width:max-content!important;
+  }
+
+  .dm-hero-role{
+    margin-top:16px!important;
+    font-size:1.28rem!important;
+  }
+
+  .dm-hero-description{
+    max-width:410px!important;
+    margin-top:16px!important;
+    font-size:.98rem!important;
+    line-height:1.58!important;
+  }
+
+  .dm-hero-actions{
+    margin-top:24px!important;
+  }
+
+  .dm-hero-actions button{
+    min-height:52px!important;
+    font-size:.88rem!important;
+    padding-inline:20px!important;
+  }
+
+  .dm-hero-presence{
+    margin-top:18px!important;
+  }
+
+  .hero-visual-v2.has-digital-mehmet{
+    min-height:690px!important;
+    overflow:visible!important;
+  }
+
+  .dm-static-character{
+    left:0!important;
+    bottom:-10px!important;
+    width:61%!important;
+    height:700px!important;
+    overflow:hidden!important;
+    z-index:2!important;
+    border-radius:0!important;
+    -webkit-mask-image:
+      linear-gradient(to right,transparent 0%,#000 7%,#000 92%,transparent 100%),
+      linear-gradient(to bottom,transparent 0%,#000 5%,#000 94%,transparent 100%);
+    -webkit-mask-composite:source-in;
+    mask-image:linear-gradient(to right,transparent 0%,#000 7%,#000 92%,transparent 100%);
+  }
+
+  .dm-static-character img{
+    width:100%!important;
+    height:100%!important;
+    object-fit:cover!important;
+    object-position:50% 45%!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+    transform:scale(1.035)!important;
+    filter:saturate(.98) contrast(1.03) brightness(.94)!important;
+  }
+
+  .digital-mehmet{
+    inset:0!important;
+    z-index:5!important;
+  }
+
+  .dm-console{
+    right:0!important;
+    top:49%!important;
+    width:min(420px,38%)!important;
+    transform:translateY(-50%)!important;
+    padding:17px!important;
+    border-radius:24px!important;
+  }
+
+  .dm-greeting{
+    margin:14px 0 16px!important;
+  }
+
+  .dm-quick-list button{
+    min-height:50px!important;
+  }
+
+  .dm-inline-form{
+    margin-top:10px!important;
+  }
+
+  .dm-hero-stats{
+    width:min(1360px,calc(100% - 70px))!important;
+    margin:-96px auto 30px!important;
+  }
+}
+
+@media(min-width:1350px){
+  .dm-hero-final{
+    grid-template-columns:minmax(390px,30%) minmax(0,70%)!important;
+    gap:28px!important;
+  }
+
+  .dm-hero-copy{
+    max-width:440px!important;
+  }
+
+  .dm-hero-title{
+    max-width:440px!important;
+    font-size:clamp(4.55rem,4.8vw,6rem)!important;
+  }
+
+  .dm-static-character{
+    left:1%!important;
+    width:60%!important;
+    height:710px!important;
+  }
+
+  .dm-console{
+    width:min(430px,39%)!important;
+    right:0!important;
+  }
+}
