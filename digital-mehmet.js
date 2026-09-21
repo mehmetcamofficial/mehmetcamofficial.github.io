@@ -73,7 +73,7 @@
         paused: "Duraklatıldı"
       };
       if (this.status) this.status.textContent = labels[next] || next;
-      this.root.dispatchEvent(new CustomEvent("digital-mehmet:state", { detail: { state: next } }));
+      this.root.dispatchEvent(new CustomEvent("digital-mehmet:state", { detail: { state: next }, bubbles: true }));
     }
 
     speak(text) {
