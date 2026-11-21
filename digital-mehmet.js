@@ -128,43 +128,120 @@
       });
     }
 
-    playIntroMotion() {
+    async playIntroMotion() {
       const video = this.introVideo;
       if (!video) return false;
 
+      // Prevent double-taps from starting overlapping audio and video tracks.
       this.stopPlayback();
+      const playToken = (this.introPlayToken = (this.introPlayToken || 0) + 1);
+      const isCurrent = () => this.introPlayToken === playToken;
+      this.visualPlay?.setAttribute("disabled", "");
+      this.visualPlay?.setAttribute("aria-busy", "true");
+      this.setVoiceMeta(document.documentElement.lang === "tr" ? "Ses ve video hazırlanıyor…" : "Preparing voice and video…");
+
+      let narration = null;
+      let narrationUrl = "";
       try {
+        // The video itself is silent while a language-matched voiceover is used.
+        // Prepare narration BEFORE starting either track so there is no TTS startup lag.
+        this.ttsController = new AbortController();
+        const lang = document.documentElement.lang === "tr" ? "tr" : "en";
+        const response = await fetch(TTS_URL, {
+          method: "POST",
+          signal: this.ttsController.signal,
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: this.intro(), lang })
+        });
+        if (!response.ok) throw new Error("Narration service unavailable");
+        const blob = await response.blob();
+        if (!blob.size || !isCurrent()) return false;
+
+        narrationUrl = URL.createObjectURL(blob);
+        narration = new Audio(narrationUrl);
+        narration.preload = "auto";
+        this.audio = narration;
+        this.audioUrl = narrationUrl;
+        await new Promise((resolve, reject) => {
+          if (narration.readyState >= 2) return resolve();
+          const timeout = window.setTimeout(() => reject(new Error("Audio load timeout")), 8000);
+          narration.addEventListener("canplay", () => { clearTimeout(timeout); resolve(); }, { once: true });
+          narration.addEventListener("error", () => { clearTimeout(timeout); reject(new Error("Audio failed")); }, { once: true });
+          narration.load();
+        });
+        if (!isCurrent()) return false;
+
         video.pause();
         video.currentTime = 0;
-      } catch {}
+        video.muted = true;
+        video.playsInline = true;
+        video.loop = false;
 
-      video.muted = true;
-      video.volume = 0;
-      video.classList.add("is-ready", "is-playing");
-      this.setState(STATES.SPEAKING);
-      this.setVoiceMeta(document.documentElement.lang === "tr" ? "Türkçe ses + doğal hareket" : "English voice + natural motion");
-
-      const cleanup = () => {
-        video.classList.remove("is-playing", "is-ready");
-        try {
+        const cleanup = () => {
+          if (!isCurrent()) return;
           video.pause();
           video.currentTime = 0;
-        } catch {}
-        this.setState(STATES.IDLE);
-        this.setVoiceMeta(document.documentElement.lang === "tr" ? "Doğal erkek AI sesi hazır" : "AI voice ready");
-      };
+          video.classList.remove("is-playing", "is-ready");
+          this.stopPlayback();
+          this.setState(STATES.IDLE);
+          this.setVoiceMeta(document.documentElement.lang === "tr" ? "Tanıtım hazır" : "Introduction ready");
+          this.visualPlay?.removeAttribute("disabled");
+          this.visualPlay?.removeAttribute("aria-busy");
+        };
+        video.onended = cleanup;
+        video.onerror = cleanup;
+        narration.onended = cleanup;
+        narration.onerror = cleanup;
 
-      video.onended = cleanup;
-      video.onerror = cleanup;
-
-      const speech = this.speak(this.intro(), { keepMotion: true });
-      Promise.resolve(speech).catch(() => {});
-
-      video.play().catch(() => {
-        cleanup();
-        this.stopPlayback();
-      });
-      return true;
+        // Starting both media play promises together avoids the previous
+        // unsynchronized TTS fetch after video playback had already begun.
+        const [videoStart, audioStart] = await Promise.allSettled([video.play(), narration.play()]);
+        if (!isCurrent()) return false;
+        if (videoStart.status !== "fulfilled" || audioStart.status !== "fulfilled") {
+          cleanup();
+          this.setVoiceMeta(document.documentElement.lang === "tr"
+            ? "Oynatma engellendi; yeniden dokunun"
+            : "Playback blocked; tap again");
+          return false;
+        }
+        video.classList.add("is-ready", "is-playing");
+        this.setState(STATES.SPEAKING);
+        this.setVoiceMeta(document.documentElement.lang === "tr" ? "Video ve Türkçe ses oynatılıyor" : "Video and English narration playing");
+        return true;
+      } catch (error) {
+        if (error?.name !== "AbortError") {
+          console.warn("Digital Mehmet introduction playback:", error);
+          this.setVoiceMeta(document.documentElement.lang === "tr"
+            ? "Ses hazırlanamadı; videoyu sesli oynatabilirsiniz"
+            : "Narration unavailable; video audio may play instead");
+          // If separate voice generation is unavailable, use the original
+          // media soundtrack (if present). No delayed TTS is started.
+          if (isCurrent()) {
+            video.pause();
+            video.currentTime = 0;
+            video.muted = false;
+            try {
+              await video.play();
+              if (!isCurrent()) return false;
+              video.classList.add("is-ready", "is-playing");
+              video.onended = () => {
+                video.pause();
+                video.classList.remove("is-playing", "is-ready");
+                this.visualPlay?.removeAttribute("disabled");
+                this.visualPlay?.removeAttribute("aria-busy");
+                this.setState(STATES.IDLE);
+              };
+              return true;
+            } catch {}
+          }
+        }
+        return false;
+      } finally {
+        if (isCurrent()) {
+          this.visualPlay?.removeAttribute("disabled");
+          this.visualPlay?.removeAttribute("aria-busy");
+        }
+      }
     }
 
     intro() {
@@ -240,6 +317,7 @@
     }
 
     stopPlayback(options = {}) {
+      if (!options.keepMotion) this.introPlayToken = (this.introPlayToken || 0) + 1;
       if (!options.keepMotion && this.introVideo) {
         try {
           this.introVideo.pause();
