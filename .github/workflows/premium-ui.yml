@@ -1,0 +1,46 @@
+name: Premium Portfolio Motion Quality
+on:
+  pull_request:
+    paths:
+      - '**/*.html'
+      - 'premium-ui.css'
+      - 'premium-ui.js'
+      - 'scripts/premium-ui-audit.mjs'
+      - 'scripts/premium-browser-smoke.mjs'
+      - '.github/workflows/premium-ui.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.html'
+      - 'premium-ui.css'
+      - 'premium-ui.js'
+      - 'scripts/premium-ui-audit.mjs'
+      - '.github/workflows/premium-ui.yml'
+permissions:
+  contents: read
+jobs:
+  premium-ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check premium-ui.js
+          node --check scripts/premium-browser-smoke.mjs
+          node --check site-language.js
+          node --check digital-mehmet.js
+      - name: Validate progressive enhancements
+        run: |
+          node --test scripts/premium-ui-audit.mjs
+          node --test scripts/locale-video-audit.mjs
+      - name: Install lightweight browser harness
+        run: npm install --no-save --no-audit --no-fund playwright-core@1.56.1
+      - name: Smoke test on Chrome desktop, mobile and reduced motion
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 >/tmp/premium-portfolio-http.log 2>&1 &
+          node scripts/premium-browser-smoke.mjs

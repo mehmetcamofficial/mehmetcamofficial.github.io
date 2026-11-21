@@ -1,0 +1,225 @@
+/*
+ * Portfolio Premium Motion — progressive visual polish, no markup replacement.
+ * Design principle: cinematic first impression, quiet interactions elsewhere.
+ * Works in both light and dark modes; animations opt out for reduced motion.
+ */
+:root {
+  --pm-ease: cubic-bezier(.22,1,.36,1);
+  --pm-edge: rgba(28,105,210,.24);
+  --pm-glow: rgba(39,116,234,.13);
+  --pm-shadow: 0 22px 60px rgba(16,58,105,.16);
+}
+html[data-theme="dark"] {
+  --pm-edge: rgba(125,194,255,.23);
+  --pm-glow: rgba(46,142,255,.16);
+  --pm-shadow: 0 24px 70px rgba(0,0,0,.36);
+}
+
+/* A fine, GPU-composited progress line, not a fixed banner. */
+.premium-scroll-progress {
+  position:fixed; inset:0 0 auto 0; z-index:10050;
+  height:3px; pointer-events:none;
+  background:linear-gradient(90deg,#0a84ff 0%,#7b61ff 54%,#cfaa68 100%);
+  transform:scaleX(var(--premium-scroll,0));
+  transform-origin:0 50%;
+  will-change:transform;
+}
+
+/* The hero keeps its original image, video, text and layout. Only the
+   independent, non-interactive ambient light receives animation. */
+.dm-hero-final .premium-hero-ambient {
+  position:absolute; inset:-18% -8%; z-index:0;
+  pointer-events:none; user-select:none;
+  opacity:.72;
+  background:
+    radial-gradient(ellipse 30% 45% at 74% 36%,rgba(36,117,226,.26),transparent 85%),
+    radial-gradient(ellipse 22% 44% at 42% 68%,rgba(199,148,72,.12),transparent 88%),
+    radial-gradient(ellipse 28% 30% at 89% 77%,rgba(45,202,171,.09),transparent 86%);
+  transform:translate3d(0,0,0) scale(1);
+  animation:premium-aurora 24s ease-in-out infinite alternate;
+}
+@keyframes premium-aurora {
+  0% { transform:translate3d(-1.5%,0,0) scale(1); opacity:.56; }
+  50% { transform:translate3d(1.5%,-1.5%,0) scale(1.045); opacity:.76; }
+  100% { transform:translate3d(0,1.4%,0) scale(1.02); opacity:.58; }
+}
+.dm-hero-final .dm-hero-kicker {
+  text-shadow:0 1px 18px rgba(255,255,255,.08);
+}
+.dm-hero-final .dm-hero-actions :is(button,a):focus-visible,
+body.premium-enabled :is(.filter-btn,.nav-links a,.content-nav a,.writing-item,.btn,.v3-command-hint):focus-visible {
+  outline:3px solid #ffc76e;
+  outline-offset:4px;
+}
+
+/* Section entrance animation: classes are added ONLY when an
+   IntersectionObserver is available and a section is below the fold. */
+@media (prefers-reduced-motion:no-preference) {
+  html[data-premium-motion="on"] .premium-reveal {
+    opacity:0;
+    transform:translate3d(0,19px,0);
+    transition:
+      opacity .72s var(--pm-ease),
+      transform .76s var(--pm-ease);
+    transition-delay:var(--premium-delay,0ms);
+  }
+  html[data-premium-motion="on"] .premium-reveal.premium-in-view {
+    opacity:1;
+    transform:translate3d(0,0,0);
+  }
+}
+
+/* Cards remain visually calm at rest; only pointer/keyboard focus activates
+   the depth, so touchscreen scrolling does not trigger hover transforms. */
+body.premium-enabled :is(
+  .focus-card,.training-card,.app-card,.agri-card,
+  .publication-card,.education-card,.skill-column,
+  .timeline-content,.workflow-step,.v3-impact-item,
+  .writing-item,.card
+) {
+  transition:
+    transform .32s var(--pm-ease),
+    border-color .32s ease,
+    box-shadow .32s ease,
+    background-color .32s ease;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  body.premium-enabled :is(
+    .focus-card,.training-card,.app-card,.agri-card,
+    .publication-card,.education-card,.skill-column,
+    .timeline-content,.workflow-step,.writing-item,.card
+  ):is(:hover,:focus-within) {
+    transform:translate3d(0,-5px,0);
+    border-color:var(--pm-edge);
+    box-shadow:var(--pm-shadow);
+  }
+  /* Preserve the moving-card hover even after a one-time reveal. */
+  html[data-premium-motion="on"] body.premium-enabled
+  :is(.focus-card,.training-card,.app-card,.agri-card,.publication-card,
+      .education-card,.skill-column,.workflow-step,.writing-item,.card)
+  .premium-reveal.premium-in-view:is(:hover,:focus-within) { transform:translate3d(0,-5px,0); }
+}
+
+/* Elegant accent edges on existing portfolio cards, no extra DOM. */
+body.premium-enabled :is(.focus-card,.training-card,.publication-card,.skill-column) {
+  position:relative;
+}
+body.premium-enabled :is(.focus-card,.training-card,.publication-card,.skill-column)::after {
+  content:""; position:absolute; inset:auto 11% 0;
+  height:2px; border-radius:99px;
+  background:linear-gradient(90deg,transparent,rgba(26,122,220,.66),rgba(185,146,84,.65),transparent);
+  opacity:.26; pointer-events:none;
+  transition:opacity .28s ease;
+}
+@media (hover:hover) and (pointer:fine) {
+  body.premium-enabled :is(.focus-card,.training-card,.publication-card,.skill-column):hover::after {opacity:.88}
+}
+
+/* Headings and dividers get visual rhythm without extra decoration. */
+body.premium-enabled .section-heading .eyebrow,
+body.premium-enabled .content-hero .kicker,
+body.premium-enabled .article .meta {
+  letter-spacing:.145em;
+}
+body.premium-enabled .section-heading h2 {
+  text-wrap:balance;
+}
+body.premium-enabled .section-heading h2,
+body.premium-enabled .content-hero h1,
+body.premium-enabled .article h1 {
+  -webkit-font-smoothing:antialiased;
+}
+body.premium-enabled .section-lead,
+body.premium-enabled .content-hero p {
+  text-wrap:pretty;
+}
+
+/* Featured TourPilot visualization: single slow highlight on the existing
+   demonstration window, with neither overlay nor layout movement. */
+body.premium-enabled .product-window {
+  position:relative; isolation:isolate;
+}
+body.premium-enabled .product-window::after {
+  content:""; position:absolute; inset:0; z-index:20;
+  border-radius:inherit; pointer-events:none;
+  background:linear-gradient(116deg,transparent 25%,rgba(255,255,255,.035) 43%,transparent 59%);
+  transform:translate3d(-130%,0,0);
+  animation:premium-window-light 13s ease-in-out infinite;
+}
+@keyframes premium-window-light {
+  0%,30% {transform:translate3d(-130%,0,0)}
+  48%,100% {transform:translate3d(130%,0,0)}
+}
+body.premium-enabled .v3-impact-item strong {
+  font-variant-numeric:tabular-nums;
+}
+
+/* Sticky navigation should not cover section headings after anchor navigation. */
+body.premium-enabled :is(.section,.content-hero,.article,[id]) {
+  scroll-margin-top:clamp(84px,10vh,125px);
+}
+
+/* Writing and evidence pages: premium editorial details, without changing
+   canonical content, article width, link targets or reading order. */
+body.premium-enabled .article {
+  border-color:var(--pm-edge);
+}
+body.premium-enabled .article h1,
+body.premium-enabled .content-hero h1 {
+  text-wrap:balance;
+}
+body.premium-enabled .article .body {
+  line-height:1.84;
+  overflow-wrap:anywhere;
+}
+body.premium-enabled .article a:not(.btn) {
+  text-decoration-thickness:1px;
+  text-underline-offset:4px;
+  transition:color .2s ease;
+}
+body.premium-enabled .writing-item,
+body.premium-enabled .card {
+  border-color:var(--pm-edge);
+}
+body.premium-enabled .writing-item .writing-link {
+  transition:letter-spacing .24s var(--pm-ease),color .24s ease;
+}
+@media (hover:hover) and (pointer:fine) {
+  body.premium-enabled .writing-item:hover .writing-link {
+    letter-spacing:.02em;
+  }
+}
+
+/* Navigation elevation increases gently on scroll without changing size. */
+body.premium-scrolled > .navbar,
+body.premium-scrolled .navbar.content-nav {
+  box-shadow:0 14px 46px rgba(9,35,79,.18);
+  border-color:var(--pm-edge);
+}
+
+/* Keep CSS effects cheap on phones: no permanent GPU layers or aurora loop. */
+@media (max-width:900px) {
+  .dm-hero-final .premium-hero-ambient {animation:none;opacity:.43}
+  body.premium-enabled .product-window::after {animation:none;display:none}
+  .premium-scroll-progress {height:2px}
+}
+@media (prefers-reduced-motion:reduce) {
+  .dm-hero-final .premium-hero-ambient,
+  body.premium-enabled .product-window::after {animation:none!important}
+  .premium-scroll-progress {transform:none!important;display:none}
+  html[data-premium-motion] .premium-reveal {
+    opacity:1!important;
+    transform:none!important;
+    transition:none!important;
+  }
+  body.premium-enabled :is(
+    .focus-card,.training-card,.app-card,.agri-card,.publication-card,
+    .education-card,.skill-column,.timeline-content,.workflow-step,
+    .writing-item,.card
+  ) {transition:none!important}
+}
+@media (prefers-contrast:more) {
+  body.premium-enabled :is(.focus-card,.writing-item,.article,.card) {
+    border-color:currentColor;
+  }
+}
