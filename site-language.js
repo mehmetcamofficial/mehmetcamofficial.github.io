@@ -9,6 +9,8 @@
 
   const nativeTurkish = [["Geleneksel Tarımdan Yeni Teknolojilere","From Traditional Agriculture to New Technologies"],["Geleceğin tarımı hangi yöne gidiyor?","Where is the future of agriculture heading?"],["Tabit Akıllı Köyün Hikayesi","The Story of Tabit Smart Village"],["Akıllı Köy yaklaşımının hikayesi ve saha deneyimi.","The story and field experience behind the Smart Village approach."],["Tarımda Dijital İkiz","Digital Twins in Agriculture"],["Tarımda digital twin yaklaşımına giriş.","An introduction to digital twins in agriculture."],["Avrupa ve Türkiye İlişkilerinde Göç Krizi ve Rusya Savaşının Etkileri","The Impact of the Migration Crisis and the Russia War on EU–Türkiye Relations"],["Avrupa-Türkiye ilişkilerine göç ve savaş bağlamında bir bakış.","A perspective on EU–Türkiye relations in the context of migration and war."],["Gelecek Enerji Sistemlerinde Blockchain","Blockchain in Future Energy Systems"],["Blockchain teknolojisinin geleceğin enerji sistemlerindeki rolü.","The role of blockchain technology in future energy systems."],["Türkiye / Europe","Türkiye / Europe"]];
   for (const [tr,en] of nativeTurkish) { turkishToEnglish.set(tr,en); englishToTurkish.set(en,tr); }
+  // Native Turkish labels must also translate back when the English page is switched to TR.
+  for (const [tr,en] of turkishToEnglish) englishToTurkish.set(en,tr);
   const normalize = value => String(value || "").replace(/\s+/g," ").trim();
   const originalNodes = new WeakMap();
   const originalAttrs = new WeakMap();
@@ -22,7 +24,7 @@
     const source = normalize(original);
     if (!source) return;
     const translated = locale === "tr"
-      ? englishToTurkish.get(source) || (!turkishToEnglish.has(source) ? source : original)
+      ? englishToTurkish.get(source) || source
       : turkishToEnglish.get(source) || source;
     const match = original.match(/^(\s*)([\s\S]*?)(\s*)$/);
     const text = match ? match[1] + translated + match[3] : translated;
