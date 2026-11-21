@@ -31,7 +31,7 @@ jobs:
       - name: Check JavaScript syntax
         run: |
           node --check premium-ui.js
-          node --check premium-browser-smoke.mjs
+          node --check scripts/premium-browser-smoke.mjs
           node --check site-language.js
           node --check digital-mehmet.js
       - name: Validate progressive enhancements
