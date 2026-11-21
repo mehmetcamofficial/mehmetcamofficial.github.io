@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import test from "node:test";
 import assert from "node:assert/strict";
-import {readFileSync} from "node:fs";
+import {readFileSync,statSync} from "node:fs";
 const read = p => readFileSync(p,"utf8");
 
-test("mobile skips oversized NASA JPEG but desktop keeps original art",()=>{
+test("mobile skips oversized NASA JPEG but desktop uses the original photograph as optimized WebP",()=>{
   const css = read("premium-ui.css");
   assert.match(css, /@media \(max-width: 900px\)/);
   assert.match(css, /html\[data-theme="light"\] body\.dm-hero-page/);
