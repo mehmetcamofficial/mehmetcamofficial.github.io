@@ -1,0 +1,58 @@
+name: CWV Diagnostic (One Time)
+on:
+  push:
+    branches: [perf/diagnose-lcp-cls-20261121]
+    paths: ['.github/workflows/cwv-diagnostic.yml']
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --no-save --no-audit --no-fund playwright-core@1.56.1
+      - name: Inspect LCP element and layout-shift sources
+        run: |
+          python3 -m http.server 8123 --bind 127.0.0.1 >/tmp/cwv-http.log 2>&1 &
+          node --input-type=module <<'JS'
+          import {chromium} from 'playwright-core';
+          const browser=await chromium.launch({executablePath:'/usr/bin/google-chrome',headless:true,args:['--no-sandbox']});
+          for(const width of [1440,393]){
+            const context=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1});
+            const page=await context.newPage();
+            await page.addInitScript(()=>{
+              window.__cwv={shifts:[],lcp:[]};
+              const selector=el => {
+                if(!el)return '?';
+                return el.tagName.toLowerCase()+(el.id?'#'+el.id:'')+(typeof el.className==='string'?'.'+el.className.trim().replace(/\s+/g,'.').slice(0,100):'');
+              };
+              new PerformanceObserver(list=>{
+                for(const entry of list.getEntries()){
+                  if(!entry.hadRecentInput) window.__cwv.shifts.push({
+                    value:entry.value,time:entry.startTime,
+                    sources:(entry.sources||[]).map(s=>({node:selector(s.node),previous:s.previousRect,current:s.currentRect}))
+                  });
+                }
+              }).observe({type:'layout-shift',buffered:true});
+              new PerformanceObserver(list=>{
+                for(const entry of list.getEntries()){
+                  window.__cwv.lcp.push({value:entry.startTime,size:entry.size,node:selector(entry.element),url:entry.url?.slice(0,160)});
+                }
+              }).observe({type:'largest-contentful-paint',buffered:true});
+            });
+            await page.goto('http://127.0.0.1:8123/',{waitUntil:'domcontentloaded'});
+            await page.waitForTimeout(5000);
+            const result=await page.evaluate(()=>window.__cwv);
+            console.log('CWV DIAGNOSTIC '+width+' '+JSON.stringify({
+              lcp:result.lcp.slice(-4),
+              shifts:result.shifts.sort((a,b)=>b.value-a.value).slice(0,12),
+              cls:result.shifts.reduce((sum,x)=>sum+x.value,0)
+            }));
+            await context.close();
+          }
+          await browser.close();
+          JS
