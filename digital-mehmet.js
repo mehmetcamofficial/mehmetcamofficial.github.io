@@ -34,6 +34,7 @@
       this.avatar = root.querySelector("[data-dm-avatar]");
       this.introVideo = document.querySelector("[data-dm-intro-video]");
       this.introBase = document.querySelector(".dm-character-base");
+      this.visualPlay = document.getElementById("dmVisualPlay");
       this.quickForm = root.querySelector("[data-dm-form]");
       this.quickInput = root.querySelector("[data-dm-input]");
       this.quickButtons = root.querySelectorAll("[data-dm-question]");
@@ -55,7 +56,9 @@
 
       this.play?.addEventListener("click", enableVoice);
       this.avatar?.addEventListener("click", enableVoice);
-      document.addEventListener("digital-mehmet:listen", enableVoice);
+      // The existing "Listen" action and the portrait play button share one video surface.
+      document.addEventListener("digital-mehmet:listen", () => this.playIntroMotion());
+      this.visualPlay?.addEventListener("click", () => this.playIntroMotion());
       this.pause?.addEventListener("click", () => this.togglePause());
       this.mute?.addEventListener("click", () => this.toggleMute());
       this.ask?.addEventListener("click", () => {
@@ -139,7 +142,7 @@
       video.volume = 0;
       video.classList.add("is-ready", "is-playing");
       this.setState(STATES.SPEAKING);
-      this.setVoiceMeta("Türkçe ses + doğal hareket");
+      this.setVoiceMeta(document.documentElement.lang === "tr" ? "Türkçe ses + doğal hareket" : "English voice + natural motion");
 
       const cleanup = () => {
         video.classList.remove("is-playing", "is-ready");
@@ -148,7 +151,7 @@
           video.currentTime = 0;
         } catch {}
         this.setState(STATES.IDLE);
-        this.setVoiceMeta("Doğal erkek AI sesi hazır");
+        this.setVoiceMeta(document.documentElement.lang === "tr" ? "Doğal erkek AI sesi hazır" : "AI voice ready");
       };
 
       video.onended = cleanup;
@@ -158,13 +161,16 @@
       Promise.resolve(speech).catch(() => {});
 
       video.play().catch(() => {
-        video.classList.remove("is-playing", "is-ready");
+        cleanup();
+        this.stopPlayback();
       });
       return true;
     }
 
     intro() {
-      return "Merhaba, ben Mehmet. Projelerim, araştırmalarım ve çalışma deneyimim hakkında bana soru sorabilirsiniz.";
+      return document.documentElement.lang === "tr"
+        ? "Merhaba, ben Mehmet. Projelerim, araştırmalarım ve çalışma deneyimim hakkında bana soru sorabilirsiniz."
+        : "Hello, I am Mehmet. Ask me about my projects, research and professional experience.";
     }
 
     loadVoices() {
