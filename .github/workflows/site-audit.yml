@@ -7,6 +7,7 @@ on:
       - 'robots.txt'
       - 'CNAME'
       - 'scripts/site-audit.mjs'
+      - 'scripts/seo-issues-audit.mjs'
       - '.github/workflows/site-audit.yml'
   push:
     branches: [main]
@@ -23,4 +24,7 @@ jobs:
         with:
           node-version: '22'
       - name: Run static audit
-        run: node scripts/site-audit.mjs
+        run: |
+          node scripts/site-audit.mjs
+          node --test scripts/seo-issues-audit.mjs
+          node --check site-language.js
