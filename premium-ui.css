@@ -253,3 +253,27 @@ body.premium-scrolled .navbar.content-nav {
 @media(max-width:700px){
   .dm-hero-final .dm-hero-identity {font-size:.8rem}
 }
+
+
+/* Mobile performance: use a matching lightweight celestial gradient instead
+   of fetching the 3.97 MB NASA desktop photograph on narrow screens.
+   The star canvas, profile portrait, Digital Mehmet image/video and palette
+   remain unchanged. Desktop retains the original credited NASA photo. */
+@media (max-width: 900px) {
+  html[data-theme="light"] body.dm-hero-page {
+    background-image:
+      radial-gradient(ellipse 70% 32% at 78% 9%, rgba(94,165,245,.24), transparent 83%),
+      radial-gradient(ellipse 45% 36% at 13% 45%, rgba(130,108,215,.13), transparent 87%),
+      linear-gradient(180deg,#eef6ff 0%,#e6f0fb 45%,#eef6ff 100%)!important;
+    background-attachment:scroll!important;
+    background-size:cover!important;
+  }
+  html[data-theme="dark"] body.dm-hero-page {
+    background-image:
+      radial-gradient(ellipse 65% 30% at 80% 10%,rgba(29,86,167,.38),transparent 86%),
+      radial-gradient(ellipse 50% 33% at 15% 52%,rgba(85,58,132,.23),transparent 89%),
+      linear-gradient(180deg,#040b19 0%,#0c1830 52%,#050b19 100%)!important;
+    background-attachment:scroll!important;
+    background-size:cover!important;
+  }
+}

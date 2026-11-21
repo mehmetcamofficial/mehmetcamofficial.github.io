@@ -21,6 +21,10 @@ try {
     const context = await browser.newContext({ viewport, deviceScaleFactor:1 });
     const page = await context.newPage();
     const pageErrors = [];
+    const backgroundRequests = [];
+    page.on("request", request => {
+      if (request.url().includes("/nasa-bg.jpg")) backgroundRequests.push(request.url());
+    });
     page.on("pageerror", error => pageErrors.push(error.message));
     await page.goto(base + "/", { waitUntil:"domcontentloaded" });
     await page.waitForFunction(() => document.body.classList.contains("premium-enabled"));
@@ -36,11 +40,18 @@ try {
         scrollProgress:!!document.querySelector(".premium-scroll-progress"),
         imgWidth:img?.width, imgHeight:img?.height,
         videoWidth:vid?.width,videoHeight:vid?.height,
-        lang:document.documentElement.lang
+        lang:document.documentElement.lang,
+        backgroundImage:getComputedStyle(document.body).backgroundImage
       };
     });
     assert.equal(result.lang, "en", "English must remain the default");
     assert.ok(result.hero && result.glow && result.scrollProgress && result.glowIsPassive, "Premium surface not initialized");
+    if (viewport.width <= 900) {
+      assert.ok(!result.backgroundImage.includes("nasa-bg.jpg"), "Mobile should use optimized CSS sky");
+      assert.equal(backgroundRequests.length, 0, "Mobile must not fetch the 3.97MB NASA image");
+    } else {
+      assert.ok(result.backgroundImage.includes("nasa-bg.jpg"), "Desktop retains original NASA art");
+    }
     assert.ok(Math.abs(result.imgWidth-result.videoWidth)<3 && Math.abs(result.imgHeight-result.videoHeight)<3,
       "Hero image and video geometry differs: " + JSON.stringify(result));
     await page.locator('[data-site-lang="tr"]').first().click();

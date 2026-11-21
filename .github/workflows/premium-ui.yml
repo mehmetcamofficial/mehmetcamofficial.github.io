@@ -7,6 +7,8 @@ on:
       - 'premium-ui.js'
       - 'scripts/premium-ui-audit.mjs'
       - 'scripts/premium-browser-smoke.mjs'
+      - 'scripts/mobile-perf-audit.mjs'
+      - 'script.js'
       - '.github/workflows/premium-ui.yml'
   push:
     branches:
@@ -34,10 +36,12 @@ jobs:
           node --check scripts/premium-browser-smoke.mjs
           node --check site-language.js
           node --check digital-mehmet.js
+          node --check script.js
       - name: Validate progressive enhancements
         run: |
           node --test scripts/premium-ui-audit.mjs
           node --test scripts/locale-video-audit.mjs
+          node --test scripts/mobile-perf-audit.mjs
       - name: Install lightweight browser harness
         run: npm install --no-save --no-audit --no-fund playwright-core@1.56.1
       - name: Smoke test on Chrome desktop, mobile and reduced motion

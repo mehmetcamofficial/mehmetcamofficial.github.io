@@ -217,19 +217,33 @@ function initStarsCanvas() {
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const saveData = navigator.connection?.saveData === true;
   let stars = [];
   let animationFrame = null;
+  let lastDraw = 0;
+  let lastWidth = 0;
+  let lastHeight = 0;
+  // The decorative starfield does not need 60fps. Limit work on mobile,
+  // preserve static stars for reduced-motion and data-saver users.
+  const interval = window.matchMedia("(max-width: 900px)").matches ? 1000 / 20 : 1000 / 30;
 
   function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+    if (width === lastWidth && height === lastHeight) return;
+    lastWidth = width;
+    lastHeight = height;
+    canvas.width = width;
+    canvas.height = height;
+    createStars();
+    paint(performance.now());
   }
 
   function createStars() {
     stars = [];
-
     const count = Math.floor((canvas.width * canvas.height) / 7000);
-
     for (let i = 0; i < count; i++) {
       stars.push({
         x: Math.random() * canvas.width,
@@ -242,43 +256,55 @@ function initStarsCanvas() {
     }
   }
 
-  function drawStars() {
+  function paint(timestamp) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    const isDark =
-      document.documentElement.getAttribute("data-theme") === "dark";
-
-    const t = Date.now() * 0.001;
-
-    stars.forEach((star) => {
-      const pulse = Math.sin(t * star.speed + star.phase) * 0.2;
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    const t = timestamp * 0.001;
+    for (const star of stars) {
+      const pulse = reducedMotion.matches || saveData ? 0 : Math.sin(t * star.speed + star.phase) * 0.2;
       const alpha = Math.max(0.05, star.alpha + pulse);
-
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
-
       ctx.fillStyle = isDark
         ? `rgba(190, 220, 255, ${alpha})`
         : `rgba(0, 80, 160, ${alpha * 0.3})`;
-
       ctx.fill();
-    });
+    }
+  }
 
-    animationFrame = requestAnimationFrame(drawStars);
+  function tick(timestamp) {
+    animationFrame = null;
+    if (document.hidden || reducedMotion.matches || saveData) return;
+    if (timestamp - lastDraw >= interval) {
+      paint(timestamp);
+      lastDraw = timestamp;
+    }
+    animationFrame = requestAnimationFrame(tick);
+  }
+
+  function start() {
+    if (animationFrame !== null || document.hidden || reducedMotion.matches || saveData) return;
+    lastDraw = 0;
+    animationFrame = requestAnimationFrame(tick);
+  }
+
+  function stop() {
+    if (animationFrame !== null) cancelAnimationFrame(animationFrame);
+    animationFrame = null;
   }
 
   resizeCanvas();
-  createStars();
-  drawStars();
-
-  window.addEventListener("resize", () => {
-    resizeCanvas();
-    createStars();
+  start();
+  window.addEventListener("resize", resizeCanvas, { passive: true });
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop(); else start();
   });
-
-  window.addEventListener("beforeunload", () => {
-    if (animationFrame) cancelAnimationFrame(animationFrame);
+  reducedMotion.addEventListener?.("change", () => {
+    stop();
+    paint(performance.now());
+    start();
   });
+  window.addEventListener("beforeunload", stop, { once: true });
 }
 
 /* -----------------------------
@@ -373,6 +399,9 @@ function renderAgriProjects() {
         <div class="agri-img-wrap">
           <img
             src="${firstImage}"
+            loading="lazy"
+            decoding="async"
+            fetchpriority="low"
             data-file="${safeText(project.imageFile)}"
             data-step="0"
             onerror="handleImageError(this)"
@@ -1336,13 +1365,23 @@ function animateSatelliteLabels() {
   ];
 
   const duration = 28000;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let animationFrame = null;
+  let lastFrame = 0;
 
-  function tick() {
+  function tick(now) {
+    animationFrame = null;
+    if (document.hidden || reducedMotion.matches) return;
+    // Satellite labels are decorative: 20 frames/s is enough on phones.
+    if (now - lastFrame < 50) {
+      animationFrame = requestAnimationFrame(tick);
+      return;
+    }
+    lastFrame = now;
     const rect = orbitSystem.getBoundingClientRect();
     const size = Math.min(rect.width, rect.height);
     const baseRadius = size / 2;
 
-    const now = performance.now();
     const progress = (now % duration) / duration;
     const globalAngle = progress * Math.PI * 2;
 
@@ -1370,10 +1409,27 @@ function animateSatelliteLabels() {
       item.style.zIndex = "60";
     });
 
-    requestAnimationFrame(tick);
+    animationFrame = requestAnimationFrame(tick);
   }
 
-  requestAnimationFrame(tick);
+  function start() {
+    if (animationFrame === null && !document.hidden && !reducedMotion.matches) {
+      animationFrame = requestAnimationFrame(tick);
+    }
+  }
+  function stop() {
+    if (animationFrame !== null) cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop(); else start();
+  });
+  reducedMotion.addEventListener?.("change", () => {
+    stop();
+    start();
+  });
+  window.addEventListener("beforeunload", stop, { once: true });
+  start();
 }
 
 /* -----------------------------
