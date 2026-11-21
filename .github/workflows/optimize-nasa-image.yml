@@ -1,0 +1,51 @@
+name: Optimize NASA Source Image (One Time)
+on:
+  push:
+    branches:
+      - perf/nasa-webp-20261121
+    paths:
+      - '.github/workflows/optimize-nasa-image.yml'
+permissions:
+  contents: write
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install image encoder
+        run: npm install --no-save --no-audit --no-fund sharp@0.34.5
+      - name: Resize and encode the existing NASA photograph
+        run: |
+          node --input-type=module <<'JS'
+          import sharp from 'sharp';
+          import {statSync} from 'node:fs';
+          const source='nasa-bg.jpg';
+          const image=sharp(source);
+          const metadata=await image.metadata();
+          const result=await image.resize({width:1920,withoutEnlargement:true})
+            .webp({quality:78,effort:6})
+            .toFile('nasa-bg.webp');
+          console.log(JSON.stringify({sourceBytes:statSync(source).size,width:metadata.width,height:metadata.height,webpBytes:result.size,webpWidth:result.width,webpHeight:result.height}));
+          if(result.size >= statSync(source).size) throw new Error('Optimized file is not smaller');
+          JS
+          python3 - <<'PY'
+          from pathlib import Path
+          css=Path('style.css')
+          original=css.read_text()
+          assert original.count('nasa-bg.jpg')==2, 'Unexpected original CSS background count'
+          css.write_text(original.replace('nasa-bg.jpg','nasa-bg.webp'))
+          PY
+      - name: Commit optimized artwork to the isolated branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add nasa-bg.webp style.css
+          git diff --cached --check
+          git commit -m "perf: encode original NASA wallpaper as efficient WebP"
+          git push origin HEAD:perf/nasa-webp-20261121
