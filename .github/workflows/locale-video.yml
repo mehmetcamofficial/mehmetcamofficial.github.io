@@ -1,0 +1,27 @@
+name: Bilingual Hero and Video
+on:
+  pull_request:
+    paths:
+      - '**/*.html'
+      - 'site-language.js'
+      - 'digital-mehmet.js'
+      - 'digital-mehmet.css'
+      - 'scripts/locale-video-audit.mjs'
+      - '.github/workflows/locale-video.yml'
+permissions:
+  contents: read
+jobs:
+  locale-video:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate JavaScript syntax
+        run: |
+          node --check site-language.js
+          node --check digital-mehmet.js
+      - name: Run scope and media integration checks
+        run: node --test scripts/locale-video-audit.mjs
