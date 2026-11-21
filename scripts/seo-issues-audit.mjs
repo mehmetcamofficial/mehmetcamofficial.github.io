@@ -79,3 +79,24 @@ test("EN/TR premium design and hero media untouched by SEO patches",()=>{
   assert.match(home,/class="dm-character-base"/);
   assert.doesNotMatch(pages.map(p=>contents.get(p.path)).join(""),/GAMEPLAY303\.html|pub-f868e77df61146e2a31924f0f62189d5/);
 });
+
+test("Search Console brand and writing discovery enhancements stay accurate",()=>{
+  const home=contents.get("/");
+  assert.match(home, /<p class="dm-hero-identity">\s*<a href="\/about\/">Mehmet Cam<\/a>/);
+  assert.match(title(home), /^Mehmet Cam \|/);
+  const blog=contents.get("/blog.html");
+  const scripts=[...blog.matchAll(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g)];
+  assert.equal(scripts.length,1,"Writing hub must expose one JSON-LD CollectionPage");
+  const schema=JSON.parse(scripts[0][1]);
+  assert.equal(schema["@type"],"CollectionPage");
+  assert.equal(schema.mainEntity["@type"],"ItemList");
+  assert.equal(schema.mainEntity.itemListElement.length,13);
+  const targets=new Set(links(blog).filter(h=>/^\/writing\/[a-z0-9-]+\/$/.test(h)));
+  for(const item of schema.mainEntity.itemListElement){
+    const u=new URL(item.url);
+    assert.equal(u.origin,origin);
+    assert.ok(targets.has(u.pathname),item.url+" is not an archive link");
+  }
+  const locale=read("site-language.js");
+  assert.ok(locale.includes("Yapay Zekâ Mühendisliği ve Uygulamalı Yapay Zekâ Araştırmaları"));
+});
