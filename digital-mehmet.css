@@ -1621,3 +1621,80 @@
     object-position:center 44%;
   }
 }
+
+
+/* Language switch and matched image/video hero: scoped to the existing hero only. */
+.dm-hero-page .dm-language{
+  display:inline-flex!important;
+  gap:3px;
+  align-items:center;
+  padding:4px;
+  border:1px solid rgba(255,255,255,.24);
+  border-radius:999px;
+  background:rgba(12,22,38,.78);
+  z-index:35;
+}
+.dm-hero-page .dm-lang-btn{
+  min-height:34px;
+  min-width:40px;
+  padding:0 9px;
+  border:0;
+  border-radius:999px;
+  background:transparent;
+  color:#ecf1fb;
+  font:700 .78rem/1 inherit;
+  cursor:pointer;
+}
+.dm-hero-page .dm-lang-btn.is-active,
+.dm-hero-page .dm-lang-btn[aria-pressed="true"]{
+  background:#f2c875;
+  color:#131a24;
+}
+.dm-hero-page .dm-lang-btn:focus-visible,
+.dm-hero-page .dm-visual-play:focus-visible{
+  outline:3px solid #ffe3a5;
+  outline-offset:3px;
+}
+.dm-hero-page .dm-static-character .dm-character-base{
+  transition:opacity .18s ease, visibility .18s ease;
+}
+.dm-hero-page .dm-static-character:has(.dm-character-video.is-playing) .dm-character-base{
+  opacity:0!important;
+  visibility:hidden!important;
+}
+.dm-hero-page .dm-static-character:has(.dm-character-video.is-playing) .dm-character-video{
+  opacity:1!important;
+  visibility:visible!important;
+  z-index:4!important;
+}
+.dm-hero-page .dm-static-character .dm-visual-play{
+  position:absolute;
+  bottom:clamp(76px,13%,140px);
+  left:50%;
+  transform:translateX(-50%);
+  z-index:10;
+  pointer-events:auto!important;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:9px;
+  padding:11px 16px;
+  border:1px solid rgba(255,255,255,.42);
+  border-radius:999px;
+  background:rgba(6,15,27,.83);
+  color:#fff;
+  font-size:.78rem;
+  font-weight:750;
+  cursor:pointer;
+  box-shadow:0 8px 28px rgba(0,0,0,.25);
+  white-space:nowrap;
+}
+.dm-hero-page .dm-static-character .dm-visual-play:hover{background:rgba(20,38,64,.95)}
+.dm-hero-page .dm-static-character:has(.dm-character-video.is-playing) .dm-visual-play{opacity:0;pointer-events:none!important}
+@media(max-width:1100px){
+  .dm-hero-page .dm-nav-actions .dm-language{display:inline-flex!important}
+  .dm-hero-page .dm-static-character .dm-visual-play{bottom:clamp(16px,7%,60px);padding:9px 12px;max-width:90%}
+}
+@media(prefers-reduced-motion:reduce){
+  .dm-hero-page .dm-static-character .dm-character-base{transition:none}
+}
