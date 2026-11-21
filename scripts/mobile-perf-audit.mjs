@@ -1,16 +1,17 @@
 #!/usr/bin/env node
 import test from "node:test";
 import assert from "node:assert/strict";
-import {readFileSync} from "node:fs";
+import {readFileSync,statSync} from "node:fs";
 const read = p => readFileSync(p,"utf8");
 
-test("mobile skips oversized NASA JPEG but desktop keeps original art",()=>{
+test("mobile skips NASA photo but desktop uses optimized WebP",()=>{
   const css = read("premium-ui.css");
   assert.match(css, /@media \(max-width: 900px\)/);
   assert.match(css, /html\[data-theme="light"\] body\.dm-hero-page/);
   assert.match(css, /html\[data-theme="dark"\] body\.dm-hero-page/);
   assert.match(css, /background-attachment:scroll!important/);
-  assert.match(read("style.css"), /url\("nasa-bg\.jpg"\)/);
+  assert.match(read("style.css"), /url\("nasa-bg\.webp"\)/);
+  assert.ok(statSync("nasa-bg.webp").size < 400000, "Optimized wallpaper must be below 400KB");
 });
 test("intro hero is requested early but video isn't auto-played",()=>{
   const home=read("index.html");
