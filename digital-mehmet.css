@@ -1698,3 +1698,50 @@
 @media(prefers-reduced-motion:reduce){
   .dm-hero-page .dm-static-character .dm-character-base{transition:none}
 }
+
+
+/* Portrait and video must occupy exactly the same surface at every breakpoint.
+   This overrides older mobile 'contain' rules that visibly shrank the video. */
+.dm-hero-page .hero-visual-v2 .dm-static-character{
+  overflow:hidden;
+}
+.dm-hero-page .hero-visual-v2 .dm-static-character > .dm-character-base,
+.dm-hero-page .hero-visual-v2 .dm-static-character > .dm-character-video{
+  position:absolute!important;
+  inset:0!important;
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:100%!important;
+  min-height:100%!important;
+  max-width:none!important;
+  max-height:none!important;
+  box-sizing:border-box!important;
+  object-fit:cover!important;
+  object-position:center 47%!important;
+  border-radius:inherit!important;
+  transform:none!important;
+  filter:none!important;
+  box-shadow:none!important;
+}
+.dm-hero-page .hero-visual-v2 .dm-static-character > .dm-character-base{
+  opacity:1;
+  visibility:visible;
+}
+.dm-hero-page .hero-visual-v2 .dm-static-character > .dm-character-video{
+  opacity:0;
+  visibility:hidden;
+}
+.dm-hero-page .hero-visual-v2 .dm-static-character > .dm-character-video.is-playing{
+  opacity:1!important;
+  visibility:visible!important;
+  z-index:4!important;
+}
+.dm-hero-page .hero-visual-v2 .dm-static-character:has(.dm-character-video.is-playing) > .dm-character-base{
+  opacity:0!important;
+  visibility:hidden!important;
+}
+.dm-hero-page .dm-visual-play[aria-busy="true"]{
+  opacity:.8!important;
+  pointer-events:none!important;
+}
