@@ -223,3 +223,33 @@ body.premium-scrolled .navbar.content-nav {
     border-color:currentColor;
   }
 }
+
+
+/* Brand identity is readable and crawlable without disturbing the hero's
+   existing Digital Mehmet title, video, interactions or responsive geometry. */
+.dm-hero-final .dm-hero-identity {
+  margin:8px 0 0;
+  color:#d9e8f8;
+  font-size:clamp(.8rem,1.12vw,.92rem);
+  font-weight:550;
+  line-height:1.45;
+  letter-spacing:.01em;
+  text-wrap:pretty;
+}
+.dm-hero-final .dm-hero-identity a{
+  color:#f6d79e;
+  text-decoration:none;
+  font-weight:750;
+  text-underline-offset:4px;
+}
+.dm-hero-final .dm-hero-identity a:hover,
+.dm-hero-final .dm-hero-identity a:focus-visible{
+  text-decoration:underline;
+}
+.dm-hero-final .dm-hero-identity a:focus-visible{
+  outline:2px solid #f6d79e;
+  outline-offset:3px;
+}
+@media(max-width:700px){
+  .dm-hero-final .dm-hero-identity {font-size:.8rem}
+}
