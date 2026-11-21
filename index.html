@@ -112,7 +112,7 @@
     <div class="dm-nav-actions">
       <a class="dm-nav-contact" href="#contact">İletişime Geç <span aria-hidden="true">→</span></a>
       <button class="theme-toggle" id="themeToggle" aria-label="Temayı değiştir">☀️</button>
-      <span class="dm-language" aria-label="Dil: Türkçe">◎ TR⌄</span>
+      <div class="dm-language" role="group" aria-label="Website language"><button type="button" class="dm-lang-btn is-active" data-site-lang="en" aria-pressed="true">EN</button><button type="button" class="dm-lang-btn" data-site-lang="tr" aria-pressed="false">TR</button></div>
     </div>
   </header>
 
@@ -152,15 +152,19 @@
       </div>
 
       <div class="hero-visual hero-visual-v2">
-        <div class="dm-static-character" aria-hidden="true">
-          <img class="dm-character-base" src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-static2" alt="">
+        <div class="dm-static-character" aria-label="Digital Mehmet introduction media">
+          <img class="dm-character-base" src="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-static2" alt="Digital Mehmet AI portfolio introduction" fetchpriority="high">
           <video
             class="dm-character-video"
             data-dm-intro-video
             src="assets/digital-mehmet/digital-mehmet-motion.mp4?v=20260921-motion1"
             preload="metadata"
             playsinline
+            muted
+            poster="assets/digital-mehmet/digital-mehmet-hero.webp?v=20260921-static2"
+            aria-label="Digital Mehmet introduction video"
           ></video>
+          <button type="button" class="dm-visual-play" id="dmVisualPlay" aria-label="Play introduction video"><span aria-hidden="true">▶</span><span class="dm-visual-play-label">Play introduction</span></button>
         </div>
 
         <div class="orbit-system">
@@ -968,5 +972,6 @@
   <script src="agritech-projects-extension.js"></script>
   <script src="v3.js?v=20260921-dmhero3"></script>
   <script src="digital-mehmet.js?v=20260921-safe1" defer></script>
+  <script src="site-language.js?v=20261121-i18n1" defer></script>
 </body>
 </html>
