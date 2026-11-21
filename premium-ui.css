@@ -97,7 +97,7 @@ body.premium-enabled :is(
   html[data-premium-motion="on"] body.premium-enabled
   :is(.focus-card,.training-card,.app-card,.agri-card,.publication-card,
       .education-card,.skill-column,.workflow-step,.writing-item,.card)
-  .premium-in-view:is(:hover,:focus-within) { transform:translate3d(0,-5px,0); }
+  .premium-reveal.premium-in-view:is(:hover,:focus-within) { transform:translate3d(0,-5px,0); }
 }
 
 /* Elegant accent edges on existing portfolio cards, no extra DOM. */
@@ -152,6 +152,11 @@ body.premium-enabled .product-window::after {
 }
 body.premium-enabled .v3-impact-item strong {
   font-variant-numeric:tabular-nums;
+}
+
+/* Sticky navigation should not cover section headings after anchor navigation. */
+body.premium-enabled :is(.section,.content-hero,.article,[id]) {
+  scroll-margin-top:clamp(84px,10vh,125px);
 }
 
 /* Writing and evidence pages: premium editorial details, without changing
