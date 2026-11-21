@@ -1,0 +1,30 @@
+name: Static Site SEO Audit
+on:
+  pull_request:
+    paths:
+      - '**/*.html'
+      - 'sitemap.xml'
+      - 'robots.txt'
+      - 'CNAME'
+      - 'scripts/site-audit.mjs'
+      - 'scripts/seo-issues-audit.mjs'
+      - '.github/workflows/site-audit.yml'
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  audit:
+    name: Validate HTML, links, sitemap and AMP policy
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run static audit
+        run: |
+          node scripts/site-audit.mjs
+          node --test scripts/seo-issues-audit.mjs
+          node --check site-language.js

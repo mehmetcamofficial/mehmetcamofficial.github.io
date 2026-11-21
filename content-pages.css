@@ -187,3 +187,41 @@ html[data-theme="dark"] .writing-item{background:rgba(10,24,39,.78)}
 
 /* Citation evidence pages v10 */
 .article h2{margin:34px 0 10px;font-size:1.45rem;letter-spacing:-.025em}.article h3{margin:22px 0 8px}.evidence-lead{font-size:1.16rem!important;color:#142b47!important}.evidence-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:22px 0}.evidence-card{padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.62)}.evidence-card strong{display:block;margin-bottom:6px}.evidence-card p{margin:0;color:var(--muted);line-height:1.6}.evidence-list{padding-left:20px;color:#20344e;line-height:1.8}.evidence-note{padding:16px 18px;margin:24px 0;border-left:4px solid var(--accent);border-radius:10px;background:rgba(9,111,255,.06);color:#20344e;line-height:1.65}.source-list{display:grid;gap:8px}.source-list a{color:var(--accent);font-weight:800}.citation-chip{display:inline-flex;margin:4px 5px 4px 0;padding:6px 9px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:.74rem;font-weight:850}@media(max-width:700px){.evidence-grid{grid-template-columns:1fr}}
+
+
+/* Editorial discovery links — semantic, crawlable anchors without layout changes. */
+.seo-related-links{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin:24px 0 12px;
+}
+.seo-related-links a{
+  display:inline-flex;
+  align-items:center;
+  min-height:42px;
+  padding:9px 14px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  color:var(--accent);
+  background:var(--panel);
+  text-decoration:none;
+  font-size:.88rem;
+  font-weight:750;
+  line-height:1.35;
+  transition:border-color .2s ease,background-color .2s ease;
+}
+.seo-related-links a:hover,
+.seo-related-links a:focus-visible{
+  border-color:var(--accent);
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.seo-related-links a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.evidence-block .evidence-list{padding-left:1.2rem;line-height:1.75}
+.evidence-block .evidence-list li{margin:.4rem 0}
+html[data-theme="dark"] .seo-related-links a{background:rgba(12,28,45,.82)}
+@media(max-width:580px){
+  .seo-related-links{gap:8px}
+  .seo-related-links a{font-size:.82rem;padding:8px 11px}
+}
