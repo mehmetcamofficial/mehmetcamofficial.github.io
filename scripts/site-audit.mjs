@@ -51,7 +51,9 @@ for (const loc of locations) {
   const file = pathToFile(url.pathname);
   if (!exists(file)) { fail("Sitemap target missing " + file); continue; }
   const html = read(file);
-  const tags = [...html.matchAll(/<(?:link|meta|img|script|source|video|a)\b[^>]*>/gi)].map((x) => x[0]);
+  // Inline JavaScript can contain HTML strings; do not mistake those for DOM links.
+  const markupOnly = html.replace(/(<script\b[^>]*>)[\s\S]*?(<\/script>)/gi, "$1$2");
+  const tags = [...markupOnly.matchAll(/<(?:link|meta|img|script|source|video|a)\b[^>]*>/gi)].map((x) => x[0]);
   const links = tags.filter((tag) => /^<link\b/i.test(tag));
   const metas = tags.filter((tag) => /^<meta\b/i.test(tag));
   const canonical = links.find((tag) => attr(tag, "rel")?.toLowerCase() === "canonical");
