@@ -1365,13 +1365,23 @@ function animateSatelliteLabels() {
   ];
 
   const duration = 28000;
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  let animationFrame = null;
+  let lastFrame = 0;
 
-  function tick() {
+  function tick(now) {
+    animationFrame = null;
+    if (document.hidden || reducedMotion.matches) return;
+    // Satellite labels are decorative: 20 frames/s is enough on phones.
+    if (now - lastFrame < 50) {
+      animationFrame = requestAnimationFrame(tick);
+      return;
+    }
+    lastFrame = now;
     const rect = orbitSystem.getBoundingClientRect();
     const size = Math.min(rect.width, rect.height);
     const baseRadius = size / 2;
 
-    const now = performance.now();
     const progress = (now % duration) / duration;
     const globalAngle = progress * Math.PI * 2;
 
@@ -1399,10 +1409,27 @@ function animateSatelliteLabels() {
       item.style.zIndex = "60";
     });
 
-    requestAnimationFrame(tick);
+    animationFrame = requestAnimationFrame(tick);
   }
 
-  requestAnimationFrame(tick);
+  function start() {
+    if (animationFrame === null && !document.hidden && !reducedMotion.matches) {
+      animationFrame = requestAnimationFrame(tick);
+    }
+  }
+  function stop() {
+    if (animationFrame !== null) cancelAnimationFrame(animationFrame);
+    animationFrame = null;
+  }
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) stop(); else start();
+  });
+  reducedMotion.addEventListener?.("change", () => {
+    stop();
+    start();
+  });
+  window.addEventListener("beforeunload", stop, { once: true });
+  start();
 }
 
 /* -----------------------------
