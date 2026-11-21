@@ -40,7 +40,12 @@ test("video and image assets exist and the same hero surface is used", () => {
   assert.match(js, /this\.visualPlay\?\.addEventListener\("click", \(\) => this\.playIntroMotion\(\)\)/);
   assert.match(js, /document\.addEventListener\("digital-mehmet:listen", \(\) => this\.playIntroMotion\(\)\)/);
   assert.match(js, /video\.onended = cleanup/);
-  assert.match(js, /video\.play\(\)\.catch/);
+  assert.match(js, /Promise\.allSettled\(\[video\.play\(\), narration\.play\(\)\]\)/);
+  assert.ok(js.indexOf('await fetch(TTS_URL') < js.indexOf('Promise.allSettled([video.play(), narration.play()])'), "Narration should be prepared before playback");
+  const css = read("digital-mehmet.css");
+  assert.match(css, /same surface at every breakpoint/);
+  assert.match(css, /object-fit:cover!important/);
+  assert.match(css, /object-position:center 47%!important/);
 });
 
 test("locale preference is persistent and updates the document language", () => {
